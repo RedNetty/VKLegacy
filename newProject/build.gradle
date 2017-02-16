@@ -1,0 +1,59 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'maven'
+
+compileJava.options.encoding = 'UTF-8'
+
+group = 'net.mckillzone'
+version = '1.9-R0.1-1.0.1-SNAPSHOT'
+// Server Directory - Modify this for your server if you want to use the copy task
+project.ext.SERVER_DIR = "E:/Minecraft/"
+
+description = ""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "http://repo.md-5.net/content/groups/public/" }
+    maven { url "http://repo.stealthyone.com/content/groups/public" }
+}
+
+dependencies {
+    runtime fileTree(dir: '../libs', include: '*.jar')
+}
+
+task sourceJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier = "sources"
+}
+
+artifacts {
+    archives sourceJar
+}
+
+jar {
+    // Keep jar clean:
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+}
+
+task copyToServer(dependsOn: 'jar', type: Copy) {
+    from 'build/libs/'
+    into project.SERVER_DIR
+}
+
+shadowJar {
+    classifier ''
+    dependencies {
+        include(project(':reds-NEWPROJECT'))
+    }
+}
