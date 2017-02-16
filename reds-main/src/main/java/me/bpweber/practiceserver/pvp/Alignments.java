@@ -120,7 +120,6 @@ public class Alignments
                         healthPercentage = 1.0;
                     }
                     float pcnt = (float) (healthPercentage * 1.F);
-                    /*
                     if (!playerBossBars.containsKey(p)) {
                         // Set new one
                         BossBar bossBar = Bukkit.createBossBar(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
@@ -134,7 +133,7 @@ public class Alignments
                                 + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
                                 + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth());
                         playerBossBars.get(p).setProgress(pcnt);
-                    } */
+                    }
                 }
             }
         }.runTaskTimerAsynchronously(PracticeServer.plugin, 20, 20);

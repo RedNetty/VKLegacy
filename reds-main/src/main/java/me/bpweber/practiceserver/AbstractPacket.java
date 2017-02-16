@@ -7,11 +7,10 @@
 package me.bpweber.practiceserver;
 
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
-import net.minecraft.server.v1_9_R2.NBTTagList;
-import org.apache.logging.log4j.core.helpers.NameUtil;
+import net.minecraft.server.v1_9_R1.NBTTagCompound;
+import net.minecraft.server.v1_9_R1.NBTTagList;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.inventivetalent.bossbar.BossBarAPI;
 
@@ -34,7 +33,7 @@ public class AbstractPacket {
                 2);
 
         // Remove native Minecraft attributes, thanks to Dr. Nick Doran - rawr xxDD
-        net.minecraft.server.v1_9_R2.ItemStack itemStack = CraftItemStack.asNMSCopy(null);
+        net.minecraft.server.v1_9_R1.ItemStack itemStack = CraftItemStack.asNMSCopy(null);
         if (!itemStack.hasTag() || itemStack.getTag() == null) {
             // Init compound
             NBTTagCompound tagCompound = new NBTTagCompound();
