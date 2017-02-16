@@ -1012,291 +1012,324 @@ public class Trading implements Listener {
 									}, 2L);
 							return;
 						}
-	                     slot_var = -1;
-	                        while (slot_var <= 27) {
-	                            if (++slot_var != 5 && slot_var != 6 && slot_var != 7 && slot_var != 8 && slot_var != 14 && slot_var != 15 && slot_var != 16 && slot_var != 17 && slot_var != 23 && slot_var != 24 && slot_var != 25 && slot_var != 26) {
-	                                continue;
-	                            }
-	                            final ItemStack k = tradeWin.getItem(slot_var);
-	                            if (k == null || k.getType() == Material.AIR || MerchantMechanics.isTradeButton(k)) {
-	                                continue;
-	                            }
-	                            if (k.getType() == Material.THIN_GLASS) {
-	                                continue;
-	                            }
-	                            ++clicker_slots_needed;
-	                        }
-	                        if (clicker_slots < clicker_slots_needed) {
-	                            clicker.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Not enough room.").toString());
-	                            clicker.sendMessage(ChatColor.GRAY + "You need " + ChatColor.BOLD + (tradie_slots_needed - tradie_slots) + ChatColor.GRAY + " more free slots to complete this trade.");
-	                            tradie.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append(clicker.getName()).append(" does not have enough room for this trade.").toString());
-	                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
-	                                @Override
-	                                public void run() {
-	                                    final InventoryCloseEvent close_tradie = new InventoryCloseEvent(tradie.getOpenInventory());
-	                                    final InventoryCloseEvent close_clicker = new InventoryCloseEvent(clicker.getOpenInventory());
-	                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
-	                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
-	                                }
-	                            }, 2L);
-	                            return;
-	                        }
-	                        slot_var = -1;
-	                        int tradeItem = 0;
-	                        String strTradeItem = "";
-	                        String itemData = "";
-	                        final JsonBuilder data = new JsonBuilder("trader_1", tradie.getName());
-	                        data.setData("trader_2", p_name);
-	                        while (slot_var <= 27) {
-	                            if (++slot_var != 0 && slot_var != 1 && slot_var != 2 && slot_var != 3 && slot_var != 9 && slot_var != 10 && slot_var != 11 && slot_var != 12 && slot_var != 18 && slot_var != 19 && slot_var != 20 && slot_var != 21) {
-	                                continue;
-	                            }
-	                            ItemStack l = tradeWin.getItem(slot_var);
-	                            if (l == null || l.getType() == Material.AIR || MerchantMechanics.isTradeButton(l)) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.THIN_GLASS) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.NETHER_STAR || l.getType() == Material.QUARTZ || l.getType() == Material.WRITTEN_BOOK) {
-	                                continue;
-	                            }
-	                            if (!this.isItemTradeable(l)) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.EMERALD) {
-	                                l = Banks.makeGems(l.getAmount());
-	                            }
-	                            strTradeItem = String.valueOf(++tradeItem);
-	                            final ItemMeta im = l.getItemMeta();
-	                            tradie.getInventory().setItem(tradie.getInventory().firstEmpty(), this.makeNormal(l));
-								tradie.updateInventory();
-								clicker.updateInventory();
-								Trading.trade_map.remove(clicker);
-								Trading.trade_map.remove(tradie);
-								Trading.trade_partners.remove(clicker);
-								Trading.trade_partners.remove(tradie);
-								Trading.trade_secure.remove(clicker);
-								Trading.trade_secure.remove(tradie);
-								Trading.trade_secure.remove(trade_partner);
-								Trading.trade_partners.remove(trade_partner);
-								Trading.trade_map.remove(trade_partner);
-								tradie.closeInventory();
-								clicker.closeInventory();
-	                            itemData = String.valueOf(itemData) + "name_" + strTradeItem + ": " + ((im.getDisplayName() == null) ? l.getType().name() : im.getDisplayName()) + ", lore_" + strTradeItem + ": " + ((im.getLore() == null) ? "" : im.getLore()) + ", damage_" + strTradeItem + ": " + l.getDurability() + ", amount_" + strTradeItem + ": " + l.getAmount();
-	                        }
-	                        data.setData("items_to_trader_1", itemData);
-	                        itemData = "";
-	                        tradeItem = 0;
-	                        tradie.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD).append("Trade accepted.").toString());
-	                        tradie.playSound(tradie.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0f, 1.5f);
-	                        slot_var = -1;
-	                        while (slot_var <= 27) {
-	                            if (++slot_var != 5 && slot_var != 6 && slot_var != 7 && slot_var != 8 && slot_var != 14 && slot_var != 15 && slot_var != 16 && slot_var != 17 && slot_var != 23 && slot_var != 24 && slot_var != 25 && slot_var != 26) {
-	                                continue;
-	                            }
-	                            ItemStack l = tradeWin.getItem(slot_var);
-	                            if (l == null || l.getType() == Material.AIR || MerchantMechanics.isTradeButton(l)) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.THIN_GLASS) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.NETHER_STAR || l.getType() == Material.QUARTZ || l.getType() == Material.WRITTEN_BOOK) {
-	                                continue;
-	                            }
-	                            if (!this.isItemTradeable(l)) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.EMERALD) {
-	                                l = Banks.makeGems(l.getAmount());
-	                            }
-	                            strTradeItem = String.valueOf(++tradeItem);
-	                            final ItemMeta im = l.getItemMeta();
-	                            clicker.getInventory().setItem(clicker.getInventory().firstEmpty(), this.makeNormal(l));
-								tradie.updateInventory();
-								clicker.updateInventory();
-								Trading.trade_map.remove(clicker);
-								Trading.trade_map.remove(tradie);
-								Trading.trade_partners.remove(clicker);
-								Trading.trade_partners.remove(tradie);
-								Trading.trade_secure.remove(clicker);
-								Trading.trade_secure.remove(tradie);
-								Trading.trade_secure.remove(trade_partner);
-								Trading.trade_partners.remove(trade_partner);
-								Trading.trade_map.remove(trade_partner);
-								tradie.closeInventory();
-								clicker.closeInventory();
-	                            itemData = String.valueOf(itemData) + "name_" + strTradeItem + ": " + ((im.getDisplayName() == null) ? l.getType().name() : im.getDisplayName()) + ", lore_" + strTradeItem + ": " + ((im.getLore() == null) ? "" : im.getLore()) + ", damage_" + strTradeItem + ": " + l.getDurability() + ", amount_" + strTradeItem + ": " + l.getAmount();
-	                        }
-	                        data.setData("items_to_trader_2", itemData);
-	                        clicker.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD).append("Trade accepted.").toString());
-	                        clicker.playSound(clicker.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0f, 1.5f);
-	                    }
-	                    if (!left_side) {
-	                        slot_var = -1;
-	                        while (slot_var <= 27) {
-	                            if (++slot_var != 0 && slot_var != 1 && slot_var != 2 && slot_var != 3 && slot_var != 9 && slot_var != 10 && slot_var != 11 && slot_var != 12 && slot_var != 18 && slot_var != 19 && slot_var != 20 && slot_var != 21) {
-	                                continue;
-	                            }
-	                            final ItemStack k = tradeWin.getItem(slot_var);
-	                            if (k == null || k.getType() == Material.AIR || MerchantMechanics.isTradeButton(k)) {
-	                                continue;
-	                            }
-	                            if (k.getType() == Material.THIN_GLASS) {
-	                                continue;
-	                            }
-	                            ++clicker_slots_needed;
-	                        }
-	                        if (clicker_slots < clicker_slots_needed) {
-	                            clicker.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Not enough room.").toString());
-	                            clicker.sendMessage(ChatColor.GRAY + "You need " + ChatColor.BOLD + (tradie_slots_needed - tradie_slots) + ChatColor.GRAY + " more free slots to complete this trade.");
-	                            tradie.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append(clicker.getName()).append(" does not have enough room for this trade.").toString());
-	                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
-	                                @Override
-	                                public void run() {
-	                                    final InventoryCloseEvent close_tradie = new InventoryCloseEvent(tradie.getOpenInventory());
-	                                    final InventoryCloseEvent close_clicker = new InventoryCloseEvent(clicker.getOpenInventory());
-	                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
-	                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
-	                                }
-	                            }, 2L);
-	                            return;
-	                        }
-	                        slot_var = -1;
-	                        while (slot_var <= 27) {
-	                            if (++slot_var != 5 && slot_var != 6 && slot_var != 7 && slot_var != 8 && slot_var != 14 && slot_var != 15 && slot_var != 16 && slot_var != 17 && slot_var != 23 && slot_var != 24 && slot_var != 25 && slot_var != 26) {
-	                                continue;
-	                            }
-	                            ItemStack k = tradeWin.getItem(slot_var);
-	                            if (k == null || k.getType() == Material.AIR || MerchantMechanics.isTradeButton(k)) {
-	                                continue;
-	                            }
-	                            if (k.getType() == Material.THIN_GLASS) {
-	                                continue;
-	                            }
-	                            if (k.getType() == Material.NETHER_STAR || k.getType() == Material.QUARTZ || k.getType() == Material.WRITTEN_BOOK) {
-	                                continue;
-	                            }
-	                            if (!this.isItemTradeable(k)) {
-	                                continue;
-	                            }
-	                            if (k.getType() == Material.EMERALD) {
-	                                k = Banks.makeGems(k.getAmount());
-	                            }
-	                            ++tradie_slots_needed;
-	                        }
-	                        if (tradie_slots < tradie_slots_needed) {
-	                            tradie.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Not enough room.").toString());
-	                            tradie.sendMessage(ChatColor.GRAY + "You need " + ChatColor.BOLD + (tradie_slots_needed - tradie_slots) + ChatColor.GRAY + " more free slots to complete this trade.");
-	                            clicker.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append(tradie.getName()).append(" does not have enough room for this trade.").toString());
-	                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
-	                                @Override
-	                                public void run() {
-	                                    final InventoryCloseEvent close_tradie = new InventoryCloseEvent(tradie.getOpenInventory());
-	                                    final InventoryCloseEvent close_clicker = new InventoryCloseEvent(clicker.getOpenInventory());
-	                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
-	                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
-	                                }
-	                            }, 2L);
-	                            return;
-	                        }
-	                        slot_var = -1;
-	                        int tradeItem = 0;
-	                        String strTradeItem = "";
-	                        String itemData = "";
-	                        final JsonBuilder data = new JsonBuilder("trader_1", p_name);
-	                        data.setData("trader_2", tradie.getName());
-	                        while (slot_var <= 27) {
-	                            if (++slot_var != 0 && slot_var != 1 && slot_var != 2 && slot_var != 3 && slot_var != 9 && slot_var != 10 && slot_var != 11 && slot_var != 12 && slot_var != 18 && slot_var != 19 && slot_var != 20 && slot_var != 21) {
-	                                continue;
-	                            }
-	                            ItemStack l = tradeWin.getItem(slot_var);
-	                            if (l == null || l.getType() == Material.AIR || MerchantMechanics.isTradeButton(l)) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.THIN_GLASS) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.NETHER_STAR || l.getType() == Material.QUARTZ || l.getType() == Material.WRITTEN_BOOK) {
-	                                continue;
-	                            }
-	                            if (!this.isItemTradeable(l)) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.EMERALD) {
-	                                l = Banks.makeGems(l.getAmount());
-	                            }
-	                            strTradeItem = String.valueOf(++tradeItem);
-	                            final ItemMeta im = l.getItemMeta();
-	                            clicker.getInventory().setItem(clicker.getInventory().firstEmpty(), this.makeNormal(l));
-								tradie.updateInventory();
-								clicker.updateInventory();
-								Trading.trade_map.remove(clicker);
-								Trading.trade_map.remove(tradie);
-								Trading.trade_partners.remove(clicker);
-								Trading.trade_partners.remove(tradie);
-								Trading.trade_secure.remove(clicker);
-								Trading.trade_secure.remove(tradie);
-								Trading.trade_secure.remove(trade_partner);
-								Trading.trade_partners.remove(trade_partner);
-								Trading.trade_map.remove(trade_partner);
-								tradie.closeInventory();
-								clicker.closeInventory();
-	                            itemData = String.valueOf(itemData) + "name_" + strTradeItem + ": " + ((im.getDisplayName() == null) ? l.getType().name() : im.getDisplayName()) + ", lore_" + strTradeItem + ": " + ((im.getLore() == null) ? "" : im.getLore()) + ", damage_" + strTradeItem + ": " + l.getDurability() + ", amount_" + strTradeItem + ": " + l.getAmount();
-	                        }
-	                        data.setData("items_to_trader_1", itemData);
-	                        itemData = "";
-	                        tradeItem = 0;
-	                        clicker.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD).append("Trade accepted.").toString());
-	                        clicker.playSound(clicker.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0f, 1.5f);
-	                        slot_var = -1;
-	                        slot_var = -1;
-	                        while (slot_var <= 27) {
-	                            if (++slot_var != 5 && slot_var != 6 && slot_var != 7 && slot_var != 8 && slot_var != 14 && slot_var != 15 && slot_var != 16 && slot_var != 17 && slot_var != 23 && slot_var != 24 && slot_var != 25 && slot_var != 26) {
-	                                continue;
-	                            }
-	                            ItemStack l = tradeWin.getItem(slot_var);
-	                            if (l == null || l.getType() == Material.AIR || MerchantMechanics.isTradeButton(l)) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.THIN_GLASS) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.NETHER_STAR || l.getType() == Material.QUARTZ || l.getType() == Material.WRITTEN_BOOK) {
-	                                continue;
-	                            }
-	                            if (!this.isItemTradeable(l)) {
-	                                continue;
-	                            }
-	                            if (l.getType() == Material.EMERALD) {
-	                                l = Banks.makeGems(l.getAmount());
-	                            }
-	                            strTradeItem = String.valueOf(++tradeItem);
-	                            final ItemMeta im = l.getItemMeta();
-	                            tradie.getInventory().setItem(tradie.getInventory().firstEmpty(), this.makeNormal(l));
-								tradie.updateInventory();
-								clicker.updateInventory();
-								Trading.trade_map.remove(clicker);
-								Trading.trade_map.remove(tradie);
-								Trading.trade_partners.remove(clicker);
-								Trading.trade_partners.remove(tradie);
-								Trading.trade_secure.remove(clicker);
-								Trading.trade_secure.remove(tradie);
-								Trading.trade_secure.remove(trade_partner);
-								Trading.trade_partners.remove(trade_partner);
-								Trading.trade_map.remove(trade_partner);
-								tradie.closeInventory();
-								clicker.closeInventory();
-	                            itemData = String.valueOf(itemData) + "name_" + strTradeItem + ": " + ((im.getDisplayName() == null) ? l.getType().name() : im.getDisplayName()) + ", lore_" + strTradeItem + ": " + ((im.getLore() == null) ? "" : im.getLore()) + ", damage_" + strTradeItem + ": " + l.getDurability() + ", amount_" + strTradeItem + ": " + l.getAmount();
-	                        }
-	                        data.setData("items_to_trader_2", itemData);
-	                        tradie.playSound(tradie.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0f, 1.5f);
-	                        tradie.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD).append("Trade accepted.").toString());
-	                    }
-	                    if (!tradeWin.getName().equalsIgnoreCase("container.crafting")) {
-	                        tradeWin.clear();
-	                    }
+						slot_var = -1;
+						int tradeItem = 0;
+						String strTradeItem = "";
+						String itemData = "";
+						final JsonBuilder data = new JsonBuilder("trader_1", tradie.getName());
+						data.setData("trader_2", p_name);
+						while (slot_var <= 27) {
+							if (++slot_var != 0 && slot_var != 1 && slot_var != 2 && slot_var != 3 && slot_var != 9
+									&& slot_var != 10 && slot_var != 11 && slot_var != 12 && slot_var != 18
+									&& slot_var != 19 && slot_var != 20 && slot_var != 21) {
+								continue;
+							}
+							ItemStack l = tradeWin.getItem(slot_var);
+							if (l == null || l.getType() == Material.AIR || MerchantMechanics.isTradeButton(l)) {
+								continue;
+							}
+							if (l.getType() == Material.THIN_GLASS) {
+								continue;
+							}
+							if (l.getType() == Material.NETHER_STAR || l.getType() == Material.QUARTZ
+									|| l.getType() == Material.WRITTEN_BOOK) {
+								continue;
+							}
+							if (!this.isItemTradeable(l)) {
+								continue;
+							}
+							if (l.getType() == Material.EMERALD) {
+								l = Banks.makeGems(l.getAmount());
+							}
+							Trading.trade_map.remove(tradie);
+							Trading.trade_partners.remove(tradie);
+							Trading.trade_secure.remove(tradie);
+							tradie.closeInventory();
+							tradeWin.clear();
+							Trading.trade_map.remove(trade_partner);
+							Trading.trade_partners.remove(trade_partner);
+							Trading.trade_secure.remove(trade_partner);
+							trade_partner.closeInventory();
+							tradie.getInventory().setItem(tradie.getInventory().firstEmpty(), this.makeNormal(l));
+							final ItemMeta im = l.getItemMeta();
+							itemData = String.valueOf(itemData) + "name_" + strTradeItem + ": "
+									+ ((im.getDisplayName() == null) ? l.getType().name() : im.getDisplayName())
+									+ ", lore_" + strTradeItem + ": " + ((im.getLore() == null) ? "" : im.getLore())
+									+ ", damage_" + strTradeItem + ": " + l.getDurability() + ", amount_" + strTradeItem
+									+ ": " + l.getAmount();
+						}
+						data.setData("items_to_trader_1", itemData);
+						itemData = "";
+						tradeItem = 0;
+						trade_partner.closeInventory();
+						Trading.trade_map.remove(trade_partner);
+						Trading.trade_partners.remove(trade_partner);
+						Trading.trade_secure.remove(trade_partner);
+						Trading.trade_map.remove(tradie);
+						Trading.trade_partners.remove(tradie);
+						Trading.trade_secure.remove(tradie);
+						tradie.closeInventory();
+						tradie.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD)
+								.append("Trade accepted.").toString());
+						tradie.playSound(tradie.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0f, 1.5f);
+						slot_var = -1;
+						while (slot_var <= 27) {
+							if (++slot_var != 5 && slot_var != 6 && slot_var != 7 && slot_var != 8 && slot_var != 14
+									&& slot_var != 15 && slot_var != 16 && slot_var != 17 && slot_var != 23
+									&& slot_var != 24 && slot_var != 25 && slot_var != 26) {
+								continue;
+							}
+							ItemStack l = tradeWin.getItem(slot_var);
+							if (l == null || l.getType() == Material.AIR || MerchantMechanics.isTradeButton(l)) {
+								continue;
+							}
+							if (l.getType() == Material.THIN_GLASS) {
+								continue;
+							}
+							if (l.getType() == Material.NETHER_STAR || l.getType() == Material.QUARTZ
+									|| l.getType() == Material.WRITTEN_BOOK) {
+								continue;
+							}
+							if (!this.isItemTradeable(l)) {
+								continue;
+							}
+							if (l.getType() == Material.EMERALD) {
+								l = Banks.makeGems(l.getAmount());
+							}
+							strTradeItem = String.valueOf(++tradeItem);
+							final ItemMeta im = l.getItemMeta();
+							Trading.trade_map.remove(clicker);
+							Trading.trade_partners.remove(clicker);
+							Trading.trade_secure.remove(clicker);
+							clicker.closeInventory();
+							tradeWin.clear();
+							Trading.trade_map.remove(trade_partner);
+							Trading.trade_partners.remove(trade_partner);
+							Trading.trade_secure.remove(trade_partner);
+							trade_partner.closeInventory();
+							clicker.getInventory().setItem(clicker.getInventory().firstEmpty(), this.makeNormal(l));
+							itemData = String.valueOf(itemData) + "name_" + strTradeItem + ": "
+									+ ((im.getDisplayName() == null) ? l.getType().name() : im.getDisplayName())
+									+ ", lore_" + strTradeItem + ": " + ((im.getLore() == null) ? "" : im.getLore())
+									+ ", damage_" + strTradeItem + ": " + l.getDurability() + ", amount_" + strTradeItem
+									+ ": " + l.getAmount();
+						}
+						data.setData("items_to_trader_2", itemData);
+						;
+						Trading.trade_map.remove(clicker);
+						Trading.trade_partners.remove(clicker);
+						Trading.trade_secure.remove(clicker);
+						clicker.closeInventory();
+						Trading.trade_map.remove(trade_partner);
+						Trading.trade_partners.remove(trade_partner);
+						Trading.trade_secure.remove(trade_partner);
+						trade_partner.closeInventory();
+						clicker.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD)
+								.append("Trade accepted.").toString());
+						clicker.playSound(clicker.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0f, 1.5f);
+					}
+					if (!left_side) {
+						slot_var = -1;
+						while (slot_var <= 27) {
+							if (++slot_var != 0 && slot_var != 1 && slot_var != 2 && slot_var != 3 && slot_var != 9
+									&& slot_var != 10 && slot_var != 11 && slot_var != 12 && slot_var != 18
+									&& slot_var != 19 && slot_var != 20 && slot_var != 21) {
+								continue;
+							}
+							final ItemStack k = tradeWin.getItem(slot_var);
+							if (k == null || k.getType() == Material.AIR || MerchantMechanics.isTradeButton(k)) {
+								continue;
+							}
+							if (k.getType() == Material.THIN_GLASS) {
+								continue;
+							}
+							++clicker_slots_needed;
+						}
+						if (clicker_slots < clicker_slots_needed) {
+							clicker.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD)
+									.append("Not enough room.").toString());
+							clicker.sendMessage(
+									ChatColor.GRAY + "You need " + ChatColor.BOLD + (tradie_slots_needed - tradie_slots)
+											+ ChatColor.GRAY + " more free slots to complete this trade.");
+							tradie.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD)
+									.append(clicker.getName()).append(" does not have enough room for this trade.")
+									.toString());
+							PracticeServer.plugin.getServer().getScheduler()
+									.scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
+										@Override
+										public void run() {
+											final InventoryCloseEvent close_tradie = new InventoryCloseEvent(
+													tradie.getOpenInventory());
+											final InventoryCloseEvent close_clicker = new InventoryCloseEvent(
+													clicker.getOpenInventory());
+											Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
+											Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
+										}
+									}, 2L);
+							return;
+						}
+						slot_var = -1;
+						while (slot_var <= 27) {
+							if (++slot_var != 5 && slot_var != 6 && slot_var != 7 && slot_var != 8 && slot_var != 14
+									&& slot_var != 15 && slot_var != 16 && slot_var != 17 && slot_var != 23
+									&& slot_var != 24 && slot_var != 25 && slot_var != 26) {
+								continue;
+							}
+							ItemStack k = tradeWin.getItem(slot_var);
+							if (k == null || k.getType() == Material.AIR || MerchantMechanics.isTradeButton(k)) {
+								continue;
+							}
+							if (k.getType() == Material.THIN_GLASS) {
+								continue;
+							}
+							if (k.getType() == Material.NETHER_STAR || k.getType() == Material.QUARTZ
+									|| k.getType() == Material.WRITTEN_BOOK) {
+								continue;
+							}
+							if (!this.isItemTradeable(k)) {
+								continue;
+							}
+							if (k.getType() == Material.EMERALD) {
+								k = Banks.makeGems(k.getAmount());
+							}
+							++tradie_slots_needed;
+						}
+						if (tradie_slots < tradie_slots_needed) {
+							tradie.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD)
+									.append("Not enough room.").toString());
+							tradie.sendMessage(
+									ChatColor.GRAY + "You need " + ChatColor.BOLD + (tradie_slots_needed - tradie_slots)
+											+ ChatColor.GRAY + " more free slots to complete this trade.");
+							clicker.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD)
+									.append(tradie.getName()).append(" does not have enough room for this trade.")
+									.toString());
+							PracticeServer.plugin.getServer().getScheduler()
+									.scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
+										@Override
+										public void run() {
+											final InventoryCloseEvent close_tradie = new InventoryCloseEvent(
+													tradie.getOpenInventory());
+											final InventoryCloseEvent close_clicker = new InventoryCloseEvent(
+													clicker.getOpenInventory());
+											Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
+											Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
+										}
+									}, 2L);
+							return;
+						}
+						slot_var = -1;
+						int tradeItem = 0;
+						String strTradeItem = "";
+						String itemData = "";
+						final JsonBuilder data = new JsonBuilder("trader_1", p_name);
+						data.setData("trader_2", tradie.getName());
+						while (slot_var <= 27) {
+							if (++slot_var != 0 && slot_var != 1 && slot_var != 2 && slot_var != 3 && slot_var != 9
+									&& slot_var != 10 && slot_var != 11 && slot_var != 12 && slot_var != 18
+									&& slot_var != 19 && slot_var != 20 && slot_var != 21) {
+								continue;
+							}
+							ItemStack l = tradeWin.getItem(slot_var);
+							if (l == null || l.getType() == Material.AIR || MerchantMechanics.isTradeButton(l)) {
+								continue;
+							}
+							if (l.getType() == Material.THIN_GLASS) {
+								continue;
+							}
+							if (l.getType() == Material.NETHER_STAR || l.getType() == Material.QUARTZ
+									|| l.getType() == Material.WRITTEN_BOOK) {
+								continue;
+							}
+							if (!this.isItemTradeable(l)) {
+								continue;
+							}
+							if (l.getType() == Material.EMERALD) {
+								l = Banks.makeGems(l.getAmount());
+							}
+							strTradeItem = String.valueOf(++tradeItem);
+							final ItemMeta im = l.getItemMeta();
+							Trading.trade_map.remove(clicker);
+							Trading.trade_partners.remove(clicker);
+							Trading.trade_secure.remove(clicker);
+							clicker.closeInventory();
+							tradeWin.clear();
+							Trading.trade_map.remove(trade_partner);
+							Trading.trade_partners.remove(trade_partner);
+							Trading.trade_secure.remove(trade_partner);
+							trade_partner.closeInventory();
+							clicker.getInventory().setItem(clicker.getInventory().firstEmpty(), this.makeNormal(l));
+							itemData = String.valueOf(itemData) + "name_" + strTradeItem + ": "
+									+ ((im.getDisplayName() == null) ? l.getType().name() : im.getDisplayName())
+									+ ", lore_" + strTradeItem + ": " + ((im.getLore() == null) ? "" : im.getLore())
+									+ ", damage_" + strTradeItem + ": " + l.getDurability() + ", amount_" + strTradeItem
+									+ ": " + l.getAmount();
+						}
+						data.setData("items_to_trader_1", itemData);
+						itemData = "";
+						tradeItem = 0;
+						Trading.trade_map.remove(clicker);
+						Trading.trade_partners.remove(clicker);
+						Trading.trade_secure.remove(clicker);
+						clicker.closeInventory();
+						Trading.trade_map.remove(trade_partner);
+						Trading.trade_partners.remove(trade_partner);
+						Trading.trade_secure.remove(trade_partner);
+						trade_partner.closeInventory();
+						clicker.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD)
+								.append("Trade accepted.").toString());
+						clicker.playSound(clicker.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0f, 1.5f);
+						slot_var = -1;
+						slot_var = -1;
+						while (slot_var <= 27) {
+							if (++slot_var != 5 && slot_var != 6 && slot_var != 7 && slot_var != 8 && slot_var != 14
+									&& slot_var != 15 && slot_var != 16 && slot_var != 17 && slot_var != 23
+									&& slot_var != 24 && slot_var != 25 && slot_var != 26) {
+								continue;
+							}
+							ItemStack l = tradeWin.getItem(slot_var);
+							if (l == null || l.getType() == Material.AIR || MerchantMechanics.isTradeButton(l)) {
+								continue;
+							}
+							if (l.getType() == Material.THIN_GLASS) {
+								continue;
+							}
+							if (l.getType() == Material.NETHER_STAR || l.getType() == Material.QUARTZ
+									|| l.getType() == Material.WRITTEN_BOOK) {
+								continue;
+							}
+							if (!this.isItemTradeable(l)) {
+								continue;
+							}
+							if (l.getType() == Material.EMERALD) {
+								l = Banks.makeGems(l.getAmount());
+							}
+							strTradeItem = String.valueOf(++tradeItem);
+							Trading.trade_map.remove(tradie);
+							Trading.trade_partners.remove(tradie);
+							Trading.trade_secure.remove(tradie);
+							tradie.closeInventory();
+
+							Trading.trade_map.remove(trade_partner);
+							Trading.trade_partners.remove(trade_partner);
+							Trading.trade_secure.remove(trade_partner);
+							trade_partner.closeInventory();
+							tradeWin.clear();
+							final ItemMeta im = l.getItemMeta();
+							tradie.getInventory().setItem(tradie.getInventory().firstEmpty(), this.makeNormal(l));
+							itemData = String.valueOf(itemData) + "name_" + strTradeItem + ": "
+									+ ((im.getDisplayName() == null) ? l.getType().name() : im.getDisplayName())
+									+ ", lore_" + strTradeItem + ": " + ((im.getLore() == null) ? "" : im.getLore())
+									+ ", damage_" + strTradeItem + ": " + l.getDurability() + ", amount_" + strTradeItem
+									+ ": " + l.getAmount();
+						}
+						data.setData("items_to_trader_2", itemData);
+						tradie.playSound(tradie.getLocation(), Sound.ENTITY_BLAZE_HURT, 1.0f, 1.5f);
+						tradie.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD)
+								.append("Trade accepted.").toString());
+					}
+					if (!tradeWin.getName().equalsIgnoreCase("container.crafting")) {
+						tradeWin.clear();
+					}
 					PracticeServer.plugin.getServer().getScheduler()
 							.scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
 								@Override

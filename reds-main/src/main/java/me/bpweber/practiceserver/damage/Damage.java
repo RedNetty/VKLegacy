@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -84,6 +83,7 @@ public class Damage
 
     public void onEnable() {
         PracticeServer.log.info("[Damage] has been enabled.");
+        /*
         Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
         new BukkitRunnable() {
 
@@ -95,27 +95,24 @@ public class Damage
                         healthPercentage = 1.0;
                     }
                     float pcnt = (float) (healthPercentage * 1.F);
-
-                    //if (!Alignments.playerBossBars.containsKey(p)) {
+                    if (!Alignments.playerBossBars.containsKey(p)) {
                         // Set new one
-                        /*
                         BossBar bossBar = Bukkit.createBossBar(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
                                 + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
                                 + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth(), BarColor.PINK, BarStyle.SOLID);
                         bossBar.addPlayer(p);
-                         *
-                        Alignments.playerBossBars.put(p, bossBar); */
-                        //Alignments.playerBossBars.get(p).setProgress(pcnt);
-                    //} else {
-                        /*
+
+                        Alignments.playerBossBars.put(p, bossBar);
+                        Alignments.playerBossBars.get(p).setProgress(pcnt);
+                    } else {
                         Alignments.playerBossBars.get(p).setTitle(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
                                 + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
                                 + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth());
-                        Alignments.playerBossBars.get(p).setProgress(pcnt); */
-                    //}
+                        Alignments.playerBossBars.get(p).setProgress(pcnt);
+                    }
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 300, 300);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 300, 300); */
         new BukkitRunnable() {
 
             public void run() {
@@ -323,14 +320,12 @@ public class Damage
             if (!Alignments.playerBossBars.containsKey(p)) {
             	p.setNoDamageTicks(0);
                 // Set new one
-                /*
                 BossBar bossBar = Bukkit.createBossBar(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
                         + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
                         + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth(), BarColor.PINK, BarStyle.SOLID);
-                bossBar.addPlayer(p); */
+                bossBar.addPlayer(p);
 
-                //Alignments.playerBossBars.put(p, bossBar);
-                /*
+                Alignments.playerBossBars.put(p, bossBar);
                 Alignments.playerBossBars.get(p).setProgress(pcnt);
             } else {
                 Alignments.playerBossBars.get(p).setTitle(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
