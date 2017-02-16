@@ -217,6 +217,7 @@ public class AAC implements Listener {
             }
         }
         e.setCancelled(true); // Don't let AAC execute any commands.. We will handle that in our onPlayerViolation event
+        e.getPlayer().kickPlayer("Hacking is not allowed.");
     }
 }
 

@@ -4,7 +4,7 @@ package me.bpweber.practiceserver.utils;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,8 +13,8 @@ import org.json.simple.JSONArray;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 
 /**
  * Created by Chase on Nov 17, 2015

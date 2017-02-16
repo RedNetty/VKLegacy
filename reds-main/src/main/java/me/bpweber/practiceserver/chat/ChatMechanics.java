@@ -44,7 +44,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -61,9 +61,9 @@ import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
 import me.bpweber.practiceserver.utils.JSONMessage;
-import net.minecraft.server.v1_9_R1.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R1.Packet;
-import net.minecraft.server.v1_9_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_9_R2.Packet;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 
 public class ChatMechanics
         implements Listener,
