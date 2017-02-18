@@ -46,7 +46,7 @@ import me.bpweber.practiceserver.player.Horses;
 import me.bpweber.practiceserver.pvp.Alignments;
 import me.bpweber.practiceserver.utils.ParticleEffect;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

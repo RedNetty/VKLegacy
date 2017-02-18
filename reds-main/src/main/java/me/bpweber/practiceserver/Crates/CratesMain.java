@@ -5,7 +5,7 @@ import me.bpweber.practiceserver.drops.CreateDrop;
 import me.bpweber.practiceserver.vendors.MerchantMechanics;
 
 import org.bukkit.*;
-import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;

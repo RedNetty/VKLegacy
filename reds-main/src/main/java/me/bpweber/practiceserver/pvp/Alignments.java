@@ -48,10 +48,10 @@ public class Alignments
     public static HashMap<String, Integer> chaotic = new HashMap<String, Integer>();
     public static HashMap<String, Long> tagged = new HashMap<String, Long>();
 
-    //public static HashMap<Player, BossBar> playerBossBars;
+    public static HashMap<Player, BossBar> playerBossBars;
 
     public void onEnable() {
-        //this.playerBossBars = Maps.newHashMap();
+        this.playerBossBars = Maps.newHashMap();
         int time;
         PracticeServer.log.info("[Alignments] has been enabled.");
         Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
@@ -119,8 +119,7 @@ public class Alignments
                     if (healthPercentage * 100.0F > 100.0F) {
                         healthPercentage = 1.0;
                     }
-                    float pcnt = (float) (healthPercentage * 1.F);;
-                    /*
+                    float pcnt = (float) (healthPercentage * 1.F);
                     if (!playerBossBars.containsKey(p)) {
                         // Set new one
                         BossBar bossBar = Bukkit.createBossBar(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
@@ -134,7 +133,7 @@ public class Alignments
                                 + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
                                 + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth());
                         playerBossBars.get(p).setProgress(pcnt);
-                    } */
+                    }
                 }
             }
         }.runTaskTimerAsynchronously(PracticeServer.plugin, 20, 20);
