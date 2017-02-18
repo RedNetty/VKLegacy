@@ -262,7 +262,7 @@ public class TeleportBooks
         if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && p.getInventory().getItemInMainHand() != null && p.getInventory().getItemInMainHand().getType() == Material.BOOK && p.getInventory().getItemInMainHand().getItemMeta().hasDisplayName() && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().toLowerCase().contains("teleport:") && !casting_time.containsKey(p.getName()) && !Horses.mounting.containsKey(p.getName())) {
             String type = ChatColor.stripColor((String) p.getInventory().getItemInMainHand().getItemMeta().getDisplayName());
             Location loc = this.getLocationFromString(type);
-            if (Alignments.chaotic.containsKey(p.getName()) && loc != Deadpeaks_Mountain_Camp) {
+            if (Alignments.chaotic.containsKey(p.getName())) {
                 p.sendMessage(ChatColor.RED + "You " + ChatColor.UNDERLINE + "cannot" + ChatColor.RED + " teleport to non-chaotic zones while chaotic.");
                 p.sendMessage(ChatColor.GRAY + "Neutral in " + ChatColor.BOLD + Alignments.chaotic.get(p.getName()) + "s");
             } else {

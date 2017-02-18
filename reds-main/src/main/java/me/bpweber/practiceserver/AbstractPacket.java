@@ -34,6 +34,7 @@ public class AbstractPacket {
                 2);
 
         // Remove native Minecraft attributes, thanks to Dr. Nick Doran - rawr xxDD
+
         net.minecraft.server.ItemStack itemStack = CraftItemStack.asNMSCopy(null);
         if (!itemStack.hasTag() || itemStack.getTag() == null) {
             // Init compound
