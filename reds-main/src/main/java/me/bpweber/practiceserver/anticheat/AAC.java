@@ -35,9 +35,6 @@ package me.bpweber.practiceserver.anticheat;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import de.photon.AACAdditionPro.events.HeuristicsAdditionViolationEvent;
-import de.photon.AACAdditionPro.events.PlayerAdditionViolationCommandEvent;
-import de.photon.AACAdditionPro.events.PlayerAdditionViolationEvent;
 import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.PracticeServer;
 import me.konsolas.aac.api.HackType;
@@ -137,51 +134,12 @@ public class AAC implements Listener {
         return;
     }
     @EventHandler
-    public void onPlayerViolation2(HeuristicsAdditionViolationEvent e)
-    {
-        System.out.println("[V2] " + e.getPlayer().getName() + " triggered " + e.getEventName());
-        for(Player p : Bukkit.getOnlinePlayers())
-        {
-            if(ModerationMechanics.isStaff(p))
-            {
-                p.sendMessage(ChatColor.RED.toString() + "ANTI-CHEAT: " + e.getPlayer().getName() + " is hacking with hack type: " + e.getEventName());
-            }
-        }
-        e.getPlayer().kickPlayer("Hacking is not allowed.");
-        return;
-    }
-    @EventHandler
-    public void onPlayerViolation3(PlayerAdditionViolationEvent e)
-    {
-        if(e.getVl() < 15)
-        {
-            return;
-        }
-        System.out.println("[V3] " + e.getPlayer().getName() + " triggered " + e.getAdditionHackType() + " with violations of: " + e.getVl());
-        for(Player p : Bukkit.getOnlinePlayers())
-        {
-            if(ModerationMechanics.isStaff(p))
-            {
-                p.sendMessage(ChatColor.RED.toString() + "ANTI-CHEAT: " + e.getPlayer().getName() + " is hacking with hack type: " + e.getAdditionHackType().name());
-            }
-        }
-        e.getPlayer().kickPlayer("Hacking is not allowed.");
-        return;
-    }
-    @EventHandler
     public void onPlayerViolationCommand(PlayerViolationCommandEvent e) {
         if(e.getHackType() == HackType.SPEED)
         {
             return;
         }
         e.setCancelled(true); // Don't let AAC execute any commands.. We will handle that in our onPlayerViolation event
-        return;
-    }
-
-    @EventHandler
-    public void PlayerAdditionViolationCommandEvent(PlayerAdditionViolationCommandEvent e)
-    {
-        e.setCancelled(true); // Don't let AAC Additions execute any commands.. We will handle that in our onPlayerViolation event
         return;
     }
 }
