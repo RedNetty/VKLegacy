@@ -35,6 +35,10 @@ package me.bpweber.practiceserver.anticheat;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import de.photon.AACAdditionPro.events.HeuristicsAdditionViolationEvent;
+import de.photon.AACAdditionPro.events.PlayerAdditionViolationCommandEvent;
+import de.photon.AACAdditionPro.events.PlayerAdditionViolationEvent;
+import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.PracticeServer;
 import me.konsolas.aac.api.HackType;
 import me.konsolas.aac.api.PlayerViolationCommandEvent;
@@ -113,95 +117,52 @@ public class AAC implements Listener {
 
     @EventHandler
     public void onPlayerViolation(PlayerViolationEvent e) {
-        HackType type = e.getHackType();
-        if(type == HackType.FLY && !isInWorld(e.getPlayer(), Bukkit.getWorlds().get(0)))
+        if(e.getHackType() == HackType.SPEED)
         {
-            e.setCancelled(true); // They are in a realm.. They can fly
             return;
         }
-        if(type == HackType.FLY && isInWorld(e.getPlayer(), Bukkit.getWorlds().get(0)))
+        if(e.getViolations() < 15)
         {
-            if(isPlayerInRegion(e.getPlayer().getUniqueId(), "tutorial_island"))
-            {
-                e.setCancelled(true);
-                return; // Don't matter.. They in tutorial
-            }
-            if(isInSafeRegion(e.getPlayer().getLocation()))
-            {
-                e.setCancelled(true);
-                return; // Fine.. Fly Hack in safe zones lolz
-            }
-            e.setCancelled(false);
             return;
         }
-        if(type == HackType.SPEED) {
-            return; // We made our own speed checker.
-        }
-        if(type == HackType.CLIMB)
-        {
-            e.setCancelled(true);
-            return; // Fuck climb hacks
-        }
-        if(type == HackType.NOFALL)
-        {
-            e.setCancelled(true);
-            return; // EVERYONE has NOFALL in SC.. Lolz
-        }
-        if(type == HackType.FASTPLACE && !isInWorld(e.getPlayer(), Bukkit.getWorlds().get(0)))
-        {
-            e.setCancelled(true);
-            return; // This is for realms
-        }
-        if(type == HackType.FASTBREAK && !isInWorld(e.getPlayer(), Bukkit.getWorlds().get(0)))
-        {
-            e.setCancelled(true);
-            return; // This is for realms
-        }
-        if(type == HackType.BADPACKETS)
-        {
-            e.setCancelled(true);
-            return; // Nope
-        }
-        if(type == HackType.REGEN)
-        {
-            e.setCancelled(true);
-            return;
-        }
-        if(type == HackType.NOSWING)
-        {
-            e.setCancelled(true);
-            return;
-        }
-        if(type == HackType.HITBOX)
-        {
-            e.setCancelled(true);
-            return;
-        }
-        if( type == HackType.INTERACT)
-        {
-            e.setCancelled(true);
-            return;
-        }
-        if( type == HackType.PHASE)
-        {
-            e.setCancelled(true);
-            return;
-        }
-        if (type == HackType.SPAM)
-        {
-            e.setCancelled(true);
-            return;
-        }
-        if (type == HackType.KNOCKBACK)
-        {
-            e.setCancelled(true);
-            return;
-        }
+        System.out.println("[V1] " + e.getPlayer().getName() + " triggered " + e.getHackType() + " with violations of: " + e.getViolations());
         for(Player p : Bukkit.getOnlinePlayers())
         {
-            if(p.hasPermission("anticheat.getautism"))
+            if(ModerationMechanics.isStaff(p))
             {
-                p.sendMessage(ChatColor.RED.toString() + "ANTI-CHEAT: " + e.getPlayer().getName() + " is hacking on " + Bukkit.getServerName());
+                p.sendMessage(ChatColor.RED.toString() + "ANTI-CHEAT: " + e.getPlayer().getName() + " is hacking with hack type: " + e.getHackType().getName());
+            }
+        }
+        e.getPlayer().kickPlayer("Hacking is not allowed.");
+        return;
+    }
+    @EventHandler
+    public void onPlayerViolation2(HeuristicsAdditionViolationEvent e)
+    {
+        System.out.println("[V2] " + e.getPlayer().getName() + " triggered " + e.getEventName());
+        for(Player p : Bukkit.getOnlinePlayers())
+        {
+            if(ModerationMechanics.isStaff(p))
+            {
+                p.sendMessage(ChatColor.RED.toString() + "ANTI-CHEAT: " + e.getPlayer().getName() + " is hacking with hack type: " + e.getEventName());
+            }
+        }
+        e.getPlayer().kickPlayer("Hacking is not allowed.");
+        return;
+    }
+    @EventHandler
+    public void onPlayerViolation3(PlayerAdditionViolationEvent e)
+    {
+        if(e.getVl() < 15)
+        {
+            return;
+        }
+        System.out.println("[V3] " + e.getPlayer().getName() + " triggered " + e.getAdditionHackType() + " with violations of: " + e.getVl());
+        for(Player p : Bukkit.getOnlinePlayers())
+        {
+            if(ModerationMechanics.isStaff(p))
+            {
+                p.sendMessage(ChatColor.RED.toString() + "ANTI-CHEAT: " + e.getPlayer().getName() + " is hacking with hack type: " + e.getAdditionHackType().name());
             }
         }
         e.getPlayer().kickPlayer("Hacking is not allowed.");
@@ -209,15 +170,19 @@ public class AAC implements Listener {
     }
     @EventHandler
     public void onPlayerViolationCommand(PlayerViolationCommandEvent e) {
-        for(Player p : Bukkit.getOnlinePlayers())
+        if(e.getHackType() == HackType.SPEED)
         {
-            if(p.hasPermission("anticheat.getautism"))
-            {
-                p.sendMessage(ChatColor.RED.toString() + "ANTI-CHEAT: " + e.getPlayer().getName() + " is hacking on " + Bukkit.getServerName());
-            }
+            return;
         }
         e.setCancelled(true); // Don't let AAC execute any commands.. We will handle that in our onPlayerViolation event
-        e.getPlayer().kickPlayer("Hacking is not allowed.");
+        return;
+    }
+
+    @EventHandler
+    public void PlayerAdditionViolationCommandEvent(PlayerAdditionViolationCommandEvent e)
+    {
+        e.setCancelled(true); // Don't let AAC Additions execute any commands.. We will handle that in our onPlayerViolation event
+        return;
     }
 }
 
