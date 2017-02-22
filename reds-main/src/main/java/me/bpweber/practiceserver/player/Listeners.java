@@ -7,12 +7,20 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import fr.neatmonster.nocheatplus.checks.CheckType;
+import fr.neatmonster.nocheatplus.checks.ViolationHistory;
+import fr.neatmonster.nocheatplus.hooks.ExemptionSettings;
+import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
+import me.konsolas.aac.AAC;
+import me.konsolas.aac.api.HackType;
+import me.konsolas.aac.api.PlayerViolationCommandEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
@@ -70,7 +78,6 @@ import me.bpweber.practiceserver.pvp.Alignments;
 import me.bpweber.practiceserver.teleport.Hearthstone;
 import me.bpweber.practiceserver.teleport.TeleportBooks;
 import me.bpweber.practiceserver.utils.ParticleEffect;
-
 @SuppressWarnings("deprecation")
 public class Listeners
         implements Listener {
@@ -119,6 +126,42 @@ public class Listeners
     public void onFallDamage(EntityDamageEvent event){
         if(event.getEntity() instanceof Horse && event.getCause() == DamageCause.FALL)
              event.setCancelled(true);
+
+    }
+
+    @EventHandler
+    public void onPlayerViolationCommand(PlayerViolationCommandEvent e) {
+        e.setCancelled(true);
+        for(Player p : Bukkit.getOnlinePlayers()) {
+            if (p.isOp()) {
+                p.sendMessage(ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "] "
+                        + ChatColor.RED + e.getPlayer().getName() + " is suspected of using " + e.getHackType().getName());
+
+            }
+        }
+    }
+    @EventHandler
+    public void NCPExempter(EntityDamageByEntityEvent e) {
+        if(e.getDamager() instanceof Player) {
+            Player p = (Player) e.getDamager();
+            if(p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") || p.getInventory().getItemInMainHand().getType().name().contains("_HOE")) {
+                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_NOSWING);
+
+                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_REACH);
+                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_SPEED);
+                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_DIRECTION);
+                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_ANGLE);
+                AAC.j.setViolationLevel(p, HackType.KILLAURA, 0);
+            }else if(!p.getInventory().getItemInMainHand().getType().name().contains("_HOE") || !p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") && NCPExemptionManager.isExempted(p, CheckType.FIGHT_SPEED) ||
+                    NCPExemptionManager.isExempted(p, CheckType.FIGHT_REACH) || NCPExemptionManager.isExempted(p, CheckType.FIGHT_NOSWING)){
+                NCPExemptionManager.unexempt(p, CheckType.FIGHT_SPEED);
+                NCPExemptionManager.unexempt(p, CheckType.FIGHT_REACH);
+                NCPExemptionManager.unexempt(p, CheckType.FIGHT_NOSWING);
+                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_DIRECTION);
+                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_ANGLE);
+
+            }
+        }
     }
     @EventHandler
     public void onMOTD(ServerListPingEvent e) {
@@ -143,8 +186,8 @@ public class Listeners
     @EventHandler
     public void onJoinBanned(PlayerLoginEvent e) {
         Player p = e.getPlayer();
-        if (Ban.banned.containsKey(p.getName().toLowerCase())) {
-            if (Ban.banned.get(p.getName().toLowerCase()) == -1) {
+        if (Ban.banned.containsKey(p.getUniqueId())) {
+            if (Ban.banned.get(p.getUniqueId()) == -1) {
                 e.setKickMessage(ChatColor.RED + "Your account has been PERMANENTLY disabled." + "\n" + ChatColor.GRAY +
                         "For further information about this suspension, please contact a " + ChatColor.UNDERLINE + "Staff Member");
             } else {
@@ -169,6 +212,8 @@ public class Listeners
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
+        p.setCollidable(false);
+
         // FIX SHIT
         p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(1024.0D);
 

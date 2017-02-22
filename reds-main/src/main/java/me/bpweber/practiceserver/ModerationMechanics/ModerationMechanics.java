@@ -3,6 +3,7 @@ package me.bpweber.practiceserver.ModerationMechanics;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,7 +39,7 @@ public class ModerationMechanics {
 					}
 					Mute.muted.put(s2, Mute.muted.get(s2) - 1);
 				}
-				for (String s2 : Ban.banned.keySet()) {
+				for (UUID s2 : Ban.banned.keySet()) {
 					if (s2 == null)
 						continue;
 					if (Ban.banned.get(s2) < 0) {
@@ -70,7 +71,8 @@ public class ModerationMechanics {
 		if (config.getConfigurationSection("banned") != null) {
 			for (String key : config.getConfigurationSection("banned").getKeys(false)) {
 				time = config.getConfigurationSection("banned").getInt(key);
-				Ban.banned.put(key, time);
+				UUID id = UUID.fromString(key);
+				Ban.banned.put(id, time);
 			}
 		}
 		if (config.getConfigurationSection("muted") != null) {
@@ -86,7 +88,7 @@ public class ModerationMechanics {
 		PracticeServer.log.info("[ModerationMechanics] has been disabled.");
 		File file = new File(PracticeServer.plugin.getDataFolder(), "bans.yml");
 		YamlConfiguration config = new YamlConfiguration();
-		for (String s2 : Ban.banned.keySet()) {
+		for (UUID s2 : Ban.banned.keySet()) {
 			config.set("banned." + s2, Ban.banned.get(s2));
 		}
 		for (String s2 : Mute.muted.keySet()) {

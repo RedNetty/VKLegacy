@@ -1,5 +1,6 @@
 package me.bpweber.practiceserver.ModerationMechanics.Commands;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
@@ -13,7 +14,7 @@ import me.bpweber.practiceserver.pvp.Alignments;
 
 public class Ban implements CommandExecutor {
 
-	public static ConcurrentHashMap<String, Integer> banned = new ConcurrentHashMap<String, Integer>();
+	public static ConcurrentHashMap<UUID, Integer> banned = new ConcurrentHashMap<UUID, Integer>();
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player p;
@@ -30,9 +31,10 @@ public class Ban implements CommandExecutor {
 				if (rank.equals("pmod") || p.isOp()) {
 					if (args.length == 2) {
 						player = args[0];
+						Player target  = Bukkit.getPlayer(player);
 						try {
 							int seconds = Integer.parseInt(args[1]) * 60 * 60;
-							banned.put(player.toLowerCase(), seconds);
+							banned.put(target.getUniqueId(), seconds);
 							p.sendMessage(ChatColor.AQUA + "You have banned the user '" + args[0] + "' for "
 									+ Integer.parseInt(args[1]) + " hours.");
 							if (Bukkit.getServer().getPlayer(player) == null

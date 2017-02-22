@@ -215,7 +215,7 @@ public class CratesMain implements Listener {
         Random r = new Random();
         ItemStack i;
         int item = r.nextInt(8);
-        int rarityd = r.nextInt(150);
+        int rarityd = r.nextInt(200);
         int rarity = 0;
         if (rarityd <= 15) {
             rarity = 2;
@@ -223,7 +223,7 @@ public class CratesMain implements Listener {
         if (rarityd > 15 && rarityd <= 50) {
             rarity = 1;
         }
-        if (rarityd > 50 && rarityd <= 85 || rarityd >= 150) {
+        if (rarityd > 50 && rarityd <= 85 || rarityd >= 200) {
             rarity = 0;
         }
         if (rarityd > 85 && rarityd <= 100) {

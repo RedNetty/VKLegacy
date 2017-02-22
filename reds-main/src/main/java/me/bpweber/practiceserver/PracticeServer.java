@@ -24,8 +24,8 @@ package me.bpweber.practiceserver;
 
 import java.util.logging.Logger;
 
+import fr.neatmonster.nocheatplus.utilities.collision.CollisionUtil;
 import io.vawke.practice.Game;
-import me.bpweber.practiceserver.anticheat.AAC;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -143,7 +143,6 @@ public class PracticeServer extends JavaPlugin {
     private static Trading trading;
     private static CratesMain cm;
     private static Economy em;
-    private static AAC aac;
 
     private Game game;
 
@@ -246,8 +245,6 @@ public class PracticeServer extends JavaPlugin {
         teleportBooks = new TeleportBooks();
         toggles = new Toggles();
         untradeable = new Untradeable();
-        aac = new AAC();
-        aac.onEnable();
         alignments.onEnable();
         antibuild.onEnable();
         banks.onEnable();
@@ -287,7 +284,6 @@ public class PracticeServer extends JavaPlugin {
 
     public void onDisable() {
        // this.game.shutdownHook();
-        aac.onDisable();
         trading.onDisable();
         em.onDisable();
         alignments.onDisable();

@@ -62,14 +62,18 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 public class Staffs
         implements Listener {
     HashMap<Projectile, ItemStack> shots = new HashMap<Projectile, ItemStack>();
     public static HashMap<Player, ItemStack> staff = new HashMap<Player, ItemStack>();
+    ArrayList<UUID> canShoot = new ArrayList<UUID>();
     public PracticeServer m;
 
     public void onEnable() {
@@ -90,6 +94,10 @@ public class Staffs
                 ParticleEffect.CRIT_MAGIC.display(0.0f, 0.0f, 0.0f, 0.5f, 20, p.getLocation().add(0.0, 1.0, 0.0), 20.0);
             } else {
                 if (Energy.nodamage.containsKey(p.getName()) && System.currentTimeMillis() - Energy.nodamage.get(p.getName()) < 100) {
+                    e.setCancelled(true);
+                    return;
+                }
+                if(canShoot.contains(p.getUniqueId())) {
                     e.setCancelled(true);
                     return;
                 }
@@ -137,6 +145,12 @@ public class Staffs
                     Energy.removeEnergy(p, amt);
                     p.playSound(p.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1.0f, 0.25f);
                     this.shots.put(ep, p.getInventory().getItemInMainHand());
+                    new BukkitRunnable() {
+
+                        public void run() {
+                            canShoot.remove(p.getUniqueId());
+                        }
+                    }.runTaskLaterAsynchronously(PracticeServer.plugin, 15);
                 } else {
                     Energy.setEnergy(p, 0.0f);
                     Energy.cd.put(p.getName(), System.currentTimeMillis());

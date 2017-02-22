@@ -28,15 +28,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.inventivetalent.bossbar.BossBarAPI;
 
 import java.io.File;
 import java.io.IOException;
@@ -192,6 +188,7 @@ public class Alignments
             e.setRespawnLocation(TeleportBooks.Cyrennica);
         }
     }
+
 
     @EventHandler
     public void onZoneMessage(PlayerMoveEvent e) {

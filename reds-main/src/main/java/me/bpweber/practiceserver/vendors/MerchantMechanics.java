@@ -563,6 +563,8 @@ public class MerchantMechanics implements Listener {
         if (isTradeButton(e.getCurrentItem())) {
             e.setCancelled(true);
             if (e.getCurrentItem().getDurability() == 8) {
+                e.getWhoClicked().closeInventory();
+                clicker.closeInventory();
                 int slots_available = 0;
                 int slots_needed = 0;
                 e.getCurrentItem().setDurability((short) 10);
