@@ -3,6 +3,8 @@ package me.bpweber.practiceserver.utils;
 
 import java.util.List;
 
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -13,8 +15,6 @@ import org.json.simple.JSONArray;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 
 /**
  * Created by Chase on Nov 17, 2015
@@ -175,7 +175,7 @@ public class JSONMessage {
     }
 
     public void sendToPlayer(Player p) {
-        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(ChatSerializer.a(json.toString())));
+        ((CraftPlayer) p).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(json.toString())));
     }
 
     public void setColor(ChatColor color) {

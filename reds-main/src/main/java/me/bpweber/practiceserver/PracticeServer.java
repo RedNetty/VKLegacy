@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import fr.neatmonster.nocheatplus.utilities.collision.CollisionUtil;
 import io.vawke.practice.Game;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -39,20 +40,6 @@ import me.bpweber.practiceserver.Crates.CratesMain;
 import me.bpweber.practiceserver.Crates.Commands.giveCrate;
 import me.bpweber.practiceserver.Crates.Commands.giveKey;
 import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Ban;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Banksee;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Createdrop;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.FixItem;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Invsee;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Speed;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.StaffChat;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Tellall;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.ToggleTrail;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Unban;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Unmute;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
 import me.bpweber.practiceserver.chat.ChatMechanics;
 import me.bpweber.practiceserver.damage.Damage;
 import me.bpweber.practiceserver.damage.Staffs;
@@ -162,6 +149,7 @@ public class PracticeServer extends JavaPlugin {
             this.getDataFolder().mkdirs();
         }
         log = plugin.getLogger();
+        this.getCommand("reboot").setExecutor((CommandExecutor) new Reboot());
         this.getCommand("tellall").setExecutor((CommandExecutor) new Tellall());
 		this.getCommand("gl").setExecutor((CommandExecutor) new ChatMechanics());
 		this.getCommand("givePouch").setExecutor((CommandExecutor) new Givepouch());

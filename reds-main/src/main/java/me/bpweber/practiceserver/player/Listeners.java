@@ -8,19 +8,19 @@ import java.util.Random;
 import java.util.UUID;
 
 import fr.neatmonster.nocheatplus.checks.CheckType;
-import fr.neatmonster.nocheatplus.checks.ViolationHistory;
-import fr.neatmonster.nocheatplus.hooks.ExemptionSettings;
 import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
+import me.bpweber.practiceserver.utils.CheckIP;
+import me.bpweber.practiceserver.utils.StringUtil;
 import me.konsolas.aac.AAC;
 import me.konsolas.aac.api.HackType;
 import me.konsolas.aac.api.PlayerViolationCommandEvent;
+import me.konsolas.aac.api.PlayerViolationEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
@@ -78,9 +78,11 @@ import me.bpweber.practiceserver.pvp.Alignments;
 import me.bpweber.practiceserver.teleport.Hearthstone;
 import me.bpweber.practiceserver.teleport.TeleportBooks;
 import me.bpweber.practiceserver.utils.ParticleEffect;
+
 @SuppressWarnings("deprecation")
 public class Listeners
         implements Listener {
+
     public static HashMap<UUID, Long> named = new HashMap<UUID, Long>();
     HashMap<String, Long> update = new HashMap<String, Long>();
     public static HashMap<String, Long> combat = new HashMap<String, Long>();
@@ -122,47 +124,110 @@ public class Listeners
     public void onDisable() {
         PracticeServer.log.info("[Listeners] has been disabled.");
     }
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onFallDamage(EntityDamageEvent event){
-        if(event.getEntity() instanceof Horse && event.getCause() == DamageCause.FALL)
-             event.setCancelled(true);
 
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onFallDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Horse && event.getCause() == DamageCause.FALL)
+            event.setCancelled(true);
+
+    }
+
+    //ANTI-VPN Check to make sure user is not on VPN bn
+    @EventHandler
+    public void onJoinVPNCHECK(PlayerJoinEvent e) {
+        if (!e.getPlayer().isOp()) {
+            Player p = e.getPlayer();
+            String addr = p.getAddress().getHostName();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    boolean bool = CheckIP.calculate(addr);
+                    if (bool == true) {
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    e.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&',
+                                            "&6[&bAutism-Catcher&6] &cYou may not log in with a VPN/Proxy! Please disable your VPN/Proxy!"));
+                                } catch (Exception e) {
+                                }
+                            }
+
+                        }.runTaskLater(PracticeServer.plugin, 40);
+                    }
+                }
+            }.runTaskLaterAsynchronously(PracticeServer.plugin, 20);
+        }
+    }
+    //ANTICHEAT
+
+
+    @EventHandler
+    public void onPlayerViolation(PlayerViolationEvent e) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.isOp()) {
+                if (e.getHackType() != HackType.FLY && e.getHackType() != HackType.INTERACT && e.getHackType() != HackType.BADPACKETS) {
+                    if (e.getViolations() > 45) {
+                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GOLD + "]");
+                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
+                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Player Suspected: " + ChatColor.GRAY + e.getPlayer().getName());
+                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Violation Level: " + ChatColor.GRAY + e.getViolations());
+                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Lag Info: " + ChatColor.GRAY + "(TPS: " + (int) AAC.j.getTPS() + ") (Ping: " + AAC.j.getPing(e.getPlayer()) + ")");
+
+                    }
+                    if (e.getViolations() > 75) {
+                        ArrayList<String> kickmsg = new ArrayList<String>();
+                        kickmsg.add(ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "]");
+                        kickmsg.add(ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
+                        e.getPlayer().kickPlayer(kickmsg.toString());
+                    }
+                    if (e.getViolations() > 150) {
+                        ArrayList<String> kickmsg = new ArrayList<String>();
+                        kickmsg.add(ChatColor.RED + "Your account has been permanently disabled.");
+                        kickmsg.add(ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "]");
+                        kickmsg.add(ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
+                        kickmsg.add(ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you believe this is an error please contact a " + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "STAFF MEMBER");
+                        e.getPlayer().kickPlayer(kickmsg.toString());
+                        e.getPlayer().setBanned(true);
+                    }
+                }
+            }
+        }
     }
 
     @EventHandler
     public void onPlayerViolationCommand(PlayerViolationCommandEvent e) {
-        e.setCancelled(true);
-        for(Player p : Bukkit.getOnlinePlayers()) {
-            if (p.isOp()) {
-                p.sendMessage(ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "] "
-                        + ChatColor.RED + e.getPlayer().getName() + " is suspected of using " + e.getHackType().getName());
-
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.isOp() && e.getHackType() != HackType.KILLAURA) {
+                e.setCancelled(true);
             }
         }
     }
+
     @EventHandler
     public void NCPExempter(EntityDamageByEntityEvent e) {
-        if(e.getDamager() instanceof Player) {
+        if (e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
-            if(p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") || p.getInventory().getItemInMainHand().getType().name().contains("_HOE")) {
+            if (p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") || p.getInventory().getItemInMainHand().getType().name().contains("_HOE")) {
+                AAC.j.setViolationLevel(p, HackType.KILLAURA, 0);
                 NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_NOSWING);
-
                 NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_REACH);
                 NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_SPEED);
                 NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_DIRECTION);
                 NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_ANGLE);
-                AAC.j.setViolationLevel(p, HackType.KILLAURA, 0);
-            }else if(!p.getInventory().getItemInMainHand().getType().name().contains("_HOE") || !p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") && NCPExemptionManager.isExempted(p, CheckType.FIGHT_SPEED) ||
-                    NCPExemptionManager.isExempted(p, CheckType.FIGHT_REACH) || NCPExemptionManager.isExempted(p, CheckType.FIGHT_NOSWING)){
+            } else if (!p.getInventory().getItemInMainHand().getType().name().contains("_HOE") || !p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") && NCPExemptionManager.isExempted(p, CheckType.FIGHT_SPEED) ||
+                    NCPExemptionManager.isExempted(p, CheckType.FIGHT_REACH) || NCPExemptionManager.isExempted(p, CheckType.FIGHT_NOSWING)) {
                 NCPExemptionManager.unexempt(p, CheckType.FIGHT_SPEED);
                 NCPExemptionManager.unexempt(p, CheckType.FIGHT_REACH);
                 NCPExemptionManager.unexempt(p, CheckType.FIGHT_NOSWING);
-                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_DIRECTION);
-                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_ANGLE);
+                NCPExemptionManager.unexempt(p, CheckType.FIGHT_DIRECTION);
+                NCPExemptionManager.unexempt(p, CheckType.FIGHT_ANGLE);
 
             }
         }
     }
+
+    //ANTICHEAT END
     @EventHandler
     public void onMOTD(ServerListPingEvent e) {
         String motd = ChatColor.AQUA.toString() + ChatColor.BOLD + "Autism Realms";
@@ -230,13 +295,13 @@ public class Listeners
             p.sendMessage(" ");
             ++i;
         }
-        p.sendMessage(ChatColor.WHITE.toString() + ChatColor.BOLD + "          Autism Realms Patch " + PracticeServer.plugin.getDescription().getVersion());
-        p.sendMessage(ChatColor.GRAY + "                  http://AutismRealms.buycraft.net/");
+        StringUtil.sendCenteredMessage(p, ChatColor.WHITE.toString() + ChatColor.BOLD + "Autism Realms Patch " + PracticeServer.plugin.getDescription().getVersion());
+        StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "http://AutismRealms.buycraft.net/");
         p.sendMessage("");
-        p.sendMessage(ChatColor.YELLOW + "                   You are on the " + ChatColor.BOLD + "US-1" + ChatColor.YELLOW + " shard.");
-        p.sendMessage(ChatColor.GRAY.toString() + ChatColor.ITALIC + "       To manage your gameplay settings, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggles");
+        StringUtil.sendCenteredMessage(p, ChatColor.YELLOW + "You are on the " + ChatColor.BOLD + "US-1" + ChatColor.YELLOW + " shard.");
+        StringUtil.sendCenteredMessage(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To manage your gameplay settings, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggles");
         if (ModerationMechanics.isSub(p)) {
-            p.sendMessage(ChatColor.GRAY.toString() + ChatColor.ITALIC + "       To toggle your subscriber trail, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggletrail");
+            StringUtil.sendCenteredMessage(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To toggle your subscriber trail, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggletrail");
         }
         p.sendMessage("");
         e.setJoinMessage(null);
@@ -253,8 +318,8 @@ public class Listeners
             if (!Vanish.vanished.contains(p.getName().toLowerCase())) {
                 Vanish.vanished.add(p.getName().toLowerCase());
             }
-            p.sendMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + "               GM INVISIBILITY (infinite)");
-            p.sendMessage(ChatColor.GREEN + "                      You are now " + ChatColor.BOLD + "invisible.");
+            StringUtil.sendCenteredMessage(p, ChatColor.AQUA.toString() + ChatColor.BOLD + "GM INVISIBILITY (infinite)");
+            StringUtil.sendCenteredMessage(p, ChatColor.GREEN + "You are now " + ChatColor.BOLD + "invisible.");
             p.setMaxHealth(9999.0);
             p.setHealth(9999.0);
         } else {
@@ -890,7 +955,7 @@ public class Listeners
         PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
         potionMeta.setDisplayName(ChatColor.WHITE + "Minor Health Potion");
         potionMeta.setLore(Arrays.asList(ChatColor.GRAY + "A potion that restores " + ChatColor.WHITE + "15HP", ChatColor.GRAY + "Untradeable"));
-        for(ItemFlag itemFlag : ItemFlag.values()) {
+        for (ItemFlag itemFlag : ItemFlag.values()) {
             potionMeta.addItemFlags(itemFlag);
         }
         itemStack.setItemMeta(potionMeta);

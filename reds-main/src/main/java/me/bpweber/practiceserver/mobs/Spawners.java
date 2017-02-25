@@ -501,7 +501,6 @@ public class Spawners implements Listener, CommandExecutor {
         }
         return a;
     }
-
     @SuppressWarnings("deprecation")
     public LivingEntity mob(final Location loc, final String type) {
         if (type.equalsIgnoreCase("skeleton") || type.equalsIgnoreCase("impa") || type.equalsIgnoreCase("skeletonking")
@@ -518,8 +517,6 @@ public class Spawners implements Listener, CommandExecutor {
                 || type.equalsIgnoreCase("bloodbutcher") || type.equalsIgnoreCase("copjak")) {
             Zombie zombie = (Zombie) loc.getWorld().spawnEntity(loc, EntityType.ZOMBIE);
             zombie.setBaby(false);
-            zombie.setVillager(false);
-            zombie.setVillagerProfession(null);
             return zombie;
         }
         if (type.equalsIgnoreCase("magmacube")) {

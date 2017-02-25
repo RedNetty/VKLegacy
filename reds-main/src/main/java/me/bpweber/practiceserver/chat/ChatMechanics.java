@@ -37,6 +37,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -54,6 +56,7 @@ import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import net.minecraft.server.v1_9_R2.Packet;
 
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
@@ -61,9 +64,6 @@ import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
 import me.bpweber.practiceserver.utils.JSONMessage;
-import net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_9_R2.Packet;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 
 public class ChatMechanics
         implements Listener,
@@ -392,7 +392,7 @@ public class ChatMechanics
             normal.addText(before + "");
             normal.addHoverText(hoveredChat, ChatColor.BOLD + ChatColor.UNDERLINE.toString() + "SHOW");
             normal.addText(after);
-			PacketPlayOutChat packet = new PacketPlayOutChat(ChatSerializer.a(normal.toString()));
+			PacketPlayOutChat packet = new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(normal.toString()));
 			((CraftPlayer) p).getHandle().playerConnection.sendPacket((Packet) packet);
         }
     }

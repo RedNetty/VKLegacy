@@ -133,14 +133,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("IRON_")) {
                     gemamt = random.nextInt(10) + 10;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 50) {
-                            dodrop = true;
-                        }
-                    } else if (elite && this.isCustomNamedElite(s)) {
                         if (rd < 38) {
                             dodrop = true;
                         }
-                    } else if (rd < 32) {
+                    } else if (elite && this.isCustomNamedElite(s)) {
+                        if (rd < 34) {
+                            dodrop = true;
+                        }
+                    } else if (rd < 26) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -171,17 +171,17 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("DIAMOND_")) {
                     gemamt = random.nextInt(30) + 24;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 35) {
+                        if (rd < 20) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 30) {
+                        if (rd < 15) {
                             dodrop = true;
                         }
-                    } else if (rd < 20) {
+                    } else if (rd < 10) {
                         dodrop = true;
                     }
-                    if (scrolldrop <= 5) {
+                    if (scrolldrop <= 9) {
                         final int scrolltype = random.nextInt(4);
                         if (scrolltype == 0) {
                             s.getWorld().dropItemNaturally(s.getLocation(), TeleportBooks.deadpeaks_book(false));
@@ -206,14 +206,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("GOLD_")) {
                     gemamt = random.nextInt(50) + 14;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 29) {
+                        if (rd < 15) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 28) {
+                        if (rd < 12) {
                             dodrop = true;
                         }
-                    } else if (rd < 16) {
+                    } else if (rd < 6) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {

@@ -82,6 +82,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -198,20 +199,19 @@ public class Horses
         }
         return 0;
     }
-
     public static Horse horse(Player p, int tier) {
         double speed = 0.25;
         double jump = 0.75;
         if (tier == 3) {
-            speed = 0.3;
+            speed = 0.28;
             jump = 0.85;
         }
         if (tier == 4) {
-            speed = 0.35;
+            speed = 0.32;
             jump = 0.95;
         }
         if (tier == 5) {
-            speed = 0.4;
+            speed = 0.38;
             jump = 1.05;
         }
         Horse h = (Horse) p.getWorld().spawnEntity(p.getLocation(), EntityType.HORSE);
@@ -326,7 +326,10 @@ public class Horses
         }
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-            if (e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION) {
+            if (e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION
+                    || e.getCause() == EntityDamageEvent.DamageCause.CONTACT || e.getCause() == EntityDamageEvent.DamageCause.FALLING_BLOCK ||
+                    e.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL || e.getCause() == EntityDamageEvent.DamageCause.CUSTOM || e.getCause() == EntityDamageEvent.DamageCause.DROWNING
+                    || e.getCause() == EntityDamageEvent.DamageCause.DROWNING){
                 if (p.isInsideVehicle() && p.getVehicle().getType() == EntityType.HORSE) {
                     e.setDamage(0.0);
                     e.setCancelled(true);
@@ -363,7 +366,7 @@ public class Horses
                 }
                 h.remove();
                 if (p != null) {
-                    p.teleport(h.getLocation().add(0.0, 1.0, 0.0));
+                    p.teleport(h.getLocation().add(0.0, 2.0, 0.0));
                 }
             }
             e.setDamage(0.0);
@@ -386,8 +389,9 @@ public class Horses
     @EventHandler
     public void onDismount(VehicleExitEvent e) {
         if (e.getExited() instanceof Player && e.getVehicle() instanceof Horse) {
-            e.getVehicle().remove();
-        }
+                e.getVehicle().remove();
+            }
+
     }
 
     @EventHandler

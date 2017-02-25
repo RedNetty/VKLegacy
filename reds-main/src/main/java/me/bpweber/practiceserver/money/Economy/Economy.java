@@ -43,7 +43,6 @@ public class Economy implements Listener {
 			int bal = currentBalance.get(id);
 			EcoConfig.get().set(id.toString(), bal);
 			EcoConfig.save();
-			PracticeServer.log.info(id.toString() + bal);
 		}
 	}
 
@@ -52,7 +51,6 @@ public class Economy implements Listener {
 			int val = EcoConfig.get().getInt(key);
 			UUID id = UUID.fromString(key);
 			currentBalance.put(id, val);
-			PracticeServer.log.info(id.toString() + val);
 		}
 
 	}

@@ -38,7 +38,7 @@ public class CratesMain implements Listener {
             public void run() {
                 String prefix = ChatColor.GRAY + "[" + ChatColor.AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AR" + ChatColor.GRAY + "]";
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    p.sendMessage(prefix + ChatColor.GREEN + " Help pay for the server today @ AutismRealms.buycraft.net! Buy Keys, Ranks, And Unbans!");
+                    p.sendMessage(prefix + ChatColor.GREEN + " Help pay for the server today @ AutismRealms.buycraft.net! Buy Gem Pouches, Ranks, And Unbans!");
                 }
             }
         }.runTaskTimerAsynchronously(PracticeServer.plugin, 2200, 2200);
@@ -66,7 +66,7 @@ public class CratesMain implements Listener {
 
         ItemStack item = null;
         if (e.getWhoClicked() instanceof Player) {
-            if (e.getCursor().getType() != null) {
+            if (e.getClickedInventory() != null && e.getClickedInventory().getHolder() instanceof Player && e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
                 if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
                     if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST) {
                         if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
@@ -75,10 +75,12 @@ public class CratesMain implements Listener {
                             item = unlockCrate(2);
                         } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
                             item = unlockCrate(3);
+                        }else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
+                            item = unlockCrate(4);
                         }
                         if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
                                 e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
-                                e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
+                                e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")){
                             if (e.getCurrentItem().getAmount() == 1) {
                                 e.setCurrentItem(null);
                             }
@@ -172,14 +174,11 @@ public class CratesMain implements Listener {
     public void onInvClick(InventoryClickEvent e) {
         if (e.getWhoClicked() instanceof Player) {
             Player p = (Player) e.getWhoClicked();
-            if (e.getCursor().getType() != null) {
+            if (e.getCursor().getType() != null && e.getClickedInventory() != null && e.getClickedInventory().getHolder() instanceof Player && e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
                 if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST && e.getCursor().getType() == Material.TRIPWIRE_HOOK) {
                     ItemStack item1 = new ItemStack(Material.AIR);
                     if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
                         item1 = unlockCrate(5);
-                    }
-                    if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
-                        item1 = unlockCrate(4);
                     }
                     doFirework(p);
                     if (e.getCursor().getAmount() == 1) {
