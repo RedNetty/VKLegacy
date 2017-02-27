@@ -412,7 +412,7 @@ public class EliteDrops {
             armdps = 2;
             elem = 3;
             str = true;
-            elemamt = 70;
+            elemamt = random.nextInt(20) + 45;
             crit = true;
             critamt = random.nextInt(3) + 8;
             mindmg = random.nextInt(11) + 180;
@@ -463,6 +463,66 @@ public class EliteDrops {
                 rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
             }
             tier = 4;
+        }
+        if (mobname.equalsIgnoreCase("jayden")) {
+            nrghp = 2;
+            armdps = 2;
+            elem = 3;
+            vit = true;
+            dodge = true;
+            elemamt = random.nextInt(10) + 30;
+            mindmg = random.nextInt(50) + 230;
+            maxdmg = random.nextInt(70) + 370;
+            if (item <= 4) {
+                name = "Jayden's Swift Blade";
+                is.setType(Material.GOLD_SWORD);
+                llore = String.valueOf(llore) + "King Jayden's blade encrusted with diamonds.";
+            }
+            if (item == 5) {
+                dpsamt = random.nextInt(2) + 6;
+                vitamt = 145;
+                hp = random.nextInt(901) + 1800;
+                nrg = random.nextInt(6) + 3;
+                dodgeamt = random.nextInt(3) + 5;
+                name = "Jayden's Beautiful Crown";
+                is.setType(Material.GOLD_HELMET);
+                llore = String.valueOf(llore) + "A golden crown forged by Maltai's great smith.";
+                rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Unique";
+            }
+            if (item == 6) {
+                dpsamt = random.nextInt(4) + 12;
+                vitamt = 345;
+                hp = random.nextInt(1801) + 2800;
+                nrg = random.nextInt(5) + 6;
+                dodgeamt = random.nextInt(11) + 10;
+                name = "Kilatans Legendary Platemail";
+                is.setType(Material.GOLD_CHESTPLATE);
+                llore = String.valueOf(llore) + "The Legendary platemail piece of the Demon Lord Kilatan.";
+                rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
+            }
+            if (item == 7) {
+                dpsamt = random.nextInt(4) + 12;
+                vitamt = 345;
+                hp = random.nextInt(1801) + 2800;
+                nrg = random.nextInt(5) + 6;
+                dodgeamt = random.nextInt(11) + 10;
+                name = "Kilatans Legendary Leggings";
+                is.setType(Material.GOLD_LEGGINGS);
+                llore = String.valueOf(llore) + "You can feel the power emanating from this armor piece.";
+                rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
+            }
+            if (item == 8) {
+                dpsamt = random.nextInt(2) + 6;
+                vitamt = 145;
+                hp = random.nextInt(1001) + 1400;
+                nrg = random.nextInt(6) + 3;
+                dodgeamt = random.nextInt(3) + 5;
+                name = "Kilatans Legendary Boots";
+                is.setType(Material.GOLD_BOOTS);
+                llore = String.valueOf(llore) + "Boots that carried the weight of the underworld.";
+                rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
+            }
+            tier = 5;
         }
         if (mobname.equalsIgnoreCase("kilatan")) {
             nrghp = 2;

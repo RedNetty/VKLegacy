@@ -1,21 +1,16 @@
 package me.bpweber.practiceserver.player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.money.Banks;
+import me.bpweber.practiceserver.utils.JsonBuilder;
+import me.bpweber.practiceserver.vendors.MerchantMechanics;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,21 +22,16 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BlockIterator;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
-import me.bpweber.practiceserver.money.Banks;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.JsonBuilder;
-import me.bpweber.practiceserver.vendors.MerchantMechanics;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class Trading implements Listener {
     public static HashMap<Player, Player> trade_map;
@@ -86,7 +76,7 @@ public class Trading implements Listener {
             }
         }
         final ItemMeta im = orig_i.getItemMeta();
-        im.setLore((List<String>) new_lore);
+        im.setLore(new_lore);
         im.setDisplayName(name);
         orig_i.setItemMeta(im);
         return orig_i;
@@ -94,7 +84,7 @@ public class Trading implements Listener {
 
     @SuppressWarnings("unused")
     public static Player getTarget(final Player trader) {
-        final List<Entity> nearbyE = (List<Entity>) trader.getNearbyEntities(4.0, 4.0, 4.0);
+        final List<Entity> nearbyE = trader.getNearbyEntities(4.0, 4.0, 4.0);
         final ArrayList<Player> livingE = new ArrayList<Player>();
         for (final Entity e : nearbyE) {
             if (e.getType() == EntityType.PLAYER && !e.hasMetadata("NPC")) {
@@ -102,7 +92,7 @@ public class Trading implements Listener {
             }
         }
         Player target = null;
-        final BlockIterator bItr = new BlockIterator((LivingEntity) trader, 4);
+        final BlockIterator bItr = new BlockIterator(trader, 4);
         if (bItr == null) {
             return null;
         }
@@ -112,7 +102,7 @@ public class Trading implements Listener {
             final int by = block.getY();
             final int bz = block.getZ();
             for (final LivingEntity e2 : livingE) {
-                if (e2 instanceof Player && Vanish.vanished.contains(((Player) e2).getName())) {
+                if (e2 instanceof Player && Vanish.vanished.contains(e2.getName())) {
                     continue;
                 }
                 final Location loc = e2.getLocation();
@@ -143,7 +133,7 @@ public class Trading implements Listener {
 
     public void onEnable() {
         this.tm = this;
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         final ItemMeta im = this.divider.getItemMeta();
         im.setDisplayName(" ");
         this.divider.setItemMeta(im);
@@ -151,7 +141,7 @@ public class Trading implements Listener {
             public void run() {
                 Trading.this.doOverheadEffect();
             }
-        }.runTaskTimerAsynchronously((Plugin) PracticeServer.plugin, 40L, 20L);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 40L, 20L);
         this.loadTradeTemplate();
         this.log.info("[Trading] has been enabled.");
     }
@@ -182,7 +172,7 @@ public class Trading implements Listener {
     }
 
     public void loadTradeTemplate() {
-        (Trading.TradeWindowTemplate = Bukkit.getServer().createInventory((InventoryHolder) null, 27)).setItem(4,
+        (Trading.TradeWindowTemplate = Bukkit.getServer().createInventory(null, 27)).setItem(4,
                 this.divider);
         Trading.TradeWindowTemplate.setItem(13, this.divider);
         Trading.TradeWindowTemplate.setItem(22, this.divider);
@@ -432,16 +422,6 @@ public class Trading implements Listener {
         if (tradie.hasMetadata("NPC") || tradie.getPlayerListName().equalsIgnoreCase("")) {
             return;
         }
-        if (Alignments.tagged.containsKey(trader.getName())) {
-            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin,
-                    (Runnable) new Runnable() {
-                        @Override
-                        public void run() {
-                            trader.updateInventory();
-                        }
-                    }, 2L);
-            return;
-        }
         final ItemStack being_dropped = e.getItemDrop().getItemStack();
         if (!Listeners.isItemTradeable(being_dropped)) {
             return;
@@ -455,11 +435,12 @@ public class Trading implements Listener {
             return;
         }
         if (tradie != null) {
+
             if (Trading.trade_map.containsKey(tradie)) {
                 trader.sendMessage(ChatColor.YELLOW + tradie.getName() + " is already trading with someone else.");
                 e.setCancelled(true);
-                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin,
-                        (Runnable) new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin,
+                        new Runnable() {
                             @Override
                             public void run() {
                                 trader.updateInventory();
@@ -478,8 +459,8 @@ public class Trading implements Listener {
                     || tradie.getOpenInventory().getTopInventory().getName().contains("container.bigchest")) {
                 trader.sendMessage(ChatColor.YELLOW + tradie.getName() + " is currently busy.");
                 e.setCancelled(true);
-                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin,
-                        (Runnable) new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin,
+                        new Runnable() {
                             @Override
                             public void run() {
                                 trader.updateInventory();
@@ -493,13 +474,11 @@ public class Trading implements Listener {
                 trader.updateInventory();
                 return;
             }
-            trader.setMetadata("no_trade",
-                    (MetadataValue) new FixedMetadataValue((Plugin) PracticeServer.plugin, (Object) true));
-            tradie.setMetadata("no_trade",
-                    (MetadataValue) new FixedMetadataValue((Plugin) PracticeServer.plugin, (Object) true));
+            trader.setMetadata("no_trade", new FixedMetadataValue(PracticeServer.plugin, true));
+            tradie.setMetadata("no_trade", new FixedMetadataValue(PracticeServer.plugin, true));
             e.getItemDrop().remove();
             this.log.info("TRADE EVENT: " + trader.getName() + " -> " + tradie.getName());
-            final Inventory TradeWindow = Bukkit.createInventory((InventoryHolder) null, 27,
+            final Inventory TradeWindow = Bukkit.createInventory(null, 27,
                     generateTitle(trader.getName(), tradie.getName()));
             TradeWindow.setItem(4, this.divider);
             TradeWindow.setItem(13, this.divider);
@@ -513,7 +492,7 @@ public class Trading implements Listener {
                 if (Listeners.isItemTradeable(tradie.getItemOnCursor())) {
                     TradeWindow.setItem(5, this.makeUnique(tradie.getItemOnCursor()));
                 } else {
-                    tradie.getInventory().addItem(new ItemStack[] { tradie.getItemOnCursor() });
+                    tradie.getInventory().addItem(tradie.getItemOnCursor());
                 }
                 tradie.setItemOnCursor(new ItemStack(Material.AIR));
             }
@@ -534,10 +513,10 @@ public class Trading implements Listener {
             trader.updateInventory();
             new BukkitRunnable() {
                 public void run() {
-                    trader.removeMetadata("no_trade", (Plugin) PracticeServer.plugin);
-                    tradie.removeMetadata("no_trade", (Plugin) PracticeServer.plugin);
+                    trader.removeMetadata("no_trade", PracticeServer.plugin);
+                    tradie.removeMetadata("no_trade", PracticeServer.plugin);
                 }
-            }.runTaskLater((Plugin) PracticeServer.plugin, 40L);
+            }.runTaskLater(PracticeServer.plugin, 40L);
         }
     }
 
@@ -688,8 +667,8 @@ public class Trading implements Listener {
                 .append("Trade cancelled.").toString());
         trade_partner.sendMessage(ChatColor.YELLOW + "Trade cancelled by " + ChatColor.BOLD.toString()
                 + closer.getName() + ChatColor.YELLOW.toString() + ".");
-        PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin,
-                (Runnable) new Runnable() {
+        PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin,
+                new Runnable() {
                     @Override
                     public void run() {
                     }
@@ -724,14 +703,14 @@ public class Trading implements Listener {
         }
         if (!clicker.getOpenInventory().getTitle().equalsIgnoreCase("container.crafting")) {
             clicker.setMetadata("click_event",
-                    (MetadataValue) new FixedMetadataValue((Plugin) PracticeServer.plugin, (Object) true));
+                    new FixedMetadataValue(PracticeServer.plugin, true));
         }
-        PracticeServer.plugin.getServer().getScheduler().runTaskLater((Plugin) PracticeServer.plugin,
-                (Runnable) new Runnable() {
+        PracticeServer.plugin.getServer().getScheduler().runTaskLater(PracticeServer.plugin,
+                new Runnable() {
                     @Override
                     public void run() {
                         if (Bukkit.getPlayer(p_name) != null) {
-                            Bukkit.getPlayer(p_name).removeMetadata("click_event", (Plugin) PracticeServer.plugin);
+                            Bukkit.getPlayer(p_name).removeMetadata("click_event", PracticeServer.plugin);
                         }
                     }
                 }, 5L);
@@ -836,8 +815,8 @@ public class Trading implements Listener {
             clicker.sendMessage(ChatColor.RED + "Trade modified, unaccepted.");
             Trading.trade_map.get(clicker).sendMessage(ChatColor.RED + "Trade modified by " + ChatColor.BOLD
                     + clicker.getName() + ChatColor.RED + ", unaccepted.");
-            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin,
-                    (Runnable) new Runnable() {
+            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin,
+                    new Runnable() {
                         @Override
                         public void run() {
                             clicker.updateInventory();
@@ -960,15 +939,15 @@ public class Trading implements Listener {
                                     .append(tradie.getName()).append(" does not have enough room for this trade.")
                                     .toString());
                             PracticeServer.plugin.getServer().getScheduler()
-                                    .scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
+                                    .scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                                         @Override
                                         public void run() {
                                             final InventoryCloseEvent close_tradie = new InventoryCloseEvent(
                                                     tradie.getOpenInventory());
                                             final InventoryCloseEvent close_clicker = new InventoryCloseEvent(
                                                     clicker.getOpenInventory());
-                                            Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
-                                            Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
+                                            Bukkit.getServer().getPluginManager().callEvent(close_tradie);
+                                            Bukkit.getServer().getPluginManager().callEvent(close_clicker);
                                         }
                                     }, 2L);
                             return;
@@ -999,15 +978,15 @@ public class Trading implements Listener {
                                     .append(clicker.getName()).append(" does not have enough room for this trade.")
                                     .toString());
                             PracticeServer.plugin.getServer().getScheduler()
-                                    .scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
+                                    .scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                                         @Override
                                         public void run() {
                                             final InventoryCloseEvent close_tradie = new InventoryCloseEvent(
                                                     tradie.getOpenInventory());
                                             final InventoryCloseEvent close_clicker = new InventoryCloseEvent(
                                                     clicker.getOpenInventory());
-                                            Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
-                                            Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
+                                            Bukkit.getServer().getPluginManager().callEvent(close_tradie);
+                                            Bukkit.getServer().getPluginManager().callEvent(close_clicker);
                                         }
                                     }, 2L);
                             return;
@@ -1030,13 +1009,13 @@ public class Trading implements Listener {
                             clicker.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Not enough room.").toString());
                             clicker.sendMessage(ChatColor.GRAY + "You need " + ChatColor.BOLD + (tradie_slots_needed - tradie_slots) + ChatColor.GRAY + " more free slots to complete this trade.");
                             tradie.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append(clicker.getName()).append(" does not have enough room for this trade.").toString());
-                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
+                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                                 @Override
                                 public void run() {
                                     final InventoryCloseEvent close_tradie = new InventoryCloseEvent(tradie.getOpenInventory());
                                     final InventoryCloseEvent close_clicker = new InventoryCloseEvent(clicker.getOpenInventory());
-                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
-                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
+                                    Bukkit.getServer().getPluginManager().callEvent(close_tradie);
+                                    Bukkit.getServer().getPluginManager().callEvent(close_clicker);
                                 }
                             }, 2L);
                             return;
@@ -1152,13 +1131,13 @@ public class Trading implements Listener {
                             clicker.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Not enough room.").toString());
                             clicker.sendMessage(ChatColor.GRAY + "You need " + ChatColor.BOLD + (tradie_slots_needed - tradie_slots) + ChatColor.GRAY + " more free slots to complete this trade.");
                             tradie.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append(clicker.getName()).append(" does not have enough room for this trade.").toString());
-                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
+                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                                 @Override
                                 public void run() {
                                     final InventoryCloseEvent close_tradie = new InventoryCloseEvent(tradie.getOpenInventory());
                                     final InventoryCloseEvent close_clicker = new InventoryCloseEvent(clicker.getOpenInventory());
-                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
-                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
+                                    Bukkit.getServer().getPluginManager().callEvent(close_tradie);
+                                    Bukkit.getServer().getPluginManager().callEvent(close_clicker);
                                 }
                             }, 2L);
                             return;
@@ -1190,13 +1169,13 @@ public class Trading implements Listener {
                             tradie.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Not enough room.").toString());
                             tradie.sendMessage(ChatColor.GRAY + "You need " + ChatColor.BOLD + (tradie_slots_needed - tradie_slots) + ChatColor.GRAY + " more free slots to complete this trade.");
                             clicker.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append(tradie.getName()).append(" does not have enough room for this trade.").toString());
-                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
+                            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                                 @Override
                                 public void run() {
                                     final InventoryCloseEvent close_tradie = new InventoryCloseEvent(tradie.getOpenInventory());
                                     final InventoryCloseEvent close_clicker = new InventoryCloseEvent(clicker.getOpenInventory());
-                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_tradie);
-                                    Bukkit.getServer().getPluginManager().callEvent((Event) close_clicker);
+                                    Bukkit.getServer().getPluginManager().callEvent(close_tradie);
+                                    Bukkit.getServer().getPluginManager().callEvent(close_clicker);
                                 }
                             }, 2L);
                             return;
@@ -1298,7 +1277,7 @@ public class Trading implements Listener {
                         tradeWin.clear();
                     }
                     PracticeServer.plugin.getServer().getScheduler()
-                            .scheduleSyncDelayedTask((Plugin) PracticeServer.plugin, (Runnable) new Runnable() {
+                            .scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                                 @Override
                                 public void run() {
                                     tradie.updateInventory();

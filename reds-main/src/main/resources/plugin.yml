@@ -5,6 +5,7 @@ authors: [bpweber, Red29, VawkeNetty]
 loadbefore:
   [Essentials, VoxelSniper]
 commands:
+  toggleholodmg:
   reboot:
   speed:
   dump:

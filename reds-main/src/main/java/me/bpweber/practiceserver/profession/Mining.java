@@ -23,7 +23,7 @@ public class Mining
 
     public void onEnable() {
         PracticeServer.log.info("[Mining] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
@@ -47,8 +47,8 @@ public class Mining
 
     public void regenOre() {
         for (Location loc : Mining.this.regenores.keySet()) {
-            Mining.this.regenores.remove(loc);
             loc.getBlock().setType(Mining.this.oretypes.get(loc));
+            Mining.this.regenores.remove(loc);
         }
     }
 
@@ -199,7 +199,7 @@ public class Mining
         while (n2 < n) {
             ItemStack i = arritemStack[n2];
             if (i != null && i.getType() != Material.AIR && (i.getAmount()) < 64 && i.getType() == is.getType() && i.getItemMeta().equals(is.getItemMeta())) {
-                p.getInventory().addItem(new ItemStack[]{is});
+                p.getInventory().addItem(is);
                 return;
             }
             ++n2;

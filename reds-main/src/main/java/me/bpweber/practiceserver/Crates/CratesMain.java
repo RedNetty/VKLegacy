@@ -3,7 +3,6 @@ package me.bpweber.practiceserver.Crates;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.drops.CreateDrop;
 import me.bpweber.practiceserver.vendors.MerchantMechanics;
-
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
@@ -32,7 +31,7 @@ public class CratesMain implements Listener {
 
     public void onEnable() {
         PracticeServer.log.info("[PracticeServer] Crates Enabled");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
@@ -106,27 +105,27 @@ public class CratesMain implements Listener {
                 meme.remove(p);
                 tier.remove(p);
                 if (tiers == 1) {
-                    final ItemStack scrap = (ItemStack) CraftItemStack.asCraftCopy(MerchantMechanics.T1_scrap);
+                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T1_scrap);
                     scrap.setAmount(120);
                     p.getInventory().addItem(scrap);
                 }
                 if (tiers == 2) {
-                    final ItemStack scrap = (ItemStack) CraftItemStack.asCraftCopy(MerchantMechanics.T2_scrap);
+                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T2_scrap);
                     scrap.setAmount(60);
                     p.getInventory().addItem(scrap);
                 }
                 if (tiers == 3) {
-                    final ItemStack scrap = (ItemStack) CraftItemStack.asCraftCopy(MerchantMechanics.T3_scrap);
+                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T3_scrap);
                     scrap.setAmount(30);
                     p.getInventory().addItem(scrap);
                 }
                 if (tiers == 4) {
-                    final ItemStack scrap = (ItemStack) CraftItemStack.asCraftCopy(MerchantMechanics.T4_scrap);
+                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T4_scrap);
                     scrap.setAmount(15);
                     p.getInventory().addItem(scrap);
                 }
                 if (tiers == 5) {
-                    final ItemStack scrap = (ItemStack) CraftItemStack.asCraftCopy(MerchantMechanics.T5_scrap);
+                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T5_scrap);
                     scrap.setAmount(5);
                     p.getInventory().addItem(scrap);
                 }

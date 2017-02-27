@@ -1,27 +1,30 @@
 package me.bpweber.practiceserver.player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
+import de.Herbystar.TTA.TTA_Methods;
 import fr.neatmonster.nocheatplus.checks.CheckType;
 import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Ban;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.ToggleTrail;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
+import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.damage.Damage;
+import me.bpweber.practiceserver.enchants.Enchants;
+import me.bpweber.practiceserver.item.Journal;
+import me.bpweber.practiceserver.mobs.Mobs;
+import me.bpweber.practiceserver.pvp.Alignments;
+import me.bpweber.practiceserver.teleport.Hearthstone;
+import me.bpweber.practiceserver.teleport.TeleportBooks;
 import me.bpweber.practiceserver.utils.CheckIP;
+import me.bpweber.practiceserver.utils.ParticleEffect;
 import me.bpweber.practiceserver.utils.StringUtil;
 import me.konsolas.aac.AAC;
 import me.konsolas.aac.api.HackType;
 import me.konsolas.aac.api.PlayerViolationCommandEvent;
 import me.konsolas.aac.api.PlayerViolationEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.MagmaCube;
@@ -30,26 +33,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -64,20 +54,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Ban;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.ToggleTrail;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.enchants.Enchants;
-import me.bpweber.practiceserver.item.Journal;
-import me.bpweber.practiceserver.mobs.Mobs;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.teleport.Hearthstone;
-import me.bpweber.practiceserver.teleport.TeleportBooks;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class Listeners
@@ -87,11 +64,12 @@ public class Listeners
     HashMap<String, Long> update = new HashMap<String, Long>();
     public static HashMap<String, Long> combat = new HashMap<String, Long>();
     public static HashMap<UUID, Long> mobd = new HashMap<UUID, Long>();
+    public static ArrayList<Player> previo = new ArrayList<Player>();
     HashMap<UUID, Long> firedmg = new HashMap<UUID, Long>();
 
     public void onEnable() {
         PracticeServer.log.info("[Listeners] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
@@ -106,6 +84,7 @@ public class Listeners
 
             public void run() {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    refreshTabList(p);
                     if (!ModerationMechanics.isSub(p) || ToggleTrail.toggletrail.contains(p.getName().toLowerCase()))
                         continue;
                     if (Setrank.ranks.get(p.getName()).equalsIgnoreCase("sub")) {
@@ -116,15 +95,32 @@ public class Listeners
                     }
                     if (!Setrank.ranks.get(p.getName()).equalsIgnoreCase("sub++")) continue;
                     ParticleEffect.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 1.0f, 10, p.getLocation().add(0.1f, 0.25F, 0.1F), 20.0);
+
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 15, 15);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 10, 10);
     }
 
     public void onDisable() {
         PracticeServer.log.info("[Listeners] has been disabled.");
     }
 
+    public void refreshTabList(Player p) {
+        int ping = TTA_Methods.getPing(p);
+        if (TTA_Methods.getPing(p) > 400) {
+            TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS\n\n"
+                            + ChatColor.DARK_AQUA + "Guild Name: " + ChatColor.GRAY + "N/A\n",
+                    ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
+                            + ChatColor.DARK_AQUA + "Your Ping: \n" + ChatColor.GRAY + "Loading Ping.." + "\n\n" +
+                            ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
+        } else {
+            TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS\n\n"
+                            + ChatColor.DARK_AQUA + "Guild Name: " + ChatColor.GRAY + "\nN/A\n",
+                    ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
+                            + ChatColor.DARK_AQUA + "Your Ping: \n" + ChatColor.GRAY + TTA_Methods.getPing(p) + "\n\n" +
+                            ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
+        }
+    }
     @EventHandler(priority = EventPriority.HIGH)
     public void onFallDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Horse && event.getCause() == DamageCause.FALL)
@@ -148,7 +144,7 @@ public class Listeners
                             public void run() {
                                 try {
                                     e.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&',
-                                            "&6[&bAutism-Catcher&6] &cYou may not log in with a VPN/Proxy! Please disable your VPN/Proxy!"));
+                                            "&6[&bAutism-Catcher&6]\n &cYou may not log in with a VPN/Proxy! Please disable your VPN/Proxy!"));
                                 } catch (Exception e) {
                                 }
                             }
@@ -161,34 +157,41 @@ public class Listeners
     }
     //ANTICHEAT
 
-
+    @EventHandler
+    public void onInteract(PlayerInteractEvent e) {
+        if (e.getPlayer().getInventory().getItemInOffHand().getType() != Material.AIR) {
+            e.setCancelled(true);
+        }
+    }
     @EventHandler
     public void onPlayerViolation(PlayerViolationEvent e) {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.isOp()) {
                 if (e.getHackType() != HackType.FLY && e.getHackType() != HackType.INTERACT && e.getHackType() != HackType.BADPACKETS) {
-                    if (e.getViolations() > 45) {
-                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GOLD + "]");
-                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
-                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Player Suspected: " + ChatColor.GRAY + e.getPlayer().getName());
-                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Violation Level: " + ChatColor.GRAY + e.getViolations());
-                        StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Lag Info: " + ChatColor.GRAY + "(TPS: " + (int) AAC.j.getTPS() + ") (Ping: " + AAC.j.getPing(e.getPlayer()) + ")");
+                    if (e.getViolations() > 35) {
+                        if (!previo.contains(e.getPlayer())) {
+                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GOLD + "]");
+                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
+                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Player Suspected: " + ChatColor.GRAY + e.getPlayer().getName());
+                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Violation Level: " + ChatColor.GRAY + e.getViolations());
+                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Lag Info: " + ChatColor.GRAY + "(TPS: " + (int) TTA_Methods.getTPS(20) + ") (Ping: " + TTA_Methods.getPing(e.getPlayer()) + ")");
+                            previo.add(e.getPlayer());
+                            new BukkitRunnable() {
+                                public void run() {
+                                    previo.remove(e.getPlayer());
+                                }
 
+                            }.runTaskLaterAsynchronously(PracticeServer.plugin, 80);
+                        }
                     }
-                    if (e.getViolations() > 75) {
-                        ArrayList<String> kickmsg = new ArrayList<String>();
-                        kickmsg.add(ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "]");
-                        kickmsg.add(ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
-                        e.getPlayer().kickPlayer(kickmsg.toString());
-                    }
-                    if (e.getViolations() > 150) {
-                        ArrayList<String> kickmsg = new ArrayList<String>();
-                        kickmsg.add(ChatColor.RED + "Your account has been permanently disabled.");
-                        kickmsg.add(ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "]");
-                        kickmsg.add(ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
-                        kickmsg.add(ChatColor.GRAY.toString() + ChatColor.ITALIC + "If you believe this is an error please contact a " + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "STAFF MEMBER");
-                        e.getPlayer().kickPlayer(kickmsg.toString());
-                        e.getPlayer().setBanned(true);
+                    if (e.getViolations() > 200 && TTA_Methods.getPing(e.getPlayer()) < 170) {
+                        Alignments.tagged.remove(e.getPlayer());
+                        e.getPlayer().kickPlayer(ChatColor.RED + "You have been kicked!\n" +
+                                ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "]\n" +
+                                ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
+                        AAC.j.setViolationLevel(e.getPlayer(), e.getHackType(), 0);
+
+
                     }
                 }
             }
@@ -210,6 +213,7 @@ public class Listeners
             Player p = (Player) e.getDamager();
             if (p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") || p.getInventory().getItemInMainHand().getType().name().contains("_HOE")) {
                 AAC.j.setViolationLevel(p, HackType.KILLAURA, 0);
+                AAC.j.setViolationLevel(p, HackType.HEURISTICS, 0);
                 NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_NOSWING);
                 NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_REACH);
                 NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_SPEED);
@@ -375,7 +379,7 @@ public class Listeners
             LivingEntity s = (LivingEntity) e.getEntity();
             double max = s.getMaxHealth();
             double hp = s.getHealth() - e.getDamage();
-            s.setCustomName(Mobs.generateOverheadBar((Entity) s, hp, max, Mobs.getMobTier(s), Mobs.isElite(s)));
+            s.setCustomName(Mobs.generateOverheadBar(s, hp, max, Mobs.getMobTier(s), Mobs.isElite(s)));
             s.setCustomNameVisible(true);
             named.put(s.getUniqueId(), System.currentTimeMillis());
         }
@@ -387,7 +391,7 @@ public class Listeners
         if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && (p = e.getPlayer()).getInventory().getItemInMainHand().getType() == Material.POTION && p.getInventory().getItemInMainHand() != null) {
             e.setCancelled(true);
             if (p.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
-                String l = ChatColor.stripColor((String) ((String) p.getInventory().getItemInMainHand().getItemMeta().getLore().get(0)));
+                String l = ChatColor.stripColor(p.getInventory().getItemInMainHand().getItemMeta().getLore().get(0));
                 l = l.split("HP")[0];
                 int hp = 0;
                 try {
@@ -494,11 +498,11 @@ public class Listeners
                 block_pcnt = (int) Math.round((double) str * 0.015);
                 block = (int) ((long) block + Math.round((double) str * 0.015));
             }
-            bm.addPage(new String[]{ChatColor.UNDERLINE.toString() + ChatColor.BOLD + "  Your Character  \n\n" + ChatColor.RESET + ChatColor.BOLD + "Alignment: " + s + "\n" + desc + "\n\n" + ChatColor.BLACK + "  " + (int) p.getHealth() + " / " + (int) p.getMaxHealth() + ChatColor.BOLD + " HP\n" + ChatColor.BLACK + "  " + arm + " - " + arm + "%" + ChatColor.BOLD + " Armor\n" + ChatColor.BLACK + "  " + dps + " - " + dps + "%" + ChatColor.BOLD + " DPS\n" + ChatColor.BLACK + "  " + amt + ChatColor.BOLD + " HP/s\n" + ChatColor.BLACK + "  " + nrg + "% " + ChatColor.BOLD + "Energy\n" + ChatColor.BLACK + "  " + dodge + "% " + ChatColor.BOLD + "Dodge\n" + ChatColor.BLACK + "  " + block + "% " + ChatColor.BOLD + "Block"});
-            bm.addPage(new String[]{ChatColor.BLACK.toString() + ChatColor.BOLD + "+ " + str + " Strength\n" + "  " + ChatColor.BLACK + ChatColor.UNDERLINE + "'The Warrior'\n" + ChatColor.BLACK + "+" + block_pcnt + "% Block\n" + ChatColor.BLACK + "+" + axe_dmg + "% Axe DMG\n\n" + ChatColor.BLACK + ChatColor.BOLD + "+ " + vit + " Vitality\n" + "  " + ChatColor.BLACK + ChatColor.UNDERLINE + "'The Defender'\n" + ChatColor.BLACK + "+" + health_pcnt + "% Health\n" + ChatColor.BLACK + "+" + hps_pcnt + "   HP/s\n" + ChatColor.BLACK + "+" + sword_dmg + "% Sword DMG\n\n" + ChatColor.BLACK + ChatColor.BOLD + "+ " + intel + " Intellect\n" + "  " + ChatColor.BLACK + ChatColor.UNDERLINE + "'The Mage'\n" + ChatColor.BLACK + "+" + nrg_pcnt + "% Energy\n" + ChatColor.BLACK + "+" + crit_pcnt + "% Critical Hit\n\n"});
+            bm.addPage(ChatColor.UNDERLINE.toString() + ChatColor.BOLD + "  Your Character  \n\n" + ChatColor.RESET + ChatColor.BOLD + "Alignment: " + s + "\n" + desc + "\n\n" + ChatColor.BLACK + "  " + (int) p.getHealth() + " / " + (int) p.getMaxHealth() + ChatColor.BOLD + " HP\n" + ChatColor.BLACK + "  " + arm + " - " + arm + "%" + ChatColor.BOLD + " Armor\n" + ChatColor.BLACK + "  " + dps + " - " + dps + "%" + ChatColor.BOLD + " DPS\n" + ChatColor.BLACK + "  " + amt + ChatColor.BOLD + " HP/s\n" + ChatColor.BLACK + "  " + nrg + "% " + ChatColor.BOLD + "Energy\n" + ChatColor.BLACK + "  " + dodge + "% " + ChatColor.BOLD + "Dodge\n" + ChatColor.BLACK + "  " + block + "% " + ChatColor.BOLD + "Block");
+            bm.addPage(ChatColor.BLACK.toString() + ChatColor.BOLD + "+ " + str + " Strength\n" + "  " + ChatColor.BLACK + ChatColor.UNDERLINE + "'The Warrior'\n" + ChatColor.BLACK + "+" + block_pcnt + "% Block\n" + ChatColor.BLACK + "+" + axe_dmg + "% Axe DMG\n\n" + ChatColor.BLACK + ChatColor.BOLD + "+ " + vit + " Vitality\n" + "  " + ChatColor.BLACK + ChatColor.UNDERLINE + "'The Defender'\n" + ChatColor.BLACK + "+" + health_pcnt + "% Health\n" + ChatColor.BLACK + "+" + hps_pcnt + "   HP/s\n" + ChatColor.BLACK + "+" + sword_dmg + "% Sword DMG\n\n" + ChatColor.BLACK + ChatColor.BOLD + "+ " + intel + " Intellect\n" + "  " + ChatColor.BLACK + ChatColor.UNDERLINE + "'The Mage'\n" + ChatColor.BLACK + "+" + nrg_pcnt + "% Energy\n" + ChatColor.BLACK + "+" + crit_pcnt + "% Critical Hit\n\n");
             bm.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Character Journal");
             bm.setLore(Arrays.asList(ChatColor.GRAY + "A book that displays", ChatColor.GRAY + "your character's stats"));
-            book.setItemMeta((ItemMeta) bm);
+            book.setItemMeta(bm);
             p.setItemInHand(book);
             p.updateInventory();
             p.playSound(p.getLocation(), Sound.ENTITY_BAT_TAKEOFF, 1.0f, 1.25f);
@@ -575,7 +579,7 @@ public class Listeners
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNoDamager(EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof LivingEntity && Alignments.isSafeZone(((LivingEntity) e.getDamager()).getLocation())) {
+        if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof LivingEntity && Alignments.isSafeZone(e.getDamager().getLocation())) {
             e.setDamage(0.0);
             e.setCancelled(true);
         }
@@ -583,7 +587,7 @@ public class Listeners
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNoDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof LivingEntity && Alignments.isSafeZone(((LivingEntity) e.getEntity()).getLocation())) {
+        if (e.getEntity() instanceof LivingEntity && Alignments.isSafeZone(e.getEntity().getLocation())) {
             e.setDamage(0.0);
             e.setCancelled(true);
         }
@@ -651,7 +655,7 @@ public class Listeners
 
     public static boolean isItemTradeable(final ItemStack i) {
         if (i != null && i.hasItemMeta() && i.getItemMeta().hasLore()) {
-            final List<String> lore = (List<String>) i.getItemMeta().getLore();
+            final List<String> lore = i.getItemMeta().getLore();
             for (final String s : lore) {
                 if (ChatColor.stripColor(s).toLowerCase().equalsIgnoreCase("untradeable") || ChatColor.stripColor(s).toLowerCase().equalsIgnoreCase("permanent untradeable")) {
                     return false;
@@ -914,7 +918,7 @@ public class Listeners
             slore.add(ChatColor.GRAY + "Untradeable");
             smeta.setLore(slore);
             S.setItemMeta(smeta);
-            p.getInventory().addItem(new ItemStack[]{S});
+            p.getInventory().addItem(S);
         }
         if (wep == 2) {
             S = new ItemStack(Material.WOOD_AXE);
@@ -925,7 +929,7 @@ public class Listeners
             slore.add(ChatColor.GRAY + "Untradeable");
             smeta.setLore(slore);
             S.setItemMeta(smeta);
-            p.getInventory().addItem(new ItemStack[]{S});
+            p.getInventory().addItem(S);
         }
         int t = 0;
         while (t < 3) {
@@ -941,8 +945,8 @@ public class Listeners
             p.getInventory().setItem(p.getInventory().firstEmpty(), bread);
             ++t2;
         }
-        p.getInventory().addItem(new ItemStack[]{Hearthstone.hearthstone()});
-        p.getInventory().addItem(new ItemStack[]{Journal.journal()});
+        p.getInventory().addItem(Hearthstone.hearthstone());
+        p.getInventory().addItem(Journal.journal());
         p.setMaxHealth(50.0);
         p.setHealth(50.0);
         p.setHealthScale(20.0);

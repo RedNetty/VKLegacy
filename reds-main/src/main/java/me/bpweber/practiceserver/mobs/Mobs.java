@@ -56,14 +56,16 @@ import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.damage.Damage;
 import me.bpweber.practiceserver.player.Listeners;
 import me.bpweber.practiceserver.utils.ParticleEffect;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -85,15 +87,15 @@ public class Mobs
 
     public void onEnable() {
         PracticeServer.log.info("[Mobs] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
-                for (Entity ent : ((World) Bukkit.getWorlds().get(0)).getEntities()) {
+                for (Entity ent : Bukkit.getWorlds().get(0).getEntities()) {
                     if (!(ent instanceof LivingEntity) || ent instanceof Player) continue;
                     LivingEntity l = (LivingEntity) ent;
-                    if (Mobs.crit.containsKey((Object) l) && Mobs.isElite(l)) {
-                        int step = Mobs.crit.get((Object) l);
+                    if (Mobs.crit.containsKey(l) && Mobs.isElite(l)) {
+                        int step = Mobs.crit.get(l);
                         if (step > 0) {
                             Mobs.crit.put(l, --step);
                             l.getWorld().playSound(l.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, 4.0f);
@@ -106,7 +108,7 @@ public class Mobs
                                     Listeners.mobd.remove(l.getUniqueId());
                                 }
                                 Player p = (Player) e;
-                                p.damage(l.getLastDamage(), (Entity) l);
+                                p.damage(l.getLastDamage(), l);
                                 Vector v = p.getLocation().toVector().subtract(l.getLocation().toVector());
                                 if (v.getX() != 0.0 || v.getY() != 0.0 || v.getZ() != 0.0) {
                                     v.normalize();
@@ -115,8 +117,8 @@ public class Mobs
                             }
                             l.getWorld().playSound(l.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 0.5f);
                             ParticleEffect.EXPLOSION_HUGE.display(0.0f, 0.0f, 0.0f, 1.0f, 40, l.getLocation().add(0.0, 1.0, 0.0), 20.0);
-                            Mobs.crit.remove((Object) l);
-                            l.setCustomName(Mobs.generateOverheadBar((Entity) l, l.getHealth(), l.getMaxHealth(), Mobs.getMobTier(l), true));
+                            Mobs.crit.remove(l);
+                            l.setCustomName(Mobs.generateOverheadBar(l, l.getHealth(), l.getMaxHealth(), Mobs.getMobTier(l), true));
                             l.setCustomNameVisible(true);
                             if (l.hasPotionEffect(PotionEffectType.SLOW)) {
                                 l.removePotionEffect(PotionEffectType.SLOW);
@@ -134,7 +136,7 @@ public class Mobs
                     Listeners.named.remove(l.getUniqueId());
                     String name = "";
                     if (l.hasMetadata("name")) {
-                        name = ((MetadataValue) l.getMetadata("name").get(0)).asString();
+                        name = l.getMetadata("name").get(0).asString();
                     }
                     l.setCustomName(name);
                 }
@@ -143,11 +145,11 @@ public class Mobs
         new BukkitRunnable() {
 
             public void run() {
-                for (Entity ent : ((World) Bukkit.getWorlds().get(0)).getEntities()) {
+                for (Entity ent : Bukkit.getWorlds().get(0).getEntities()) {
                     LivingEntity l;
-                    if (!(ent instanceof LivingEntity) || ent instanceof Player || !Mobs.crit.containsKey((Object) (l = (LivingEntity) ent)) || Mobs.isElite(l))
+                    if (!(ent instanceof LivingEntity) || ent instanceof Player || !Mobs.crit.containsKey(l = (LivingEntity) ent) || Mobs.isElite(l))
                         continue;
-                    int step = Mobs.crit.get((Object) l);
+                    int step = Mobs.crit.get(l);
                     if (step > 0) {
                         Mobs.crit.put(l, --step);
                         l.getWorld().playSound(l.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1.0f, 2.0f);
@@ -160,31 +162,31 @@ public class Mobs
         new BukkitRunnable() {
 
             public void run() {
-                for (Entity ent : ((World) Bukkit.getWorlds().get(0)).getEntities()) {
+                for (Entity ent : Bukkit.getWorlds().get(0).getEntities()) {
                     Creature c;
                     if (!(ent instanceof Creature) || (c = (Creature) ent).getEquipment().getItemInMainHand() == null || !c.getEquipment().getItemInMainHand().getType().name().contains("_HOE"))
                         continue;
-                    if (Mobs.isElite((LivingEntity) c) && Mobs.crit.containsKey((Object) c)) {
+                    if (Mobs.isElite(c) && Mobs.crit.containsKey(c)) {
                         return;
                     }
                     if (!Mobs.isPlayerNearby(c) || c.getTarget() == null) continue;
                     LivingEntity trgt = c.getTarget();
                     if (c.getLocation().distanceSquared(trgt.getLocation()) <= 9.0) continue;
                     Projectile pj = null;
-                    if (Mobs.getMobTier((LivingEntity) c) == 1) {
+                    if (Mobs.getMobTier(c) == 1) {
                         pj = c.launchProjectile(Snowball.class);
                     }
-                    if (Mobs.getMobTier((LivingEntity) c) == 2) {
+                    if (Mobs.getMobTier(c) == 2) {
                         pj = c.launchProjectile(Snowball.class);
                     }
-                    if (Mobs.getMobTier((LivingEntity) c) == 3) {
+                    if (Mobs.getMobTier(c) == 3) {
                         pj = c.launchProjectile(Snowball.class);
                         pj.setVelocity(pj.getVelocity().multiply(1.25));
                     }
-                    if (Mobs.getMobTier((LivingEntity) c) == 4) {
+                    if (Mobs.getMobTier(c) == 4) {
                         pj = c.launchProjectile(Snowball.class);
                     }
-                    if (Mobs.getMobTier((LivingEntity) c) != 5) continue;
+                    if (Mobs.getMobTier(c) != 5) continue;
                     pj = c.launchProjectile(Snowball.class);
                     pj.setVelocity(pj.getVelocity().multiply(2));
                 }
@@ -221,7 +223,7 @@ public class Mobs
                 if (pj instanceof EnderPearl) {
                     e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 2.0f, 1.5f);
                 }
-                target.damage(1.0, (Entity) d);
+                target.damage(1.0, d);
             }
         }
     }
@@ -245,7 +247,7 @@ public class Mobs
 
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player) && !e.getCause().equals((Object) EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
+        if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player) && !e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK)) {
             e.setCancelled(true);
             e.setDamage(0.0);
         }
@@ -340,17 +342,12 @@ public class Mobs
         if (e.getReason() == EntityTargetEvent.TargetReason.CLOSEST_PLAYER && e.getTarget() instanceof Player && e.getEntity() instanceof Creature) {
             Creature l = (Creature) e.getEntity();
             Player p = (Player) e.getTarget();
-            if (l.getLocation().distance(p.getLocation()) > 15.0) {
+            if (p.hasMetadata("NPC")) {
                 e.setCancelled(true);
                 e.setTarget(null);
                 return;
             }
-            if (p.hasMetadata("NPC") || p.getPlayerListName() == " ") {
-                e.setCancelled(true);
-                e.setTarget(null);
-                return;
-            }
-            if (Mobs.getPlayerTier(p) - Mobs.getMobTier((LivingEntity) l) > 2) {
+            if (Mobs.getPlayerTier(p) - Mobs.getMobTier(l) > 2) {
                 e.setCancelled(true);
                 e.setTarget(null);
                 return;
@@ -364,11 +361,7 @@ public class Mobs
             if (l.hasPotionEffect(PotionEffectType.JUMP)) {
                 l.removePotionEffect(PotionEffectType.JUMP);
             }
-            target.put(l, p);
-            return;
         }
-        e.setTarget(null);
-        e.setCancelled(true);
     }
 
     @EventHandler
@@ -376,23 +369,20 @@ public class Mobs
         if (e.getEntity() instanceof Creature && e.getDamager() instanceof Player) {
             Creature c = (Creature) e.getEntity();
             Player p = (Player) e.getDamager();
-            if (target.containsKey((Object) c) && target.get((Object) c) != null) {
-                if (p.getLocation().distanceSquared(c.getLocation()) < target.get((Object) c).getLocation().distanceSquared(c.getLocation())) {
-                    c.setTarget((LivingEntity) p);
+            if (target.containsKey(c) && target.get(c) != null) {
+                if (p.getLocation().distanceSquared(c.getLocation()) < target.get(c).getLocation().distanceSquared(c.getLocation())) {
+                    c.setTarget(p);
                     target.put(c, p);
                 }
             } else {
-                c.setTarget((LivingEntity) p);
+                c.setTarget(p);
                 target.put(c, p);
             }
         }
     }
 
     public static boolean isElite(LivingEntity e) {
-        if (e.getEquipment().getItemInMainHand() != null && e.getEquipment().getItemInMainHand().getType() != Material.AIR && e.getEquipment().getItemInMainHand().getItemMeta().hasEnchants()) {
-            return true;
-        }
-        return false;
+        return e.getEquipment().getItemInMainHand() != null && e.getEquipment().getItemInMainHand().getType() != Material.AIR && e.getEquipment().getItemInMainHand().getItemMeta().hasEnchants();
     }
 
     public static int getBarLength(int tier) {
@@ -434,10 +424,10 @@ public class Mobs
         if (percent_hp <= 20.0) {
             cc = ChatColor.RED;
         }
-        if (crit.containsKey((Object) ent) && cur_hp > 0.0) {
+        if (crit.containsKey(ent) && cur_hp > 0.0) {
             cc = ChatColor.LIGHT_PURPLE;
         }
-        String return_string = (Object) cc + ChatColor.BOLD.toString() + "\u2551" + ChatColor.RESET.toString() + cc.toString();
+        String return_string = cc + ChatColor.BOLD.toString() + "\u2551" + ChatColor.RESET.toString() + cc.toString();
         if (elite) {
             return_string = String.valueOf(return_string) + ChatColor.BOLD.toString();
         }
@@ -454,7 +444,7 @@ public class Mobs
             return_string = String.valueOf(return_string) + "|";
             ++bar_count;
         }
-        return_string = String.valueOf(return_string) + (Object) cc + ChatColor.BOLD.toString() + "\u2551";
+        return_string = String.valueOf(return_string) + cc + ChatColor.BOLD.toString() + "\u2551";
         return return_string;
     }
 
@@ -462,11 +452,11 @@ public class Mobs
     public void onMobDeath(EntityDamageEvent e) {
         if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player)) {
             LivingEntity s = (LivingEntity) e.getEntity();
-            if (e.getDamage() >= s.getHealth() && crit.containsKey((Object) s)) {
-                crit.remove((Object) s);
+            if (e.getDamage() >= s.getHealth() && crit.containsKey(s)) {
+                crit.remove(s);
                 String mname = "";
                 if (s.getEquipment().getItemInMainHand() != null && s.getEquipment().getItemInMainHand().getType() != Material.AIR) {
-                    mname = Mobs.generateOverheadBar((Entity) s, 0.0, s.getMaxHealth(), Mobs.getMobTier(s), Mobs.isElite(s));
+                    mname = Mobs.generateOverheadBar(s, 0.0, s.getMaxHealth(), Mobs.getMobTier(s), Mobs.isElite(s));
                     s.setCustomName(mname);
                     s.setCustomNameVisible(true);
                 }
@@ -483,13 +473,13 @@ public class Mobs
             LivingEntity s = (LivingEntity) e.getEntity();
             Random random = new Random();
             int rcrt = random.nextInt(100) + 1;
-            if (!crit.containsKey((Object) s) && (Mobs.getMobTier(s) == 1 && rcrt <= 5 || Mobs.getMobTier(s) == 2 && rcrt <= 7 || Mobs.getMobTier(s) == 3 && rcrt <= 10 || Mobs.getMobTier(s) == 4 && rcrt <= 13 || Mobs.getMobTier(s) == 5 && rcrt <= 20)) {
+            if (!crit.containsKey(s) && (Mobs.getMobTier(s) == 1 && rcrt <= 5 || Mobs.getMobTier(s) == 2 && rcrt <= 7 || Mobs.getMobTier(s) == 3 && rcrt <= 10 || Mobs.getMobTier(s) == 4 && rcrt <= 13 || Mobs.getMobTier(s) == 5 && rcrt <= 20)) {
                 crit.put(s, 4);
                 if (Mobs.isElite(s)) {
                     s.getWorld().playSound(s.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, 4.0f);
                     double max = s.getMaxHealth();
                     double hp = s.getHealth() - e.getDamage();
-                    s.setCustomName(Mobs.generateOverheadBar((Entity) s, hp, max, Mobs.getMobTier(s), Mobs.isElite(s)));
+                    s.setCustomName(Mobs.generateOverheadBar(s, hp, max, Mobs.getMobTier(s), Mobs.isElite(s)));
                     s.setCustomNameVisible(true);
                     Listeners.named.put(s.getUniqueId(), System.currentTimeMillis());
                     s.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 10), true);
@@ -498,7 +488,7 @@ public class Mobs
                     s.getWorld().playSound(s.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1.0f, 2.0f);
                     double max = s.getMaxHealth();
                     double hp = s.getHealth() - e.getDamage();
-                    s.setCustomName(Mobs.generateOverheadBar((Entity) s, hp, max, Mobs.getMobTier(s), Mobs.isElite(s)));
+                    s.setCustomName(Mobs.generateOverheadBar(s, hp, max, Mobs.getMobTier(s), Mobs.isElite(s)));
                     s.setCustomNameVisible(true);
                     Listeners.named.put(s.getUniqueId(), System.currentTimeMillis());
                 }
@@ -545,15 +535,15 @@ public class Mobs
                 int max = Damage.getDamageRange(s.getEquipment().getItemInMainHand()).get(1);
                 dmg = random.nextInt(max - min + 1) + min + 1;
             }
-            if (crit.containsKey((Object) s) && crit.get((Object) s) == 0) {
+            if (crit.containsKey(s) && crit.get(s) == 0) {
                 dmg = Mobs.isElite(s) ? (dmg *= 4) : (dmg *= 3);
                 if (!Mobs.isElite(s)) {
-                    crit.remove((Object) s);
+                    crit.remove(s);
                 }
                 p.playSound(p.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 0.3f);
                 double max = s.getMaxHealth();
                 double hp = s.getHealth() - e.getDamage();
-                s.setCustomName(Mobs.generateOverheadBar((Entity) s, hp, max, Mobs.getMobTier(s), Mobs.isElite(s)));
+                s.setCustomName(Mobs.generateOverheadBar(s, hp, max, Mobs.getMobTier(s), Mobs.isElite(s)));
                 s.setCustomNameVisible(true);
                 Listeners.named.put(s.getUniqueId(), System.currentTimeMillis());
             }

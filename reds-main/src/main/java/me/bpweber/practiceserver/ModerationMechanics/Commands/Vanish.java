@@ -1,14 +1,15 @@
 package me.bpweber.practiceserver.ModerationMechanics.Commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import de.Herbystar.TTA.TTA_Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Vanish implements CommandExecutor {
 	public static List<String> vanished = new ArrayList<String>();
@@ -24,7 +25,8 @@ public class Vanish implements CommandExecutor {
 					pl.showPlayer(p);
 				}
 				p.sendMessage(ChatColor.RED + "You are now " + ChatColor.BOLD + "visible.");
-			} else {
+                TTA_Methods.sendActionBar(p, ChatColor.RED + "You are now " + ChatColor.BOLD + "visible.", 40);
+            } else {
 				vanished.add(p.getName().toLowerCase());
 				for (Player pl : Bukkit.getOnlinePlayers()) {
 					if (pl == p || pl.isOp())
@@ -32,7 +34,8 @@ public class Vanish implements CommandExecutor {
 					pl.hidePlayer(p);
 				}
 				p.sendMessage(ChatColor.GREEN + "You are now " + ChatColor.BOLD + "invisible.");
-			}
+                TTA_Methods.sendActionBar(p, ChatColor.GREEN + "You are now " + ChatColor.BOLD + "invisible.", 40);
+            }
 		}
 		return false;
 	}

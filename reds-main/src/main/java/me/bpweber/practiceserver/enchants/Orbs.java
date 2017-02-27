@@ -73,7 +73,7 @@ public class Orbs implements Listener {
         String rare = "";
         int tier = getItemTier(is);
         final int item = getItemType(is);
-        final List<String> oldlore = (List<String>) is.getItemMeta().getLore();
+        final List<String> oldlore = is.getItemMeta().getLore();
         final List<String> lore = new ArrayList<String>();
         final Random random = new Random();
         final int elem = random.nextInt(10) + 1;
@@ -86,6 +86,8 @@ public class Orbs implements Listener {
         final int vit = random.nextInt(8) + 1;
         final int str = random.nextInt(6) + 1;
         final int intel = random.nextInt(7) + 1;
+        final int thorns = random.nextInt(5) + 1;
+
         int dodgeamt = 0;
         int blockamt = 0;
         int vitamt = 0;
@@ -95,6 +97,7 @@ public class Orbs implements Listener {
         int pureamt = 0;
         int lifeamt = 0;
         int critamt = 0;
+        int thornsamt = 0;
         int accamt = 0;
         rare = oldlore.get(oldlore.size() - 1);
         if (tier == 1) {
@@ -109,6 +112,7 @@ public class Orbs implements Listener {
             lifeamt = random.nextInt(30) + 1;
             critamt = random.nextInt(3) + 1;
             accamt = random.nextInt(10) + 1;
+            thornsamt = random.nextInt(2) + 1;
             if (item == 0) {
                 name = "Staff";
                 is.setType(Material.WOOD_HOE);
@@ -154,6 +158,7 @@ public class Orbs implements Listener {
             lifeamt = random.nextInt(15) + 1;
             critamt = random.nextInt(6) + 1;
             accamt = random.nextInt(12) + 1;
+            thornsamt = random.nextInt(3) + 1;
             if (item == 0) {
                 name = "Battletaff";
                 is.setType(Material.STONE_HOE);
@@ -199,6 +204,7 @@ public class Orbs implements Listener {
             lifeamt = random.nextInt(12) + 1;
             critamt = random.nextInt(8) + 1;
             accamt = random.nextInt(25) + 1;
+            thornsamt = random.nextInt(4) + 1;
             if (item == 0) {
                 name = "Wizard Staff";
                 is.setType(Material.IRON_HOE);
@@ -244,6 +250,7 @@ public class Orbs implements Listener {
             lifeamt = random.nextInt(10) + 1;
             critamt = random.nextInt(10) + 1;
             accamt = random.nextInt(28) + 1;
+            thornsamt = random.nextInt(5) + 1;
             if (item == 0) {
                 name = "Ancient Staff";
                 is.setType(Material.DIAMOND_HOE);
@@ -289,6 +296,7 @@ public class Orbs implements Listener {
             lifeamt = random.nextInt(8) + 1;
             critamt = random.nextInt(11) + 1;
             accamt = random.nextInt(35) + 1;
+            thornsamt = random.nextInt(5) + 1;
             if (item == 0) {
                 name = "Legendary Staff";
                 is.setType(Material.GOLD_HOE);
@@ -370,6 +378,10 @@ public class Orbs implements Listener {
                 lore.add(ChatColor.RED + "DODGE: " + dodgeamt + "%");
                 name = "Agile " + name;
             }
+            if (thorns == 1) {
+                lore.add(ChatColor.RED + "THORNS: " + thornsamt + "%");
+                name = "Thorny " + name;
+            }
             if (oldlore.get(2).contains("HP REGEN:")) {
                 name = "Mending " + name;
             }
@@ -402,14 +414,14 @@ public class Orbs implements Listener {
         }
         final ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
-        im.setLore((List) lore);
+        im.setLore(lore);
         is.setItemMeta(im);
         return is;
     }
 
     public void onEnable() {
         PracticeServer.log.info("[Orbs] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
     }
 
     public void onDisable() {
@@ -433,7 +445,7 @@ public class Orbs implements Listener {
                 if (e.getCursor().getAmount() > 1) {
                     e.getCursor().setAmount(e.getCursor().getAmount() - 1);
                 } else if (e.getCursor().getAmount() == 1) {
-                    e.setCursor((ItemStack) null);
+                    e.setCursor(null);
                 }
                 final int oldsize = is.getItemMeta().getLore().size();
                 final ItemStack newis = randomizeStats(is);

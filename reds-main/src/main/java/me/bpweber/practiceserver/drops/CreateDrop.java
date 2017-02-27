@@ -19,12 +19,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class CreateDrop {
-
-    public static ItemStack createDrop(int tier, int item, int rari) {
+    public static ItemStack createDrop(int tier, int item, int raree) {
         int min_min_dmg;
         int max_min_dmg;
-        int max_max_dmg;
         int min_max_dmg;
+        int max_max_dmg;
         String name = "";
         String rare = "";
         ItemStack is = new ItemStack(Material.AIR);
@@ -59,17 +58,16 @@ public class CreateDrop {
         int accamt = 0;
         int hps = 0;
         int nrg = 0;
-        int r = rari;
-        if (r == 3) {
+        if (raree == 3) {
             rarity = 3;
             rare = ChatColor.YELLOW.toString() + ChatColor.ITALIC + "Unique";
-        } else if (r == 2) {
+        } else if (raree == 2) {
             rarity = 2;
             rare = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
-        } else if (r == 1) {
+        } else if (raree == 1) {
             rarity = 1;
             rare = ChatColor.GREEN.toString() + ChatColor.ITALIC + "Uncommon";
-        } else if (r == 0) {
+        } else if (raree == 0) {
             rarity = 0;
             rare = ChatColor.GRAY.toString() + ChatColor.ITALIC + "Common";
         }
@@ -329,36 +327,40 @@ public class CreateDrop {
                 hp = random.nextInt(311) + 650;
                 min_min_dmg = 65;
                 max_min_dmg = 81;
-                max_max_dmg = 126;
+                max_max_dmg = 30;
+                min_max_dmg = 90;
                 mindmg = random.nextInt(max_min_dmg - min_min_dmg) + min_min_dmg;
-                maxdmg = random.nextInt(max_max_dmg - mindmg) + mindmg;
+                maxdmg = random.nextInt(max_max_dmg) + min_max_dmg;
             }
             if (rarity == 1) {
                 dpsamt = random.nextInt(3) + 10;
                 hp = random.nextInt(490) + 961;
                 min_min_dmg = 70;
                 max_min_dmg = 86;
-                max_max_dmg = 156;
+                max_max_dmg = 35;
+                min_max_dmg = 120;
                 mindmg = random.nextInt(max_min_dmg - min_min_dmg) + min_min_dmg;
-                maxdmg = random.nextInt(max_max_dmg - mindmg) + mindmg;
+                maxdmg = random.nextInt(max_max_dmg) + min_max_dmg;
             }
             if (rarity == 2) {
                 dpsamt = random.nextInt(3) + 11;
                 hp = random.nextInt(850) + 1451;
                 min_min_dmg = 90;
                 max_min_dmg = 100;
-                max_max_dmg = 221;
+                max_max_dmg = 50;
+                min_max_dmg = 160;
                 mindmg = random.nextInt(max_min_dmg - min_min_dmg) + min_min_dmg;
-                maxdmg = random.nextInt(max_max_dmg - mindmg) + mindmg;
+                maxdmg = random.nextInt(max_max_dmg) + min_max_dmg;
             }
             if (rarity == 3) {
                 dpsamt = random.nextInt(3) + 12;
                 hp = random.nextInt(500) + 2301;
                 min_min_dmg = 90;
                 max_min_dmg = 100;
-                max_max_dmg = 221;
+                max_max_dmg = 60;
+                min_max_dmg = 199;
                 mindmg = random.nextInt(max_min_dmg - min_min_dmg) + min_min_dmg;
-                maxdmg = random.nextInt(max_max_dmg - mindmg) + mindmg;
+                maxdmg = random.nextInt(max_max_dmg) + min_max_dmg;
             }
             hps = random.nextInt(16) + 60;
             nrg = random.nextInt(3) + 3;
@@ -675,15 +677,13 @@ public class CreateDrop {
             name = ChatColor.YELLOW + name;
         }
         ItemMeta im = is.getItemMeta();
-
-        // Remove native Minecraft lore
+        im.setDisplayName(name);
+        im.setLore(lore);
         for (ItemFlag itemFlag : ItemFlag.values()) {
             im.addItemFlags(itemFlag);
         }
-        im.setDisplayName(name);
-        im.setLore(lore);
         is.setItemMeta(im);
-
         return is;
     }
 }
+

@@ -53,10 +53,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockIgniteEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.ExplosionPrimeEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
@@ -78,13 +75,19 @@ public class Staffs
 
     public void onEnable() {
         PracticeServer.log.info("[Staffs] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
     }
 
     public void onDisable() {
         PracticeServer.log.info("[Staffs] has been disabled.");
     }
 
+    @EventHandler
+    public void onCreatureSpawn(CreatureSpawnEvent event) {
+        if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.EGG) {
+            event.setCancelled(true);
+        }
+    }
     @EventHandler
     public void onStaffShot(PlayerInteractEvent e) {
         Player p;
@@ -110,26 +113,26 @@ public class Staffs
                         amt = 7;
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.STONE_HOE) {
-                        ep = p.launchProjectile(Snowball.class);
+                        ep = p.launchProjectile(Egg.class);
                         ep.setVelocity(ep.getVelocity().multiply(1));
                         ep.setBounce(false);
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 8;
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.IRON_HOE) {
-                        ep = p.launchProjectile(Snowball.class);
+                        ep = p.launchProjectile(EnderPearl.class);
                         ep.setVelocity(ep.getVelocity().multiply(1));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 9;
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_HOE) {
-                        ep = p.launchProjectile(Snowball.class);
-                        ep.setVelocity(ep.getVelocity().multiply(1));
+                        ep = p.launchProjectile(WitherSkull.class);
+                        ep.setVelocity(ep.getVelocity().multiply(2));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 10;
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.GOLD_HOE) {
-                        ep = p.launchProjectile(Snowball.class);
+                        ep = p.launchProjectile(SmallFireball.class);
                         ep.setVelocity(ep.getVelocity().multiply(1));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 11;
@@ -166,15 +169,14 @@ public class Staffs
         Projectile pj = e.getEntity();
         if (pj.getShooter() != null && pj.getShooter() instanceof Player) {
             Player d = (Player) pj.getShooter();
-            if (this.shots.containsKey((Object) pj)) {
+            if (this.shots.containsKey(pj)) {
                 LivingEntity target = null;
-                ItemStack wep = this.shots.get((Object) pj);
-                this.shots.remove((Object) pj);
+                ItemStack wep = this.shots.get(pj);
+                this.shots.remove(pj);
 
                 for (Entity ent : pj.getNearbyEntities(2.0, 2.0, 2.0)) {
                     if (!(ent instanceof LivingEntity) || ent == d) continue;
                     target = (LivingEntity) ent;
-                    ParticleEffect.CLOUD.display(4, 2, 1, 1, 1, target.getLocation(), 2F);
                 }
                 if (target != null) {
                     if (pj instanceof Snowball) {
@@ -183,10 +185,10 @@ public class Staffs
 
                     }
                     staff.put(d, wep);
-                    target.damage(1.0, (Entity) d);
-                    staff.remove((Object) d);
+                    target.damage(1.0, d);
+                    staff.remove(d);
                 }
-                this.shots.remove((Object) pj);
+                this.shots.remove(pj);
             }
         }
     }
@@ -220,7 +222,7 @@ public class Staffs
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerTp(PlayerTeleportEvent e) {
-        if (e.getCause().equals((Object) PlayerTeleportEvent.TeleportCause.ENDER_PEARL)) {
+        if (e.getCause().equals(PlayerTeleportEvent.TeleportCause.ENDER_PEARL)) {
             e.setCancelled(true);
         }
     }

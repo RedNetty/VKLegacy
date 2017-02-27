@@ -34,19 +34,13 @@
  */
 package me.bpweber.practiceserver.damage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Effect;
-import org.bukkit.EntityEffect;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.player.Energy;
+import me.bpweber.practiceserver.player.Toggles;
+import me.bpweber.practiceserver.pvp.Alignments;
+import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.vendors.Merchant;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -60,18 +54,12 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.player.Energy;
-import me.bpweber.practiceserver.player.Toggles;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.ParticleEffect;
-import me.bpweber.practiceserver.vendors.Merchant;
+import java.util.*;
 
 public class Damage
         implements Listener {
@@ -83,13 +71,13 @@ public class Damage
 
     public void onEnable() {
         PracticeServer.log.info("[Damage] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
 
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                	double healthPercentage = ((double) p.getHealth() / p.getMaxHealth());
+                    double healthPercentage = (p.getHealth() / p.getMaxHealth());
                     if (healthPercentage * 100.0F > 100.0F) {
                         healthPercentage = 1.0;
                     }
@@ -138,9 +126,9 @@ public class Damage
 
     public static int getHp(ItemStack is) {
         List<String> lore;
-        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 1 && ((String) lore.get(1)).contains("HP")) {
+        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 1 && lore.get(1).contains("HP")) {
             try {
-                return Integer.parseInt(((String) lore.get(1)).split(": +")[1]);
+                return Integer.parseInt(lore.get(1).split(": +")[1]);
             } catch (Exception e) {
                 return 0;
             }
@@ -150,9 +138,9 @@ public class Damage
 
     public static int getArmor(ItemStack is) {
         List<String> lore;
-        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 0 && ((String) lore.get(0)).contains("ARMOR")) {
+        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 0 && lore.get(0).contains("ARMOR")) {
             try {
-                return Integer.parseInt(((String) lore.get(0)).split(" - ")[1].split("%")[0]);
+                return Integer.parseInt(lore.get(0).split(" - ")[1].split("%")[0]);
             } catch (Exception e) {
                 return 0;
             }
@@ -162,9 +150,9 @@ public class Damage
 
     public static int getDps(ItemStack is) {
         List<String> lore;
-        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 0 && ((String) lore.get(0)).contains("DPS")) {
+        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 0 && lore.get(0).contains("DPS")) {
             try {
-                return Integer.parseInt(((String) lore.get(0)).split(" - ")[1].split("%")[0]);
+                return Integer.parseInt(lore.get(0).split(" - ")[1].split("%")[0]);
             } catch (Exception e) {
                 return 0;
             }
@@ -174,9 +162,9 @@ public class Damage
 
     public static int getEnergy(ItemStack is) {
         List<String> lore;
-        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 2 && ((String) lore.get(2)).contains("ENERGY REGEN")) {
+        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 2 && lore.get(2).contains("ENERGY REGEN")) {
             try {
-                return Integer.parseInt(((String) lore.get(2)).split(": +")[1].split("%")[0]);
+                return Integer.parseInt(lore.get(2).split(": +")[1].split("%")[0]);
             } catch (Exception e) {
                 return 0;
             }
@@ -186,9 +174,9 @@ public class Damage
 
     public static int getHps(ItemStack is) {
         List<String> lore;
-        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 2 && ((String) lore.get(2)).contains("HP REGEN")) {
+        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 2 && lore.get(2).contains("HP REGEN")) {
             try {
-                return Integer.parseInt(((String) lore.get(2)).split(": +")[1].split(" HP/s")[0]);
+                return Integer.parseInt(lore.get(2).split(": +")[1].split(" HP/s")[0]);
             } catch (Exception e) {
                 return 0;
             }
@@ -225,18 +213,17 @@ public class Damage
         }
         return 0;
     }
-
     public static List<Integer> getDamageRange(ItemStack is) {
         List<String> lore;
         ArrayList<Integer> dmg = new ArrayList<Integer>();
         dmg.add(1);
         dmg.add(1);
-        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 0 && ((String) lore.get(0)).contains("DMG")) {
+        if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 0 && lore.get(0).contains("DMG")) {
             try {
                 int min = 1;
                 int max = 1;
-                min = Integer.parseInt(((String) lore.get(0)).split("DMG: ")[1].split(" - ")[0]);
-                max = Integer.parseInt(((String) lore.get(0)).split(" - ")[1]);
+                min = Integer.parseInt(lore.get(0).split("DMG: ")[1].split(" - ")[0]);
+                max = Integer.parseInt(lore.get(0).split(" - ")[1]);
                 dmg.set(0, min);
                 dmg.set(1, max);
             } catch (Exception e) {
@@ -310,7 +297,7 @@ public class Damage
     public void onHPUpdate(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
-        	double healthPercentage = ((double) p.getHealth() / p.getMaxHealth());
+            double healthPercentage = (p.getHealth() / p.getMaxHealth());
             if (healthPercentage * 100.0F > 100.0F) {
                 healthPercentage = 1.0;
             }
@@ -330,6 +317,41 @@ public class Damage
                         + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
                         + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth());
                 Alignments.playerBossBars.get(p).setProgress(pcnt);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onThorns(EntityDamageByEntityEvent e) {
+        Player p;
+        LivingEntity le;
+        Random random;
+        int thornsamt = 0;
+
+        if (e.getEntity() instanceof Player) {
+            p = (Player) e.getEntity();
+            ItemStack[] arritemStack = p.getInventory().getArmorContents();
+            int n = arritemStack.length;
+            int n2 = 0;
+            while (n2 < n) {
+                ItemStack is = arritemStack[n2];
+                if (is != null && is.getType() != Material.AIR && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+                    thornsamt = thornsamt + Damage.getPercent(is, "THORNS");
+                }
+                ++n2;
+            }
+            if (e.getDamager() instanceof LivingEntity) {
+                le = (LivingEntity) e.getDamager();
+                if (thornsamt > 0) {
+                    if (!e.isCancelled()) {
+                        if (e.getDamage() > 0.0) {
+                            p.getWorld().playEffect(p.getEyeLocation(), Effect.STEP_SOUND, Material.LEAVES);
+                            int dmg = (int) e.getDamage();
+                            int afterDmg = dmg * thornsamt / 200;
+                            le.damage(afterDmg);
+                        }
+                    }
+                }
             }
         }
     }
@@ -420,7 +442,7 @@ public class Damage
                     LivingEntity li = (LivingEntity) e.getDamager();
                     String mname = "";
                     if (li.hasMetadata("name")) {
-                        mname = ((MetadataValue) li.getMetadata("name").get(0)).asString();
+                        mname = li.getMetadata("name").get(0).asString();
                     }
                     if (blockr <= block) {
                         e.setDamage(0.0);
@@ -677,7 +699,7 @@ public class Damage
             }
             String name = "";
             if (p.hasMetadata("name")) {
-                name = ((MetadataValue) p.getMetadata("name").get(0)).asString();
+                name = p.getMetadata("name").get(0).asString();
             }
             if ((Toggles.getToggles(d.getName())).contains("debug")) {
                 d.sendMessage(ChatColor.RED + "            " + dmg + ChatColor.RED + ChatColor.BOLD + " DMG " + ChatColor.RED + "-> " + ChatColor.RESET + name + " [" + health + "HP]");
@@ -731,6 +753,7 @@ public class Damage
         }
     }
 
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onPolearmAOE(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player) {
@@ -749,7 +772,7 @@ public class Damage
                         Energy.nodamage.remove(d.getName());
                     }
                     this.p_arm.add(d.getName());
-                    n.damage(1.0, (Entity) d);
+                    n.damage(1.0, d);
                     this.p_arm.remove(d.getName());
                 }
             }

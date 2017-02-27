@@ -29,6 +29,9 @@
  */
 package me.bpweber.practiceserver.player;
 
+import com.sainttx.holograms.api.Hologram;
+import com.sainttx.holograms.api.line.HologramLine;
+import com.sainttx.holograms.api.line.TextLine;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.party.Parties;
 import me.bpweber.practiceserver.pvp.Alignments;
@@ -40,6 +43,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -49,12 +53,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Toggles
         implements Listener,
@@ -63,7 +69,7 @@ public class Toggles
 
     public void onEnable() {
         PracticeServer.log.info("[Toggles] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         File file = new File(PracticeServer.plugin.getDataFolder(), "toggles.yml");
         YamlConfiguration config = new YamlConfiguration();
         if (!file.exists()) {
@@ -108,16 +114,28 @@ public class Toggles
             if (cmd.getName().equalsIgnoreCase("toggle")) {
                 p.openInventory(Toggles.getToggleMenu(p));
             }
+            if (cmd.getName().equalsIgnoreCase("toggleholodmg")) {
+                toggle = Toggles.getToggles(p.getName());
+                if (toggle.contains("holodmg")) {
+                    toggle.remove("holodmg");
+                    toggles.put(p.getName(), toggle);
+                    p.sendMessage(ChatColor.RED + "Holographic Damage Messages - " + ChatColor.BOLD + "DISABLED");
+                } else {
+                    toggle.add("holodmg");
+                    toggles.put(p.getName(), toggle);
+                    p.sendMessage(ChatColor.GREEN + "Holographic Damage Messages - " + ChatColor.BOLD + "ENABLED");
+                }
+            }
             if (cmd.getName().equalsIgnoreCase("toggledebug")) {
                 toggle = Toggles.getToggles(p.getName());
                 if (toggle.contains("debug")) {
                     toggle.remove("debug");
                     toggles.put(p.getName(), toggle);
-                    p.sendMessage((Object) ChatColor.RED + "Debug Messages - " + (Object) ChatColor.BOLD + "DISABLED");
+                    p.sendMessage(ChatColor.RED + "Debug Messages - " + ChatColor.BOLD + "DISABLED");
                 } else {
                     toggle.add("debug");
                     toggles.put(p.getName(), toggle);
-                    p.sendMessage((Object) ChatColor.GREEN + "Debug Messages - " + (Object) ChatColor.BOLD + "ENABLED");
+                    p.sendMessage(ChatColor.GREEN + "Debug Messages - " + ChatColor.BOLD + "ENABLED");
                 }
             }
             if (cmd.getName().equalsIgnoreCase("togglepvp")) {
@@ -125,11 +143,11 @@ public class Toggles
                 if (toggle.contains("pvp")) {
                     toggle.remove("pvp");
                     toggles.put(p.getName(), toggle);
-                    p.sendMessage((Object) ChatColor.GREEN + "Outgoing PVP Damage - " + (Object) ChatColor.BOLD + "ENABLED");
+                    p.sendMessage(ChatColor.GREEN + "Outgoing PVP Damage - " + ChatColor.BOLD + "ENABLED");
                 } else {
                     toggle.add("pvp");
                     toggles.put(p.getName(), toggle);
-                    p.sendMessage((Object) ChatColor.RED + "Outgoing PVP Damage - " + (Object) ChatColor.BOLD + "DISABLED");
+                    p.sendMessage(ChatColor.RED + "Outgoing PVP Damage - " + ChatColor.BOLD + "DISABLED");
                 }
             }
             if (cmd.getName().equalsIgnoreCase("togglechaos")) {
@@ -137,11 +155,11 @@ public class Toggles
                 if (toggle.contains("chaos")) {
                     toggle.remove("chaos");
                     toggles.put(p.getName(), toggle);
-                    p.sendMessage((Object) ChatColor.RED + "Anti-Chaotic - " + (Object) ChatColor.BOLD + "DISABLED");
+                    p.sendMessage(ChatColor.RED + "Anti-Chaotic - " + ChatColor.BOLD + "DISABLED");
                 } else {
                     toggle.add("chaos");
                     toggles.put(p.getName(), toggle);
-                    p.sendMessage((Object) ChatColor.GREEN + "Anti-Chaotic - " + (Object) ChatColor.BOLD + "ENABLED");
+                    p.sendMessage(ChatColor.GREEN + "Anti-Chaotic - " + ChatColor.BOLD + "ENABLED");
                 }
             }
             if (cmd.getName().equalsIgnoreCase("toggleff")) {
@@ -149,27 +167,51 @@ public class Toggles
                 if (toggle.contains("ff")) {
                     toggle.remove("ff");
                     toggles.put(p.getName(), toggle);
-                    p.sendMessage((Object) ChatColor.RED + "Friendly Fire - " + (Object) ChatColor.BOLD + "DISABLED");
+                    p.sendMessage(ChatColor.RED + "Friendly Fire - " + ChatColor.BOLD + "DISABLED");
                 } else {
                     toggle.add("ff");
                     toggles.put(p.getName(), toggle);
-                    p.sendMessage((Object) ChatColor.GREEN + "Friendly Fire - " + (Object) ChatColor.BOLD + "ENABLED");
+                    p.sendMessage(ChatColor.GREEN + "Friendly Fire - " + ChatColor.BOLD + "ENABLED");
                 }
             }
         }
         return true;
     }
 
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNoDamageToggle(EntityDamageByEntityEvent e) {
+        ArrayList<String> gettoggles = Toggles.getToggles(e.getDamager().getName());
+        ArrayList<String> buddies = Buddies.getBuddies(e.getDamager().getName());
+        if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player) {
+            if (gettoggles.contains("holodmg")) {
+                Player p = (Player) e.getDamager();
+                LivingEntity le = (LivingEntity) e.getEntity();
+                Random r = new Random();
+                Hologram hg = new Hologram("dmg", le.getLocation().add(0.5F, 1F, 0.5F));
+                HologramLine line = new TextLine(hg, ChatColor.RED + "-" + (int) e.getDamage() + "❤");
+                hg.addLine(line);
+                hg.spawn();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        hg.teleport(hg.getLocation().add(0, 0.5, 0));
+                    }
+                }.runTaskLaterAsynchronously(PracticeServer.plugin, 20);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        hg.despawn();
+                    }
+                }.runTaskLaterAsynchronously(PracticeServer.plugin, 40);
+            }
+        }
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             Player pp = (Player) e.getEntity();
             if (e.getDamage() <= 0.0) {
                 return;
             }
-            ArrayList<String> gettoggles = Toggles.getToggles(p.getName());
-            ArrayList<String> buddies = Buddies.getBuddies(p.getName());
             if (buddies.contains(pp.getName().toLowerCase()) && !gettoggles.contains("ff")) {
                 e.setDamage(0.0);
                 e.setCancelled(true);
@@ -199,7 +241,7 @@ public class Toggles
         if (p.getOpenInventory().getTopInventory().getName().equals("Toggle Menu")) {
             e.setCancelled(true);
             if (e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR && e.getCurrentItem().getItemMeta().hasDisplayName() && e.getCurrentItem().getItemMeta().getDisplayName().contains("/toggle")) {
-                String name = ChatColor.stripColor((String) e.getCurrentItem().getItemMeta().getDisplayName());
+                String name = ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName());
                 name = name.substring(1, name.length());
                 p.performCommand(name);
                 boolean on = e.getCurrentItem().getItemMeta().getDisplayName().contains(ChatColor.RED.toString());
@@ -234,10 +276,15 @@ public class Toggles
         } else {
             inv.setItem(2, Toggles.getToggleButton("toggleff", false));
         }
-        if (toggles.contains("debug")) {
-            inv.setItem(3, Toggles.getToggleButton("toggledebug", true));
+        if (toggles.contains("holodmg")) {
+            inv.setItem(3, Toggles.getToggleButton("toggleholodmg", true));
         } else {
-            inv.setItem(3, Toggles.getToggleButton("toggledebug", false));
+            inv.setItem(3, Toggles.getToggleButton("toggleholodmg", false));
+        }
+        if (toggles.contains("debug")) {
+            inv.setItem(4, Toggles.getToggleButton("toggledebug", true));
+        } else {
+            inv.setItem(4, Toggles.getToggleButton("toggledebug", false));
         }
         return inv;
     }
@@ -253,7 +300,7 @@ public class Toggles
             is.setDurability((short) 8);
             cc = ChatColor.RED;
         }
-        im.setDisplayName((Object) cc + "/" + s);
+        im.setDisplayName(cc + "/" + s);
         im.setLore(Arrays.asList(Toggles.getToggleDescription(s)));
         is.setItemMeta(im);
         return is;

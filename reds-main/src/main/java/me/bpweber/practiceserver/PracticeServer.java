@@ -22,23 +22,11 @@
  */
 package me.bpweber.practiceserver;
 
-import java.util.logging.Logger;
-
-import fr.neatmonster.nocheatplus.utilities.collision.CollisionUtil;
 import io.vawke.practice.Game;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.World;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import me.bpweber.practiceserver.Crates.CratesMain;
 import me.bpweber.practiceserver.Crates.Commands.giveCrate;
 import me.bpweber.practiceserver.Crates.Commands.giveKey;
+import me.bpweber.practiceserver.Crates.CratesMain;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
 import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.chat.ChatMechanics;
 import me.bpweber.practiceserver.damage.Damage;
@@ -53,17 +41,11 @@ import me.bpweber.practiceserver.loot.LootChests;
 import me.bpweber.practiceserver.mobs.Mobs;
 import me.bpweber.practiceserver.mobs.Spawners;
 import me.bpweber.practiceserver.money.Banks;
-import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.money.Commands.Givepouch;
 import me.bpweber.practiceserver.money.Economy.Economy;
+import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.party.Parties;
-import me.bpweber.practiceserver.player.Buddies;
-import me.bpweber.practiceserver.player.Energy;
-import me.bpweber.practiceserver.player.Horses;
-import me.bpweber.practiceserver.player.Listeners;
-import me.bpweber.practiceserver.player.Speedfish;
-import me.bpweber.practiceserver.player.Toggles;
-import me.bpweber.practiceserver.player.Trading;
+import me.bpweber.practiceserver.player.*;
 import me.bpweber.practiceserver.profession.Mining;
 import me.bpweber.practiceserver.profession.ProfessionMechanics;
 import me.bpweber.practiceserver.pvp.Alignments;
@@ -74,6 +56,14 @@ import me.bpweber.practiceserver.vendors.ItemVendors;
 import me.bpweber.practiceserver.vendors.MerchantMechanics;
 import me.bpweber.practiceserver.world.Antibuild;
 import me.bpweber.practiceserver.world.Logout;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.logging.Logger;
 
 /**
  * Jaxon's native Dungeon Realms practice server code.
@@ -136,62 +126,63 @@ public class PracticeServer extends JavaPlugin {
 
     public void onEnable() {
         plugin = this;
-        ((World) Bukkit.getWorlds().get(0)).setAutoSave(false);
-        ((World) Bukkit.getWorlds().get(0)).setTime(14000);
-        ((World) Bukkit.getWorlds().get(0)).setGameRuleValue("doDaylightCycle", "false");
+        Bukkit.getWorlds().get(0).setAutoSave(false);
+        Bukkit.getWorlds().get(0).setTime(14000);
+        Bukkit.getWorlds().get(0).setGameRuleValue("doDaylightCycle", "false");
         new BukkitRunnable() {
 
             public void run() {
                 Bukkit.getServer().getOnlinePlayers().forEach(Player::saveData);
             }
-        }.runTaskTimerAsynchronously((Plugin) this, 6000, 6000);
+        }.runTaskTimerAsynchronously(this, 6000, 6000);
         if (!this.getDataFolder().exists()) {
             this.getDataFolder().mkdirs();
         }
         log = plugin.getLogger();
-        this.getCommand("reboot").setExecutor((CommandExecutor) new Reboot());
-        this.getCommand("tellall").setExecutor((CommandExecutor) new Tellall());
-		this.getCommand("gl").setExecutor((CommandExecutor) new ChatMechanics());
-		this.getCommand("givePouch").setExecutor((CommandExecutor) new Givepouch());
-		this.getCommand("message").setExecutor((CommandExecutor) new ChatMechanics());
-		this.getCommand("reply").setExecutor((CommandExecutor) new ChatMechanics());
-		this.getCommand("roll").setExecutor((CommandExecutor) new ChatMechanics());
-		this.getCommand("toggle").setExecutor((CommandExecutor) new Toggles());
-		this.getCommand("togglepvp").setExecutor((CommandExecutor) new Toggles());
-		this.getCommand("togglechaos").setExecutor((CommandExecutor) new Toggles());
-		this.getCommand("toggleff").setExecutor((CommandExecutor) new Toggles());
-		this.getCommand("toggledebug").setExecutor((CommandExecutor) new Toggles());
-		this.getCommand("add").setExecutor((CommandExecutor) new Buddies());
-		this.getCommand("del").setExecutor((CommandExecutor) new Buddies());
-		this.getCommand("logout").setExecutor((CommandExecutor) new Logout());
-		this.getCommand("sync").setExecutor((CommandExecutor) new Logout());
-		this.getCommand("setrank").setExecutor((CommandExecutor) new Setrank());
-		this.getCommand("psban").setExecutor((CommandExecutor) new Ban());
-		this.getCommand("psunban").setExecutor((CommandExecutor) new Unban());
-		this.getCommand("psmute").setExecutor((CommandExecutor) new Mute());
-		this.getCommand("psunmute").setExecutor((CommandExecutor) new Unmute());
-		this.getCommand("banksee").setExecutor((CommandExecutor) new Banksee());
-		this.getCommand("psvanish").setExecutor((CommandExecutor) new Vanish());
-		this.getCommand("toggletrail").setExecutor((CommandExecutor) new ToggleTrail());
-		this.getCommand("invsee").setExecutor((CommandExecutor) new Invsee());
-		this.getCommand("speed").setExecutor((CommandExecutor) new Speed());
-		this.getCommand("createdrop").setExecutor((CommandExecutor) new Createdrop());
-		this.getCommand("sc").setExecutor((CommandExecutor) new StaffChat());
-		this.getCommand("showms").setExecutor((CommandExecutor) new Spawners());
-		this.getCommand("hidems").setExecutor((CommandExecutor) new Spawners());
-		this.getCommand("killall").setExecutor((CommandExecutor) new Spawners());
-		this.getCommand("monspawn").setExecutor((CommandExecutor) new Spawners());
-		this.getCommand("showloot").setExecutor((CommandExecutor) new LootChests());
-		this.getCommand("hideloot").setExecutor((CommandExecutor) new LootChests());
-		this.getCommand("pinvite").setExecutor((CommandExecutor) new Parties());
-		this.getCommand("paccept").setExecutor((CommandExecutor) new Parties());
-		this.getCommand("pkick").setExecutor((CommandExecutor) new Parties());
-		this.getCommand("pquit").setExecutor((CommandExecutor) new Parties());
-		this.getCommand("pdecline").setExecutor((CommandExecutor) new Parties());
-		this.getCommand("p").setExecutor((CommandExecutor) new Parties());
-		this.getCommand("giveKey").setExecutor((CommandExecutor) new giveKey());
-		this.getCommand("giveCrate").setExecutor((CommandExecutor) new giveCrate());
-		this.getCommand("dump").setExecutor((CommandExecutor) new FixItem());
+        this.getCommand("reboot").setExecutor(new ChatMechanics());
+        this.getCommand("tellall").setExecutor(new Tellall());
+        this.getCommand("gl").setExecutor(new ChatMechanics());
+        this.getCommand("givePouch").setExecutor(new Givepouch());
+        this.getCommand("message").setExecutor(new ChatMechanics());
+        this.getCommand("reply").setExecutor(new ChatMechanics());
+        this.getCommand("roll").setExecutor(new ChatMechanics());
+        this.getCommand("toggle").setExecutor(new Toggles());
+        this.getCommand("togglepvp").setExecutor(new Toggles());
+        this.getCommand("togglechaos").setExecutor(new Toggles());
+        this.getCommand("toggleff").setExecutor(new Toggles());
+        this.getCommand("toggledebug").setExecutor(new Toggles());
+        this.getCommand("add").setExecutor(new Buddies());
+        this.getCommand("del").setExecutor(new Buddies());
+        this.getCommand("logout").setExecutor(new Logout());
+        this.getCommand("sync").setExecutor(new Logout());
+        this.getCommand("setrank").setExecutor(new Setrank());
+        this.getCommand("psban").setExecutor(new Ban());
+        this.getCommand("psunban").setExecutor(new Unban());
+        this.getCommand("psmute").setExecutor(new Mute());
+        this.getCommand("psunmute").setExecutor(new Unmute());
+        this.getCommand("banksee").setExecutor(new Banksee());
+        this.getCommand("psvanish").setExecutor(new Vanish());
+        this.getCommand("toggletrail").setExecutor(new ToggleTrail());
+        this.getCommand("toggleholodmg").setExecutor(new Toggles());
+        this.getCommand("invsee").setExecutor(new Invsee());
+        this.getCommand("speed").setExecutor(new Speed());
+        this.getCommand("createdrop").setExecutor(new Createdrop());
+        this.getCommand("sc").setExecutor(new StaffChat());
+        this.getCommand("showms").setExecutor(new Spawners());
+        this.getCommand("hidems").setExecutor(new Spawners());
+        this.getCommand("killall").setExecutor(new Spawners());
+        this.getCommand("monspawn").setExecutor(new Spawners());
+        this.getCommand("showloot").setExecutor(new LootChests());
+        this.getCommand("hideloot").setExecutor(new LootChests());
+        this.getCommand("pinvite").setExecutor(new Parties());
+        this.getCommand("paccept").setExecutor(new Parties());
+        this.getCommand("pkick").setExecutor(new Parties());
+        this.getCommand("pquit").setExecutor(new Parties());
+        this.getCommand("pdecline").setExecutor(new Parties());
+        this.getCommand("p").setExecutor(new Parties());
+        this.getCommand("giveKey").setExecutor(new giveKey());
+        this.getCommand("giveCrate").setExecutor(new giveCrate());
+        this.getCommand("dump").setExecutor(new FixItem());
 
 
         // Start VawkeNetty Game

@@ -32,11 +32,15 @@
  */
 package me.bpweber.practiceserver.chat;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
-
+import de.Herbystar.TTA.TTA_Methods;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
+import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.player.Listeners;
+import me.bpweber.practiceserver.pvp.Alignments;
+import me.bpweber.practiceserver.utils.JSONMessage;
 import net.minecraft.server.v1_9_R2.IChatBaseComponent;
 import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 import org.bukkit.Bukkit;
@@ -46,6 +50,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -56,14 +61,12 @@ import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import net.minecraft.server.v1_9_R2.Packet;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
-import me.bpweber.practiceserver.utils.JSONMessage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 public class ChatMechanics
         implements Listener,
@@ -72,7 +75,7 @@ public class ChatMechanics
 
     public void onEnable() {
         PracticeServer.log.info("[ChatMechanics] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
     }
 
     public void onDisable() {
@@ -227,6 +230,7 @@ public class ChatMechanics
                     p.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "ERROR: " + ChatColor.RED + "You have no conversation to respond to!");
                 }
             }
+
             if (cmd.getName().equalsIgnoreCase("roll")) {
                 if (args.length < 1 || args.length > 1) {
                     p.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Incorrect Syntax." + ChatColor.GRAY + " /roll <1 - 10000>");
@@ -259,6 +263,80 @@ public class ChatMechanics
                 }
             }
         }
+        if (cmd.getName().equalsIgnoreCase("reboot") && sender.isOp()) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "60s" + ChatColor.RED + "..");
+                TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "60s" + ChatColor.RED + "..", 20);
+            }
+            new BukkitRunnable() {
+
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "30s" + ChatColor.RED + "..");
+                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "30s" + ChatColor.RED + "..", 20);
+                    }
+                }
+            }.runTaskLater(PracticeServer.plugin, 600);
+            new BukkitRunnable() {
+
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "10s" + ChatColor.RED + "..");
+                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "10s" + ChatColor.RED + "..", 20);
+                    }
+                }
+            }.runTaskLater(PracticeServer.plugin, 1000);
+            new BukkitRunnable() {
+
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "5s" + ChatColor.RED + "..");
+                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "5s" + ChatColor.RED + "..", 20);
+                    }
+                }
+            }.runTaskLater(PracticeServer.plugin, 1100);
+            new BukkitRunnable() {
+
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "4s" + ChatColor.RED + "..");
+                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "4s" + ChatColor.RED + "..", 20);
+                    }
+                }
+            }.runTaskLater(PracticeServer.plugin, 1120);
+            new BukkitRunnable() {
+
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "3s" + ChatColor.RED + "..");
+                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "3s" + ChatColor.RED + "..", 20);
+                    }
+                }
+            }.runTaskLater(PracticeServer.plugin, 1140);
+            new BukkitRunnable() {
+
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "2s" + ChatColor.RED + "..");
+                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "2s" + ChatColor.RED + "..", 20);
+                    }
+                }
+            }.runTaskLater(PracticeServer.plugin, 1160);
+            new BukkitRunnable() {
+
+                public void run() {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "1s" + ChatColor.RED + "..");
+                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "1s" + ChatColor.RED + "..", 20);
+                        Alignments.tagged.remove(p);
+                        Listeners.combat.remove(p);
+                        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+                        Bukkit.dispatchCommand(console, "restart");
+                    }
+                }
+            }.runTaskLater(PracticeServer.plugin, 1180);
+
+        }
         return true;
     }
 
@@ -275,7 +353,7 @@ public class ChatMechanics
         if (s.equals("i") || s.equals("give")) {
             e.setCancelled(true);
             if (p.isOp()) {
-                p.getInventory().addItem(new ItemStack[]{new ItemStack(Material.MOB_SPAWNER)});
+                p.getInventory().addItem(new ItemStack(Material.MOB_SPAWNER));
             }
             p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
             return;
@@ -393,7 +471,7 @@ public class ChatMechanics
             normal.addHoverText(hoveredChat, ChatColor.BOLD + ChatColor.UNDERLINE.toString() + "SHOW");
             normal.addText(after);
 			PacketPlayOutChat packet = new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(normal.toString()));
-			((CraftPlayer) p).getHandle().playerConnection.sendPacket((Packet) packet);
+            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         }
     }
 }
