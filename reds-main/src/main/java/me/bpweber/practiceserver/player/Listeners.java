@@ -17,7 +17,7 @@ import me.bpweber.practiceserver.pvp.Alignments;
 import me.bpweber.practiceserver.teleport.Hearthstone;
 import me.bpweber.practiceserver.teleport.TeleportBooks;
 import me.bpweber.practiceserver.utils.CheckIP;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import me.bpweber.practiceserver.utils.StringUtil;
 import me.konsolas.aac.AAC;
 import me.konsolas.aac.api.HackType;
@@ -67,6 +67,7 @@ public class Listeners
     public static ArrayList<Player> previo = new ArrayList<Player>();
     HashMap<UUID, Long> firedmg = new HashMap<UUID, Long>();
 
+
     public void onEnable() {
         PracticeServer.log.info("[Listeners] has been enabled.");
         Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
@@ -85,20 +86,25 @@ public class Listeners
             public void run() {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                     refreshTabList(p);
+                    Random r = new Random();
+                    float y = r.nextFloat() - 0.2F;
+                    float x = r.nextFloat() - 0.01F;
+                    float z = r.nextFloat() - 0.01F;
+
                     if (!ModerationMechanics.isSub(p) || ToggleTrail.toggletrail.contains(p.getName().toLowerCase()))
                         continue;
                     if (Setrank.ranks.get(p.getName()).equalsIgnoreCase("sub")) {
-                        ParticleEffect.VILLAGER_HAPPY.display(0.125f, 0.125f, 0.125f, 0.02f, 10, p.getLocation().add(0.1f, 0.25F, 0.1F), 20.0);
+                        Particles.VILLAGER_HAPPY.display(0.125f, 0.125f, 0.125f, 0.02f, 10, p.getLocation().add(x, y, z), 20.0);
                     }
                     if (Setrank.ranks.get(p.getName()).equalsIgnoreCase("sub+")) {
-                        ParticleEffect.FLAME.display(0.0f, 0.0f, 0.0f, 0.02f, 10, p.getLocation().add(0.1f, 0.25F, 0.1F), 20.0);
+                        Particles.FLAME.display(0.0f, 0.0f, 0.0f, 0.02f, 10, p.getLocation().add(x, y, z), 20.0);
                     }
                     if (!Setrank.ranks.get(p.getName()).equalsIgnoreCase("sub++")) continue;
-                    ParticleEffect.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 1.0f, 10, p.getLocation().add(0.1f, 0.25F, 0.1F), 20.0);
+                    Particles.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 1.0f, 10, p.getLocation().add(x, y, z), 20.0);
 
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 10, 10);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 2, 2);
     }
 
     public void onDisable() {
@@ -108,14 +114,14 @@ public class Listeners
     public void refreshTabList(Player p) {
         int ping = TTA_Methods.getPing(p);
         if (TTA_Methods.getPing(p) > 400) {
-            TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS\n\n"
-                            + ChatColor.DARK_AQUA + "Guild Name: " + ChatColor.GRAY + "N/A\n",
+            TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS"
+                            + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n",
                     ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
                             + ChatColor.DARK_AQUA + "Your Ping: \n" + ChatColor.GRAY + "Loading Ping.." + "\n\n" +
                             ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
         } else {
-            TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS\n\n"
-                            + ChatColor.DARK_AQUA + "Guild Name: " + ChatColor.GRAY + "\nN/A\n",
+            TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS"
+                            + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n",
                     ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
                             + ChatColor.DARK_AQUA + "Your Ping: \n" + ChatColor.GRAY + TTA_Methods.getPing(p) + "\n\n" +
                             ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
@@ -128,6 +134,29 @@ public class Listeners
 
     }
 
+    @EventHandler
+    public void dropItem(PlayerDropItemEvent e) {
+        if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().getName().equalsIgnoreCase("RedsEmporium")) {
+            e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onMiddleClick(InventoryClickEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        if (player.getGameMode() == GameMode.CREATIVE && !event.getWhoClicked().getName().equalsIgnoreCase("RedsEmporium")) {
+            if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK) {
+                player.getInventory().clear();
+                event.getCursor().setType(null);
+                event.getCurrentItem().setType(null);
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    if (ModerationMechanics.isStaff(p)) {
+                        p.sendMessage(ChatColor.RED.toString() + "Staff Member " + player.getName() + " Was found with illegal items in their inventory.");
+                    }
+                }
+            }
+        }
+    }
     //ANTI-VPN Check to make sure user is not on VPN bn
     @EventHandler
     public void onJoinVPNCHECK(PlayerJoinEvent e) {
@@ -144,7 +173,8 @@ public class Listeners
                             public void run() {
                                 try {
                                     e.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&',
-                                            "&6[&bAutism-Catcher&6]\n &cYou may not log in with a VPN/Proxy! Please disable your VPN/Proxy!"));
+                                            "&6[&bAutism-Catcher&6]\n &cYou may not log in with a VPN/Proxy! You have been banned!"));
+                                    e.getPlayer().setBanned(true);
                                 } catch (Exception e) {
                                 }
                             }
@@ -846,7 +876,7 @@ public class Listeners
             public void run() {
                 Listeners.hpCheck(p);
             }
-        }.runTaskLater(PracticeServer.plugin, 1);
+        }.runTaskLaterAsynchronously(PracticeServer.plugin, 1);
     }
 
     @EventHandler

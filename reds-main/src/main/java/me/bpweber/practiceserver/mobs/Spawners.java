@@ -2,7 +2,7 @@ package me.bpweber.practiceserver.mobs;
 
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.drops.Drops;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,7 +23,6 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -65,7 +64,7 @@ public class Spawners implements Listener, CommandExecutor {
 
     public static int getHp(final ItemStack is) {
         if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore()) {
-            final List<String> lore = (List<String>) is.getItemMeta().getLore();
+            final List<String> lore = is.getItemMeta().getLore();
             if (lore.size() > 1 && lore.get(1).contains("HP")) {
                 try {
                     return Integer.parseInt(lore.get(1).split(": +")[1]);
@@ -96,7 +95,8 @@ public class Spawners implements Listener, CommandExecutor {
                         && !type.equalsIgnoreCase("mitsuki") && !type.equalsIgnoreCase("copjak")
                         && !type.equalsIgnoreCase("kingofgreed") && !type.equalsIgnoreCase("skeletonking")
                         && !type.equalsIgnoreCase("impa") && !type.equalsIgnoreCase("bloodbutcher")
-                        && !type.equalsIgnoreCase("blayshan") && !type.equalsIgnoreCase("kilatan")) {
+                        && !type.equalsIgnoreCase("blayshan") && !type.equalsIgnoreCase("jayden")
+                        && !type.equalsIgnoreCase("kilatan")) {
                     return false;
                 }
                 try {
@@ -128,6 +128,7 @@ public class Spawners implements Listener, CommandExecutor {
                         || (type.equalsIgnoreCase("impa") && (!iselite || tier2 != 3))
                         || (type.equalsIgnoreCase("bloodbutcher") && (!iselite || tier2 != 4))
                         || (type.equalsIgnoreCase("blayshan") && (!iselite || tier2 != 4))
+                        || (type.equalsIgnoreCase("jayden") && (!iselite || tier2 != 5))
                         || (type.equalsIgnoreCase("kilatan") && (!iselite || tier2 != 5))) {
                     return false;
                 }
@@ -142,7 +143,8 @@ public class Spawners implements Listener, CommandExecutor {
                 && !type2.equalsIgnoreCase("mitsuki") && !type2.equalsIgnoreCase("copjak")
                 && !type2.equalsIgnoreCase("kingofgreed") && !type2.equalsIgnoreCase("skeletonking")
                 && !type2.equalsIgnoreCase("impa") && !type2.equalsIgnoreCase("bloodbutcher")
-                && !type2.equalsIgnoreCase("blayshan") && !type2.equalsIgnoreCase("kilatan")) {
+                && !type2.equalsIgnoreCase("blayshan") && !type2.equalsIgnoreCase("jayden")
+                && !type2.equalsIgnoreCase("kilatan")) {
             return false;
         }
         try {
@@ -174,6 +176,7 @@ public class Spawners implements Listener, CommandExecutor {
                 && (!type2.equalsIgnoreCase("impa") || (iselite2 && tier4 == 3))
                 && (!type2.equalsIgnoreCase("bloodbutcher") || (iselite2 && tier4 == 4))
                 && (!type2.equalsIgnoreCase("blayshan") || (iselite2 && tier4 == 4))
+                && (!type2.equalsIgnoreCase("jayden") || (iselite2 && tier4 == 5))
                 && (!type2.equalsIgnoreCase("kilatan") || (iselite2 && tier4 == 5));
     }
 
@@ -206,7 +209,7 @@ public class Spawners implements Listener, CommandExecutor {
 
     public void onEnable() {
         PracticeServer.log.info("[Spawners] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         final File file = new File(PracticeServer.plugin.getDataFolder(), "spawners.yml");
         final YamlConfiguration config = new YamlConfiguration();
         if (!file.exists()) {
@@ -262,7 +265,7 @@ public class Spawners implements Listener, CommandExecutor {
                         s.setFallDistance(0.0f);
                         s.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 10));
                         s.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 127));
-                        ParticleEffect.SPELL.display(0.0f, 0.0f, 0.0f, 0.5f, 80, s.getLocation().add(0.0, 0.15, 0.0), 20.0);
+                        Particles.SPELL.display(0.0f, 0.0f, 0.0f, 0.5f, 80, s.getLocation().add(0.0, 0.15, 0.0), 20.0);
                         s.remove();
 
                         if (!s.hasMetadata("name")) {
@@ -344,7 +347,7 @@ public class Spawners implements Listener, CommandExecutor {
         for (final Location loc : Spawners.spawners.keySet()) {
             final String s = String.valueOf(loc.getWorld().getName()) + "," + (int) loc.getX() + "," + (int) loc.getY()
                     + "," + (int) loc.getZ();
-            config.set(s, (Object) Spawners.spawners.get(loc));
+            config.set(s, Spawners.spawners.get(loc));
             try {
                 config.save(file);
             } catch (IOException e) {
@@ -506,12 +509,12 @@ public class Spawners implements Listener, CommandExecutor {
         if (type.equalsIgnoreCase("skeleton") || type.equalsIgnoreCase("impa") || type.equalsIgnoreCase("skeletonking")
                 || type.equalsIgnoreCase("kingofgreed")) {
             final Skeleton skeleton = (Skeleton) loc.getWorld().spawnEntity(loc, EntityType.SKELETON);
-            return (LivingEntity) skeleton;
+            return skeleton;
         }
-        if (type.equalsIgnoreCase("witherskeleton") || type.equalsIgnoreCase("kilatan")) {
+        if (type.equalsIgnoreCase("witherskeleton") || type.equalsIgnoreCase("kilatan") || type.equalsIgnoreCase("jayden")) {
             final Skeleton skeleton = (Skeleton) loc.getWorld().spawnEntity(loc, EntityType.SKELETON);
             skeleton.setSkeletonType(Skeleton.SkeletonType.WITHER);
-            return (LivingEntity) skeleton;
+            return skeleton;
         }
         if (type.equalsIgnoreCase("zombie") || type.equalsIgnoreCase("mitsuki") || type.equalsIgnoreCase("blayshan")
                 || type.equalsIgnoreCase("bloodbutcher") || type.equalsIgnoreCase("copjak")) {
@@ -522,27 +525,27 @@ public class Spawners implements Listener, CommandExecutor {
         if (type.equalsIgnoreCase("magmacube")) {
             MagmaCube cube = (MagmaCube) loc.getWorld().spawnEntity(loc, EntityType.MAGMA_CUBE);
             cube.setSize(3);
-            return (LivingEntity) cube;
+            return cube;
         }
         if (type.equalsIgnoreCase("spider")) {
             final Spider spider = (Spider) loc.getWorld().spawnEntity(loc, EntityType.SPIDER);
-            return (LivingEntity) spider;
+            return spider;
         }
         if (type.equalsIgnoreCase("cavespider")) {
             final CaveSpider cspider = (CaveSpider) loc.getWorld().spawnEntity(loc, EntityType.CAVE_SPIDER);
-            return (LivingEntity) cspider;
+            return cspider;
         }
         if (type.equalsIgnoreCase("daemon")) {
             final PigZombie daemon = (PigZombie) loc.getWorld().spawnEntity(loc, EntityType.PIG_ZOMBIE);
             daemon.setAngry(true);
             daemon.setBaby(false);
-            return (LivingEntity) daemon;
+            return daemon;
         }
         if (type.equalsIgnoreCase("imp")) {
             final PigZombie imp = (PigZombie) loc.getWorld().spawnEntity(loc, EntityType.PIG_ZOMBIE);
             imp.setAngry(true);
             imp.setBaby(true);
-            return (LivingEntity) imp;
+            return imp;
         }
         return null;
     }
@@ -764,6 +767,9 @@ public class Spawners implements Listener, CommandExecutor {
         if (type.equalsIgnoreCase("blayshan")) {
             name = "Blayshan The Naga";
         }
+        if (type.equalsIgnoreCase("jayden")) {
+            name = "King Jayden";
+        }
         if (type.equalsIgnoreCase("kilatan")) {
             name = "Daemon Lord Kilatan";
         }
@@ -796,8 +802,8 @@ public class Spawners implements Listener, CommandExecutor {
         s.setCustomName(String.valueOf(color) + name);
         s.setCustomNameVisible(true);
         s.setMetadata("name",
-                (MetadataValue) new FixedMetadataValue(PracticeServer.plugin, (Object) (String.valueOf(color) + name)));
-        s.setMetadata("type", (MetadataValue) new FixedMetadataValue(PracticeServer.plugin, (Object) type));
+                new FixedMetadataValue(PracticeServer.plugin, String.valueOf(color) + name));
+        s.setMetadata("type", new FixedMetadataValue(PracticeServer.plugin, type));
         if (elite) {
             s.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
         }
@@ -817,9 +823,9 @@ public class Spawners implements Listener, CommandExecutor {
         s.getEquipment().setChestplate(chest);
         s.getEquipment().setLeggings(legs);
         s.getEquipment().setBoots(boots);
-        if (s.getType().equals((Object) EntityType.SKELETON)
-                && ((Skeleton) s).getSkeletonType().equals((Object) Skeleton.SkeletonType.WITHER)) {
-            s.getEquipment().setHelmet((ItemStack) null);
+        if (s.getType().equals(EntityType.SKELETON)
+                && ((Skeleton) s).getSkeletonType().equals(Skeleton.SkeletonType.WITHER)) {
+            s.getEquipment().setHelmet(null);
         }
         int hp = this.hpCheck(s);
         if (elite) {
@@ -830,13 +836,13 @@ public class Spawners implements Listener, CommandExecutor {
                 hp = (int) (hp * 2.5);
             }
             if (tier == 3) {
-                hp = (int) (hp * 3);
+                hp = hp * 3;
             }
             if (tier == 4) {
-                hp = (int) (hp * 5);
+                hp = hp * 5;
             }
             if (tier == 5) {
-                hp = (int) (hp * 7);
+                hp = hp * 7;
             }
         } else {
             if (tier == 1) {
@@ -852,7 +858,7 @@ public class Spawners implements Listener, CommandExecutor {
                 hp = (int) (hp * 1.4);
             }
             if (tier == 5) {
-                hp = (int) (hp * 2);
+                hp = hp * 2;
             }
         }
         if (hp < 1) {
@@ -864,7 +870,7 @@ public class Spawners implements Listener, CommandExecutor {
             public void run() {
                 Spawners.mobs.put(s, loc);
             }
-        }.runTaskLater(PracticeServer.plugin, 1L);
+        }.runTaskLaterAsynchronously(PracticeServer.plugin, 1L);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -890,7 +896,7 @@ public class Spawners implements Listener, CommandExecutor {
                 for (final Location loc : Spawners.spawners.keySet()) {
                     final String s = String.valueOf(loc.getWorld().getName()) + "," + (int) loc.getX() + ","
                             + (int) loc.getY() + "," + (int) loc.getZ();
-                    config.set(s, (Object) Spawners.spawners.get(loc));
+                    config.set(s, Spawners.spawners.get(loc));
                     try {
                         config.save(file);
                     } catch (IOException e1) {
@@ -914,7 +920,7 @@ public class Spawners implements Listener, CommandExecutor {
     @EventHandler
     public void onBlockPlace(final BlockPlaceEvent e) {
         final Player p = e.getPlayer();
-        if (p.isOp() && e.getBlock().getType().equals((Object) Material.MOB_SPAWNER)) {
+        if (p.isOp() && e.getBlock().getType().equals(Material.MOB_SPAWNER)) {
             p.sendMessage(new StringBuilder().append(ChatColor.GREEN).append(ChatColor.BOLD)
                     .append("     *** SPAWNER CREATION STARTED ***").toString());
             p.sendMessage(" ");
@@ -931,7 +937,7 @@ public class Spawners implements Listener, CommandExecutor {
     @EventHandler
     public void onBlockBreak(final BlockBreakEvent e) {
         final Player p = e.getPlayer();
-        if (p.isOp() && e.getBlock().getType().equals((Object) Material.MOB_SPAWNER)) {
+        if (p.isOp() && e.getBlock().getType().equals(Material.MOB_SPAWNER)) {
             if (Spawners.spawners.containsKey(e.getBlock().getLocation())) {
                 p.sendMessage(ChatColor.GRAY + "Spawner with data '" + ChatColor.YELLOW
                         + Spawners.spawners.get(e.getBlock().getLocation()) + ChatColor.GRAY + "' removed at "
@@ -940,7 +946,7 @@ public class Spawners implements Listener, CommandExecutor {
             }
             if (this.creatingspawner.containsValue(e.getBlock().getLocation())) {
                 for (final String s : this.creatingspawner.keySet()) {
-                    if (this.creatingspawner.get(s).equals((Object) e.getBlock().getLocation())) {
+                    if (this.creatingspawner.get(s).equals(e.getBlock().getLocation())) {
                         p.sendMessage(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD)
                                 .append("     *** SPAWNER CREATION CANCELLED ***").toString());
                         this.creatingspawner.remove(s);
@@ -954,7 +960,7 @@ public class Spawners implements Listener, CommandExecutor {
     public void onBlockClick(final PlayerInteractEvent e) {
         final Player p = e.getPlayer();
         if (p.isOp() && e.getAction() == Action.RIGHT_CLICK_BLOCK
-                && e.getClickedBlock().getType().equals((Object) Material.MOB_SPAWNER)
+                && e.getClickedBlock().getType().equals(Material.MOB_SPAWNER)
                 && Spawners.spawners.containsKey(e.getClickedBlock().getLocation())) {
             p.sendMessage(ChatColor.GRAY + "Spawner with data '" + ChatColor.YELLOW
                     + Spawners.spawners.get(e.getClickedBlock().getLocation()) + ChatColor.GRAY + "' at "

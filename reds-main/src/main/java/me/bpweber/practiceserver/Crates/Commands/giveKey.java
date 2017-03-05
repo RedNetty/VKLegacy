@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class giveKey implements CommandExecutor {
     @Override
@@ -14,7 +15,9 @@ public class giveKey implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("giveKey") && sender.getName().equalsIgnoreCase("RedsEmporium") || sender instanceof ConsoleCommandSender) {
             Player p = Bukkit.getPlayer(args[0]);
             if (p != null && p.isOnline()) {
-                p.getInventory().addItem(CratesMain.createKey());
+                ItemStack item = CratesMain.createKey();
+                item.setAmount(Integer.parseInt(args[1]));
+                p.getInventory().addItem(item);
             }
         }
 

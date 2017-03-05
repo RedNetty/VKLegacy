@@ -22,7 +22,6 @@
  */
 package me.bpweber.practiceserver;
 
-import io.vawke.practice.Game;
 import me.bpweber.practiceserver.Crates.Commands.giveCrate;
 import me.bpweber.practiceserver.Crates.Commands.giveKey;
 import me.bpweber.practiceserver.Crates.CratesMain;
@@ -121,7 +120,6 @@ public class PracticeServer extends JavaPlugin {
     private static CratesMain cm;
     private static Economy em;
 
-    private Game game;
 
 
     public void onEnable() {
@@ -186,8 +184,6 @@ public class PracticeServer extends JavaPlugin {
 
 
         // Start VawkeNetty Game
-        //this.game = new Game(this);
-
 
         cm = new CratesMain();
         trading = new Trading();
@@ -262,7 +258,6 @@ public class PracticeServer extends JavaPlugin {
     }
 
     public void onDisable() {
-       // this.game.shutdownHook();
         trading.onDisable();
         em.onDisable();
         alignments.onDisable();

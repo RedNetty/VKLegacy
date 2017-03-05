@@ -25,7 +25,7 @@ public class Mobdrops implements Listener {
 
     public void onEnable() {
         PracticeServer.log.info("[MobDrops] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
     }
 
     public void onDisable() {
@@ -65,14 +65,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("WOOD_")) {
                     gemamt = random.nextInt(3) + 3;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 70) {
+                        if (rd < 40) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 61) {
+                        if (rd < 35) {
                             dodrop = true;
                         }
-                    } else if (rd < 50) {
+                    } else if (rd < 23) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -95,14 +95,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("STONE_")) {
                     gemamt = random.nextInt(5) + 5;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 65) {
+                        if (rd < 30) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 49) {
+                        if (rd < 24) {
                             dodrop = true;
                         }
-                    } else if (rd < 38) {
+                    } else if (rd < 18) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -133,14 +133,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("IRON_")) {
                     gemamt = random.nextInt(10) + 10;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 38) {
+                        if (rd < 22) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 34) {
+                        if (rd < 18) {
                             dodrop = true;
                         }
-                    } else if (rd < 26) {
+                    } else if (rd < 15) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -171,14 +171,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("DIAMOND_")) {
                     gemamt = random.nextInt(30) + 24;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 20) {
+                        if (rd < 11) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 15) {
+                        if (rd < 10) {
                             dodrop = true;
                         }
-                    } else if (rd < 10) {
+                    } else if (rd < 7) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 9) {
@@ -206,14 +206,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("GOLD_")) {
                     gemamt = random.nextInt(50) + 14;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 15) {
+                        if (rd < 9) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 12) {
+                        if (rd < 8) {
                             dodrop = true;
                         }
-                    } else if (rd < 6) {
+                    } else if (rd < 3) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -286,7 +286,7 @@ public class Mobdrops implements Listener {
                         if (type.equalsIgnoreCase("mitsuki") || type.equalsIgnoreCase("copjak")
                                 || type.equalsIgnoreCase("kingofgreed") || type.equalsIgnoreCase("skeletonking")
                                 || type.equalsIgnoreCase("impa") || type.equalsIgnoreCase("bloodbutcher")
-                                || type.equalsIgnoreCase("blayshan") || type.equalsIgnoreCase("kilatan")) {
+                                || type.equalsIgnoreCase("blayshan") || type.equalsIgnoreCase("jayden") || type.equalsIgnoreCase("kilatan")) {
                             final ItemStack is = EliteDrops.createCustomEliteDrop(type);
                             s.getWorld().dropItemNaturally(s.getLocation(), is);
                         }
@@ -302,7 +302,7 @@ public class Mobdrops implements Listener {
             if (type.equalsIgnoreCase("mitsuki") || type.equalsIgnoreCase("copjak") || type.equalsIgnoreCase("impa")
                     || type.equalsIgnoreCase("skeletonking") || type.equalsIgnoreCase("kingofgreed")
                     || type.equalsIgnoreCase("blayshan") || type.equalsIgnoreCase("bloodbutcher")
-                    || type.equalsIgnoreCase("kilatan")) {
+                    || type.equalsIgnoreCase("jayden") || type.equalsIgnoreCase("kilatan")) {
                 return true;
             }
         }

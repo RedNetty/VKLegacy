@@ -44,7 +44,7 @@ import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.player.Horses;
 import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.LivingEntity;
@@ -94,24 +94,24 @@ public class TeleportBooks
     }
 
     public void onEnable() {
-        Cyrennica = new Location((World) Bukkit.getWorlds().get(0), -367.0, 83.0, 390.0);
-        Harrison_Field = new Location((World) Bukkit.getWorlds().get(0), -594.0, 58.0, 687.0, 92.0f, 1.0f);
-        Dark_Oak_Tavern = new Location((World) Bukkit.getWorlds().get(0), 280.0, 58.0, 1132.0, 2.0f, 1.0f);
-        Deadpeaks_Mountain_Camp = new Location((World) Bukkit.getWorlds().get(0), -1173.0, 105.0, 1030.0, -88.0f, 1.0f);
-        Trollsbane_Tavern = new Location((World) Bukkit.getWorlds().get(0), 962.0, 94.0, 1069.0, -153.0f, 1.0f);
-        Tripoli = new Location((World) Bukkit.getWorlds().get(0), -1320.0, 90.0, 370.0, 153.0f, 1.0f);
-        Gloomy_Hollows = new Location((World) Bukkit.getWorlds().get(0), -590.0, 43.0, 0.0, 144.0f, 1.0f);
-        Crestguard_Keep = new Location((World) Bukkit.getWorlds().get(0), -1428.0, 115.0, -489.0, 95.0f, 1.0f);
-        CrestWatch = new Location((World) Bukkit.getWorlds().get(0), -544.0, 60.0, -418.0, 95.0f, 1.0f);
+        Cyrennica = new Location(Bukkit.getWorlds().get(0), -367.0, 83.0, 390.0);
+        Harrison_Field = new Location(Bukkit.getWorlds().get(0), -594.0, 58.0, 687.0, 92.0f, 1.0f);
+        Dark_Oak_Tavern = new Location(Bukkit.getWorlds().get(0), 280.0, 58.0, 1132.0, 2.0f, 1.0f);
+        Deadpeaks_Mountain_Camp = new Location(Bukkit.getWorlds().get(0), -1173.0, 105.0, 1030.0, -88.0f, 1.0f);
+        Trollsbane_Tavern = new Location(Bukkit.getWorlds().get(0), 962.0, 94.0, 1069.0, -153.0f, 1.0f);
+        Tripoli = new Location(Bukkit.getWorlds().get(0), -1320.0, 90.0, 370.0, 153.0f, 1.0f);
+        Gloomy_Hollows = new Location(Bukkit.getWorlds().get(0), -590.0, 43.0, 0.0, 144.0f, 1.0f);
+        Crestguard_Keep = new Location(Bukkit.getWorlds().get(0), -1428.0, 115.0, -489.0, 95.0f, 1.0f);
+        CrestWatch = new Location(Bukkit.getWorlds().get(0), -544.0, 60.0, -418.0, 95.0f, 1.0f);
         PracticeServer.log.info("[TeleportBooks] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                     if (!TeleportBooks.casting_time.containsKey(p.getName())) continue;
                     if (TeleportBooks.casting_time.get(p.getName()) == 0) {
-                        ParticleEffect.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 0.2f, 200, p.getLocation().add(0.0, 1.0, 0.0), 20.0);
+                        Particles.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 0.2f, 200, p.getLocation().add(0.0, 1.0, 0.0), 20.0);
                         p.eject();
                         p.teleport(TeleportBooks.teleporting_loc.get(p.getName()));
                         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 2));
@@ -122,7 +122,7 @@ public class TeleportBooks
                     }
                     p.sendMessage(ChatColor.BOLD + "CASTING" + ChatColor.WHITE + " ... " + TeleportBooks.casting_time.get(p.getName()) + ChatColor.BOLD + "s");
                     TeleportBooks.casting_time.put(p.getName(), TeleportBooks.casting_time.get(p.getName()) - 1);
-                    ParticleEffect.PORTAL.display(0.0f, 0.0f, 0.0f, 4.0f, 300, p.getLocation(), 20.0);
+                    Particles.PORTAL.display(0.0f, 0.0f, 0.0f, 4.0f, 300, p.getLocation(), 20.0);
                     p.getWorld().playEffect(p.getLocation().add(0, 0, 0), Effect.STEP_SOUND, Material.PORTAL);
                     p.getWorld().playEffect(p.getLocation().add(0, 1, 0), Effect.STEP_SOUND, Material.PORTAL);
                     p.getWorld().playEffect(p.getLocation().add(0, 2, 0), Effect.STEP_SOUND, Material.PORTAL);
@@ -260,7 +260,7 @@ public class TeleportBooks
     public void onRightClick(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && p.getInventory().getItemInMainHand() != null && p.getInventory().getItemInMainHand().getType() == Material.BOOK && p.getInventory().getItemInMainHand().getItemMeta().hasDisplayName() && p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().toLowerCase().contains("teleport:") && !casting_time.containsKey(p.getName()) && !Horses.mounting.containsKey(p.getName())) {
-            String type = ChatColor.stripColor((String) p.getInventory().getItemInMainHand().getItemMeta().getDisplayName());
+            String type = ChatColor.stripColor(p.getInventory().getItemInMainHand().getItemMeta().getDisplayName());
             Location loc = this.getLocationFromString(type);
             if (Alignments.chaotic.containsKey(p.getName())) {
                 p.sendMessage(ChatColor.RED + "You " + ChatColor.UNDERLINE + "cannot" + ChatColor.RED + " teleport to non-chaotic zones while chaotic.");
@@ -345,10 +345,10 @@ public class TeleportBooks
             e.setCancelled(true);
             if (p.getInventory().firstEmpty() != -1) {
                 int amount = e.getItem().getItemStack().getAmount();
-                CraftItemStack scroll = CraftItemStack.asCraftCopy((ItemStack) e.getItem().getItemStack());
+                CraftItemStack scroll = CraftItemStack.asCraftCopy(e.getItem().getItemStack());
                 scroll.setAmount(1);
                 while (amount > 0 && p.getInventory().firstEmpty() != -1) {
-                    p.getInventory().setItem(p.getInventory().firstEmpty(), (ItemStack) scroll);
+                    p.getInventory().setItem(p.getInventory().firstEmpty(), scroll);
                     p.updateInventory();
                     if (--amount <= 0) continue;
                     ItemStack new_stack = e.getItem().getItemStack();
@@ -464,8 +464,8 @@ public class TeleportBooks
     @EventHandler
     public void onAvalonTp(PlayerMoveEvent e) {
         Location to = e.getTo();
-        Location enter = new Location((World) Bukkit.getWorlds().get(0), -357.5, 171.0, -3440.5);
-        Location exit = new Location((World) Bukkit.getWorlds().get(0), -1158.5, 95.0, -515.5);
+        Location enter = new Location(Bukkit.getWorlds().get(0), -357.5, 171.0, -3440.5);
+        Location exit = new Location(Bukkit.getWorlds().get(0), -1158.5, 95.0, -515.5);
         if (to.getX() > -1155.0 && to.getX() < -1145.0 && to.getY() > 90.0 && to.getY() < 100.0 && to.getZ() < -500.0 && to.getZ() > -530.0) {
             e.getPlayer().teleport(enter.setDirection(to.getDirection()));
         }
@@ -477,11 +477,11 @@ public class TeleportBooks
     public static Location generateRandomSpawnPoint(String s) {
         ArrayList<Location> spawns = new ArrayList<Location>();
         if (Alignments.chaotic.containsKey(s)) {
-            spawns.add(new Location((World) Bukkit.getWorlds().get(0), -382.0, 68.0, 867.0));
-            spawns.add(new Location((World) Bukkit.getWorlds().get(0), -350.0, 67.0, 883.0));
-            spawns.add(new Location((World) Bukkit.getWorlds().get(0), -330.0, 65.0, 898.0));
-            spawns.add(new Location((World) Bukkit.getWorlds().get(0), -419.0, 61.0, 830.0));
-            return (Location) spawns.get(new Random().nextInt(spawns.size()));
+            spawns.add(new Location(Bukkit.getWorlds().get(0), -382.0, 68.0, 867.0));
+            spawns.add(new Location(Bukkit.getWorlds().get(0), -350.0, 67.0, 883.0));
+            spawns.add(new Location(Bukkit.getWorlds().get(0), -330.0, 65.0, 898.0));
+            spawns.add(new Location(Bukkit.getWorlds().get(0), -419.0, 61.0, 830.0));
+            return spawns.get(new Random().nextInt(spawns.size()));
         }
         return Cyrennica;
     }

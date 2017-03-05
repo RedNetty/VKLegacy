@@ -1,7 +1,5 @@
 package me.bpweber.practiceserver.utils;
 
-
-import io.vawke.practice.prompt.DefaultFontInfo;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 

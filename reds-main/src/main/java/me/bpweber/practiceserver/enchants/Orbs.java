@@ -1,7 +1,7 @@
 package me.bpweber.practiceserver.enchants;
 
 import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -460,7 +460,7 @@ public class Orbs implements Listener {
                     fw.setFireworkMeta(fwm);
                 } else {
                     p.getWorld().playSound(p.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 2.0f, 1.25f);
-                    ParticleEffect.LAVA.display(0.0f, 0.0f, 0.0f, 5.0f, 10, p.getEyeLocation(), 20.0);
+                    Particles.LAVA.display(0.0f, 0.0f, 0.0f, 5.0f, 10, p.getEyeLocation(), 20.0);
                 }
                 newis.setDurability((short) 0);
                 e.setCurrentItem(newis);

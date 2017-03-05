@@ -472,11 +472,11 @@ public class EliteDrops {
             dodge = true;
             elemamt = random.nextInt(10) + 30;
             mindmg = random.nextInt(50) + 230;
-            maxdmg = random.nextInt(70) + 370;
+            maxdmg = random.nextInt(70) + 400;
             if (item <= 4) {
-                name = "Jayden's Swift Blade";
-                is.setType(Material.GOLD_SWORD);
-                llore = String.valueOf(llore) + "King Jayden's blade encrusted with diamonds.";
+                name = "Jayden's Swift War Axe";
+                is.setType(Material.GOLD_AXE);
+                llore = String.valueOf(llore) + "King Jayden's sturdy axe encrusted with diamonds.";
             }
             if (item == 5) {
                 dpsamt = random.nextInt(2) + 6;
@@ -487,7 +487,7 @@ public class EliteDrops {
                 name = "Jayden's Beautiful Crown";
                 is.setType(Material.GOLD_HELMET);
                 llore = String.valueOf(llore) + "A golden crown forged by Maltai's great smith.";
-                rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Unique";
+                rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
             }
             if (item == 6) {
                 dpsamt = random.nextInt(4) + 12;
@@ -495,9 +495,9 @@ public class EliteDrops {
                 hp = random.nextInt(1801) + 2800;
                 nrg = random.nextInt(5) + 6;
                 dodgeamt = random.nextInt(11) + 10;
-                name = "Kilatans Legendary Platemail";
+                name = "Jayden's Stolen Chest Guard";
                 is.setType(Material.GOLD_CHESTPLATE);
-                llore = String.valueOf(llore) + "The Legendary platemail piece of the Demon Lord Kilatan.";
+                llore = String.valueOf(llore) + "The protection from the last blow of the fallen knight.";
                 rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
             }
             if (item == 7) {
@@ -506,9 +506,9 @@ public class EliteDrops {
                 hp = random.nextInt(1801) + 2800;
                 nrg = random.nextInt(5) + 6;
                 dodgeamt = random.nextInt(11) + 10;
-                name = "Kilatans Legendary Leggings";
+                name = "Jayden's Godlike Leggings";
                 is.setType(Material.GOLD_LEGGINGS);
-                llore = String.valueOf(llore) + "You can feel the power emanating from this armor piece.";
+                llore = String.valueOf(llore) + "The legendary leggings of a fallen lord.";
                 rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
             }
             if (item == 8) {
@@ -517,9 +517,9 @@ public class EliteDrops {
                 hp = random.nextInt(1001) + 1400;
                 nrg = random.nextInt(6) + 3;
                 dodgeamt = random.nextInt(3) + 5;
-                name = "Kilatans Legendary Boots";
+                name = "Jayden's Legendary Footwear";
                 is.setType(Material.GOLD_BOOTS);
-                llore = String.valueOf(llore) + "Boots that carried the weight of the underworld.";
+                llore = String.valueOf(llore) + "Sturdy golden footwear owner by the king himself.";
                 rarity = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
             }
             tier = 5;

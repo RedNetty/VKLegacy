@@ -1,3 +1,5 @@
+package me.bpweber.practiceserver.utils;
+
 public enum DefaultFontInfo {
 
     A('A', 5),

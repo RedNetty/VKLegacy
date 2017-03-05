@@ -55,7 +55,7 @@ package me.bpweber.practiceserver.mobs;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.damage.Damage;
 import me.bpweber.practiceserver.player.Listeners;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -99,7 +99,7 @@ public class Mobs
                         if (step > 0) {
                             Mobs.crit.put(l, --step);
                             l.getWorld().playSound(l.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, 4.0f);
-                            ParticleEffect.EXPLOSION_LARGE.display(0.0f, 0.0f, 0.0f, 0.3f, 40, l.getLocation().add(0.0, 1.0, 0.0), 20.0);
+                            Particles.EXPLOSION_LARGE.display(0.0f, 0.0f, 0.0f, 0.3f, 40, l.getLocation().add(0.0, 1.0, 0.0), 20.0);
                         }
                         if (step == 0) {
                             for (Entity e : l.getNearbyEntities(8.0, 8.0, 8.0)) {
@@ -116,7 +116,7 @@ public class Mobs
                                 p.setVelocity(v.multiply(3));
                             }
                             l.getWorld().playSound(l.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 0.5f);
-                            ParticleEffect.EXPLOSION_HUGE.display(0.0f, 0.0f, 0.0f, 1.0f, 40, l.getLocation().add(0.0, 1.0, 0.0), 20.0);
+                            Particles.EXPLOSION_HUGE.display(0.0f, 0.0f, 0.0f, 1.0f, 40, l.getLocation().add(0.0, 1.0, 0.0), 20.0);
                             Mobs.crit.remove(l);
                             l.setCustomName(Mobs.generateOverheadBar(l, l.getHealth(), l.getMaxHealth(), Mobs.getMobTier(l), true));
                             l.setCustomNameVisible(true);
@@ -155,7 +155,7 @@ public class Mobs
                         l.getWorld().playSound(l.getLocation(), Sound.BLOCK_PISTON_EXTEND, 1.0f, 2.0f);
                     }
                     if (step != 0) continue;
-                    ParticleEffect.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 0.5f, 35, l.getLocation().add(0.0, 1.0, 0.0), 20.0);
+                    Particles.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 0.5f, 35, l.getLocation().add(0.0, 1.0, 0.0), 20.0);
                 }
             }
         }.runTaskTimerAsynchronously(PracticeServer.plugin, 20, 10);

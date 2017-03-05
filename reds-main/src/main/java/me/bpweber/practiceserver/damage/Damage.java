@@ -34,11 +34,14 @@
  */
 package me.bpweber.practiceserver.damage;
 
+import com.sainttx.holograms.api.Hologram;
+import com.sainttx.holograms.api.line.HologramLine;
+import com.sainttx.holograms.api.line.TextLine;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.player.Energy;
 import me.bpweber.practiceserver.player.Toggles;
 import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import me.bpweber.practiceserver.vendors.Merchant;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
@@ -92,14 +95,14 @@ public class Damage
                         Alignments.playerBossBars.put(p, bossBar);
                         Alignments.playerBossBars.get(p).setProgress(pcnt);
                     } else {
-                        Alignments.playerBossBars.get(p).setTitle(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
+                        BossBar bossBar = Bukkit.createBossBar(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
                                 + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
-                                + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth());
+                                + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth(), BarColor.PINK, BarStyle.SOLID);
                         Alignments.playerBossBars.get(p).setProgress(pcnt);
                     }
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 300, 300);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 1, 1);
         new BukkitRunnable() {
 
             public void run() {
@@ -135,7 +138,6 @@ public class Damage
         }
         return 0;
     }
-
     public static int getArmor(ItemStack is) {
         List<String> lore;
         if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 0 && lore.get(0).contains("ARMOR")) {
@@ -294,34 +296,6 @@ public class Damage
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void onHPUpdate(EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            double healthPercentage = (p.getHealth() / p.getMaxHealth());
-            if (healthPercentage * 100.0F > 100.0F) {
-                healthPercentage = 1.0;
-            }
-            float pcnt = (float) (healthPercentage * 1.F);
-            if (!Alignments.playerBossBars.containsKey(p)) {
-            	p.setNoDamageTicks(0);
-                // Set new one
-                BossBar bossBar = Bukkit.createBossBar(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
-                        + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
-                        + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth(), BarColor.PINK, BarStyle.SOLID);
-                bossBar.addPlayer(p);
-
-                Alignments.playerBossBars.put(p, bossBar);
-                Alignments.playerBossBars.get(p).setProgress(pcnt);
-            } else {
-                Alignments.playerBossBars.get(p).setTitle(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
-                        + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
-                        + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth());
-                Alignments.playerBossBars.get(p).setProgress(pcnt);
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW)
     public void onThorns(EntityDamageByEntityEvent e) {
         Player p;
         LivingEntity le;
@@ -351,6 +325,35 @@ public class Damage
                             le.damage(afterDmg);
                         }
                     }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void holoDMG(EntityDamageByEntityEvent e) {
+        ArrayList<String> gettoggles = Toggles.getToggles(e.getDamager().getName());
+        if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player) {
+            if (gettoggles.contains("holodmg")) {
+                if (e.getDamage() > 0 && !e.isCancelled()) {
+                    Player p = (Player) e.getDamager();
+                    LivingEntity le = (LivingEntity) e.getEntity();
+                    Random r = new Random();
+                    float x = r.nextFloat();
+                    float y = r.nextFloat();
+                    float z = r.nextFloat();
+                    int dmg = (int) e.getDamage();
+                    Hologram hg = new Hologram("dmg", le.getLocation().add(x, 0.5 + y, z));
+                    HologramLine line = new TextLine(hg, ChatColor.RED + "-" + dmg + "❤");
+                    hg.addLine(line);
+                    hg.spawn();
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            hg.teleport(hg.getLocation().add(0, 0.8, 0));
+                            hg.despawn();
+                        }
+                    }.runTaskLaterAsynchronously(PracticeServer.plugin, 25);
                 }
             }
         }
@@ -550,7 +553,7 @@ public class Damage
                 if (drop <= crit) {
                     dmg *= 2;
                     p.playSound(p.getLocation(), Sound.BLOCK_WOOD_BUTTON_CLICK_ON, 1.5f, 0.5f);
-                    ParticleEffect.CRIT_MAGIC.display(0.0f, 0.0f, 0.0f, 1.0f, 50, li.getLocation(), 20.0);
+                    Particles.CRIT_MAGIC.display(0.0f, 0.0f, 0.0f, 1.0f, 50, li.getLocation(), 20.0);
                 }
                 PlayerInventory i = p.getInventory();
                 double dps = 0.0;

@@ -32,14 +32,11 @@
  */
 package me.bpweber.practiceserver.chat;
 
-import de.Herbystar.TTA.TTA_Methods;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
 import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.player.Listeners;
-import me.bpweber.practiceserver.pvp.Alignments;
 import me.bpweber.practiceserver.utils.JSONMessage;
 import net.minecraft.server.v1_9_R2.IChatBaseComponent;
 import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
@@ -50,7 +47,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,7 +57,6 @@ import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -263,83 +258,8 @@ public class ChatMechanics
                 }
             }
         }
-        if (cmd.getName().equalsIgnoreCase("reboot") && sender.isOp()) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "60s" + ChatColor.RED + "..");
-                TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "60s" + ChatColor.RED + "..", 20);
-            }
-            new BukkitRunnable() {
-
-                public void run() {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "30s" + ChatColor.RED + "..");
-                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "30s" + ChatColor.RED + "..", 20);
-                    }
-                }
-            }.runTaskLater(PracticeServer.plugin, 600);
-            new BukkitRunnable() {
-
-                public void run() {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "10s" + ChatColor.RED + "..");
-                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "10s" + ChatColor.RED + "..", 20);
-                    }
-                }
-            }.runTaskLater(PracticeServer.plugin, 1000);
-            new BukkitRunnable() {
-
-                public void run() {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "5s" + ChatColor.RED + "..");
-                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "5s" + ChatColor.RED + "..", 20);
-                    }
-                }
-            }.runTaskLater(PracticeServer.plugin, 1100);
-            new BukkitRunnable() {
-
-                public void run() {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "4s" + ChatColor.RED + "..");
-                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "4s" + ChatColor.RED + "..", 20);
-                    }
-                }
-            }.runTaskLater(PracticeServer.plugin, 1120);
-            new BukkitRunnable() {
-
-                public void run() {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "3s" + ChatColor.RED + "..");
-                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "3s" + ChatColor.RED + "..", 20);
-                    }
-                }
-            }.runTaskLater(PracticeServer.plugin, 1140);
-            new BukkitRunnable() {
-
-                public void run() {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "2s" + ChatColor.RED + "..");
-                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "2s" + ChatColor.RED + "..", 20);
-                    }
-                }
-            }.runTaskLater(PracticeServer.plugin, 1160);
-            new BukkitRunnable() {
-
-                public void run() {
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "1s" + ChatColor.RED + "..");
-                        TTA_Methods.sendActionBar(p, ChatColor.RED + "Rebooting in " + ChatColor.BOLD + "1s" + ChatColor.RED + "..", 20);
-                        Alignments.tagged.remove(p);
-                        Listeners.combat.remove(p);
-                        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-                        Bukkit.dispatchCommand(console, "restart");
-                    }
-                }
-            }.runTaskLater(PracticeServer.plugin, 1180);
-
-        }
         return true;
     }
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(PlayerCommandPreprocessEvent e) {
         Player p = e.getPlayer();
@@ -358,7 +278,7 @@ public class ChatMechanics
             p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
             return;
         }
-        if (s.equals("save-all") || s.equals("stop") || s.equals("restart") || s.equals("reload") || s.equals("ban") || s.equals("tpall") || s.equals("kill") || s.equals("vanish") || s.equals("mute") || s.equals("more")) {
+        if (s.equals("save-all") || s.equalsIgnoreCase("more") || s.equalsIgnoreCase("stack") || s.equals("stop") || s.equals("restart") || s.equals("reload") || s.equals("ban") || s.equals("tpall") || s.equals("kill") || s.equals("vanish") || s.equals("mute") || s.equals("more")) {
             e.setCancelled(true);
             p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
             return;

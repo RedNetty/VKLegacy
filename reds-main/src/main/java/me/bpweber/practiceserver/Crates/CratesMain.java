@@ -65,7 +65,7 @@ public class CratesMain implements Listener {
 
         ItemStack item = null;
         if (e.getWhoClicked() instanceof Player) {
-            if (e.getClickedInventory() != null && e.getClickedInventory().getHolder() instanceof Player && e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+            if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
                 if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
                     if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST) {
                         if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
@@ -86,8 +86,10 @@ public class CratesMain implements Listener {
                             if (e.getCurrentItem().getAmount() > 1) {
                                 e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
                             }
-                            p.getInventory().addItem(item);
-                            doFirework(p);
+                            if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
+                                p.getInventory().addItem(item);
+                                doFirework(p);
+                            }
                         }
                     }
                 }
@@ -173,7 +175,7 @@ public class CratesMain implements Listener {
     public void onInvClick(InventoryClickEvent e) {
         if (e.getWhoClicked() instanceof Player) {
             Player p = (Player) e.getWhoClicked();
-            if (e.getCursor().getType() != null && e.getClickedInventory() != null && e.getClickedInventory().getHolder() instanceof Player && e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+            if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
                 if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST && e.getCursor().getType() == Material.TRIPWIRE_HOOK) {
                     ItemStack item1 = new ItemStack(Material.AIR);
                     if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
@@ -192,7 +194,9 @@ public class CratesMain implements Listener {
                     if (e.getCurrentItem().getAmount() > 1) {
                         e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
                     }
-                    p.getInventory().addItem(item1);
+                    if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
+                        p.getInventory().addItem(item1);
+                    }
                 }
             }
         }

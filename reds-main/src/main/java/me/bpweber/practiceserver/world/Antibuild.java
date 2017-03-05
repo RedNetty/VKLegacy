@@ -66,7 +66,7 @@ public class Antibuild
         implements Listener {
     public void onEnable() {
         PracticeServer.log.info("[Antibuild] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
     }
 
     public void onDisable() {
@@ -86,6 +86,7 @@ public class Antibuild
             e.setCancelled(true);
         }
     }
+
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent e) {

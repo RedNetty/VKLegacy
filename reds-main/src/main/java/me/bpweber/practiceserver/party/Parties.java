@@ -74,7 +74,7 @@ public class Parties implements CommandExecutor, Listener {
                 sb.getObjective(DisplaySlot.SIDEBAR).unregister();
             }
             final Objective o = sb.registerNewObjective("party_data", "dummy");
-            o.setDisplayName(new StringBuilder().append(ChatColor.AQUA).append(ChatColor.BOLD).append("Party").toString());
+            o.setDisplayName(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Party").toString());
             o.setDisplaySlot(DisplaySlot.SIDEBAR);
             for (final Player pl : mem) {
                 if (Parties.parties.containsKey(pl)) {
@@ -227,7 +227,7 @@ public class Parties implements CommandExecutor, Listener {
 
     public void onEnable() {
         PracticeServer.log.info("[Parties] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
             public void run() {
                 for (final Player p : Bukkit.getOnlinePlayers()) {
@@ -236,7 +236,7 @@ public class Parties implements CommandExecutor, Listener {
                 	}
                 }
             }
-        }.runTaskTimer(PracticeServer.plugin, 1L, 1L);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 1L, 1L);
         new BukkitRunnable() {
             public void run() {
                 for (final Player p : Parties.invite.keySet()) {

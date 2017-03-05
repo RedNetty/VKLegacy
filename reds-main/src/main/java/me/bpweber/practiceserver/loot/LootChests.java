@@ -17,7 +17,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -36,8 +35,7 @@ public class LootChests
 
     public void onEnable() {
         PracticeServer.log.info("[LootChests] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
@@ -57,6 +55,7 @@ public class LootChests
             }
         }.runTaskTimer(PracticeServer.plugin, 20, 20);
         File file = new File(PracticeServer.plugin.getDataFolder(), "loot.yml");
+
         YamlConfiguration config = new YamlConfiguration();
         if (!file.exists()) {
             try {
@@ -73,7 +72,7 @@ public class LootChests
         for (String key : config.getKeys(false)) {
             int val = config.getInt(key);
             String[] str = key.split(",");
-            World world = Bukkit.getWorld((String) str[0]);
+            World world = Bukkit.getWorld(str[0]);
             double x = Double.valueOf(str[1]);
             double y = Double.valueOf(str[2]);
             double z = Double.valueOf(str[3]);
@@ -198,8 +197,8 @@ public class LootChests
                                 p.sendMessage(ChatColor.RED + "It is " + ChatColor.BOLD + "NOT" + ChatColor.RED + " safe to open that right now.");
                                 p.sendMessage(ChatColor.GRAY + "Eliminate the monsters in the area first.");
                             } else if (!this.opened.containsKey(loc)) {
-                                Inventory inv = Bukkit.createInventory((InventoryHolder) null, (int) 27, (String) "Loot Chest");
-                                inv.addItem(new ItemStack[]{LootDrops.createLootDrop(loot.get(loc))});
+                                Inventory inv = Bukkit.createInventory(null, 27, "Loot Chest");
+                                inv.addItem(LootDrops.createLootDrop(loot.get(loc)));
                                 p.openInventory(inv);
                                 p.playSound(p.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0f, 1.0f);
                                 this.viewers.put(e.getPlayer(), loc);

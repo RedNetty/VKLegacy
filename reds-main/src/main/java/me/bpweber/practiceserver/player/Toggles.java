@@ -29,9 +29,6 @@
  */
 package me.bpweber.practiceserver.player;
 
-import com.sainttx.holograms.api.Hologram;
-import com.sainttx.holograms.api.line.HologramLine;
-import com.sainttx.holograms.api.line.TextLine;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.party.Parties;
 import me.bpweber.practiceserver.pvp.Alignments;
@@ -43,7 +40,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -53,14 +49,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 
 public class Toggles
         implements Listener,
@@ -183,29 +177,6 @@ public class Toggles
     public void onNoDamageToggle(EntityDamageByEntityEvent e) {
         ArrayList<String> gettoggles = Toggles.getToggles(e.getDamager().getName());
         ArrayList<String> buddies = Buddies.getBuddies(e.getDamager().getName());
-        if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player) {
-            if (gettoggles.contains("holodmg")) {
-                Player p = (Player) e.getDamager();
-                LivingEntity le = (LivingEntity) e.getEntity();
-                Random r = new Random();
-                Hologram hg = new Hologram("dmg", le.getLocation().add(0.5F, 1F, 0.5F));
-                HologramLine line = new TextLine(hg, ChatColor.RED + "-" + (int) e.getDamage() + "❤");
-                hg.addLine(line);
-                hg.spawn();
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        hg.teleport(hg.getLocation().add(0, 0.5, 0));
-                    }
-                }.runTaskLaterAsynchronously(PracticeServer.plugin, 20);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        hg.despawn();
-                    }
-                }.runTaskLaterAsynchronously(PracticeServer.plugin, 40);
-            }
-        }
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
             Player p = (Player) e.getDamager();
             Player pp = (Player) e.getEntity();

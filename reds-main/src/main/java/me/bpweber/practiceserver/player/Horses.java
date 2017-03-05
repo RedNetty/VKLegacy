@@ -55,12 +55,12 @@
  */
 package me.bpweber.practiceserver.player;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
+import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
+import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.money.Money;
 import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import me.bpweber.practiceserver.vendors.ItemVendors;
 import net.minecraft.server.v1_9_R2.GenericAttributes;
 import org.bukkit.*;
@@ -76,13 +76,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -98,15 +96,15 @@ public class Horses
 
     public void onEnable() {
         PracticeServer.log.info("[Horses] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                     if (!p.isOnline() || !Horses.mounting.containsKey(p.getName())) continue;
-                    ParticleEffect.SPELL.display(0.0f, 0.0f, 0.0f, 0.5f, 80, p.getLocation().add(0.0, 0.15, 0.0), 20.0);
+                    Particles.SPELL.display(0.0f, 0.0f, 0.0f, 0.5f, 80, p.getLocation().add(0.0, 0.15, 0.0), 20.0);
                     if (Horses.mounting.get(p.getName()) == 0) {
-                        ParticleEffect.CRIT.display(0.0f, 0.0f, 0.0f, 0.5f, 80, p.getLocation().add(0.0, 1.0, 0.0), 20.0);
+                        Particles.CRIT.display(0.0f, 0.0f, 0.0f, 0.5f, 80, p.getLocation().add(0.0, 1.0, 0.0), 20.0);
                         Horses.mounting.remove(p.getName());
                         Horses.mountingloc.remove(p.getName());
                         Horses.horse(p, Horses.horsetier.get(p.getName()));
@@ -122,7 +120,7 @@ public class Horses
                     Horses.mounting.put(p.getName(), Horses.mounting.get(p.getName()) - 1);
                 }
             }
-        }.runTaskTimer(PracticeServer.plugin, 20, 20);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 20, 20);
     }
 
     public void onDisable() {
@@ -218,7 +216,7 @@ public class Horses
         h.setVariant(Horse.Variant.HORSE);
         h.setAdult();
         h.setTamed(true);
-        h.setOwner((AnimalTamer) p);
+        h.setOwner(p);
         h.setColor(Horse.Color.BROWN);
         h.setAgeLock(true);
         h.setStyle(Horse.Style.NONE);
@@ -251,7 +249,7 @@ public class Horses
         h.setHealth(20.0);
         h.setJumpStrength(jump);
         ((CraftLivingEntity) h).getHandle().getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(speed);
-        h.setPassenger((Entity) p);
+        h.setPassenger(p);
         return h;
     }
 
@@ -261,11 +259,11 @@ public class Horses
             Player at = (Player) e.getRightClicked();
             Player p = e.getPlayer();
             if (at.getName().equalsIgnoreCase("animal tamer")) {
-                Inventory inv = Bukkit.createInventory((InventoryHolder) null, (int) 9, (String) "Animal Tamer");
-                inv.addItem(new ItemStack[]{Horses.mount(2, true)});
-                inv.addItem(new ItemStack[]{Horses.mount(3, true)});
-                inv.addItem(new ItemStack[]{Horses.mount(4, true)});
-                inv.addItem(new ItemStack[]{Horses.mount(5, true)});
+                Inventory inv = Bukkit.createInventory(null, 9, "Animal Tamer");
+                inv.addItem(Horses.mount(2, true));
+                inv.addItem(Horses.mount(3, true));
+                inv.addItem(Horses.mount(4, true));
+                inv.addItem(Horses.mount(5, true));
                 p.openInventory(inv);
                 p.playSound(p.getLocation(), Sound.BLOCK_WOOD_BUTTON_CLICK_ON, 1.0f, 1.0f);
             }
@@ -348,7 +346,7 @@ public class Horses
                     Player d = (Player) evt.getDamager();
                     ArrayList<String> toggles = Toggles.getToggles(d.getName());
                     ArrayList<String> buddies = Buddies.getBuddies(d.getName());
-                    if (buddies.contains(((Player) p).getName().toLowerCase()) && !toggles.contains("ff")) {
+                    if (buddies.contains(p.getName().toLowerCase()) && !toggles.contains("ff")) {
                         e.setDamage(0.0);
                         e.setCancelled(true);
                         return;
@@ -358,7 +356,7 @@ public class Horses
                         e.setCancelled(true);
                         return;
                     }
-                    if (!Alignments.neutral.containsKey(((Player) p).getName()) && !Alignments.chaotic.containsKey(((Player) p).getName()) && toggles.contains("chaos")) {
+                    if (!Alignments.neutral.containsKey(p.getName()) && !Alignments.chaotic.containsKey(p.getName()) && toggles.contains("chaos")) {
                         e.setDamage(0.0);
                         e.setCancelled(true);
                         return;

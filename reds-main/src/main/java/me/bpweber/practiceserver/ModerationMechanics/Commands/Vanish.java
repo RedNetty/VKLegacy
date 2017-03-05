@@ -1,6 +1,5 @@
 package me.bpweber.practiceserver.ModerationMechanics.Commands;
 
-import de.Herbystar.TTA.TTA_Methods;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -25,7 +24,6 @@ public class Vanish implements CommandExecutor {
 					pl.showPlayer(p);
 				}
 				p.sendMessage(ChatColor.RED + "You are now " + ChatColor.BOLD + "visible.");
-                TTA_Methods.sendActionBar(p, ChatColor.RED + "You are now " + ChatColor.BOLD + "visible.", 40);
             } else {
 				vanished.add(p.getName().toLowerCase());
 				for (Player pl : Bukkit.getOnlinePlayers()) {
@@ -34,7 +32,6 @@ public class Vanish implements CommandExecutor {
 					pl.hidePlayer(p);
 				}
 				p.sendMessage(ChatColor.GREEN + "You are now " + ChatColor.BOLD + "invisible.");
-                TTA_Methods.sendActionBar(p, ChatColor.GREEN + "You are now " + ChatColor.BOLD + "invisible.", 40);
             }
 		}
 		return false;

@@ -3,7 +3,7 @@ package me.bpweber.practiceserver.teleport;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.player.Horses;
 import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ public class Hearthstone
 
     public void onEnable() {
         PracticeServer.log.info("[Hearthstone] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
@@ -43,7 +43,7 @@ public class Hearthstone
                         p.teleport(TeleportBooks.Cyrennica);
                         continue;
                     }
-                    ParticleEffect.SPELL.display(0.0f, 0.0f, 0.0f, 0.5f, 80, p.getLocation().add(0.0, 0.15, 0.0), 20.0);
+                    Particles.SPELL.display(0.0f, 0.0f, 0.0f, 0.5f, 80, p.getLocation().add(0.0, 0.15, 0.0), 20.0);
                     p.sendMessage(ChatColor.BOLD + "TELEPORTING" + ChatColor.WHITE + " ... " + Hearthstone.casting.get(p.getName()) + "s");
                     Hearthstone.casting.put(p.getName(), Hearthstone.casting.get(p.getName()) - 1);
                 }

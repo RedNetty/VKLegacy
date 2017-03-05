@@ -2,7 +2,7 @@ package me.bpweber.practiceserver.enchants;
 
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -24,7 +24,7 @@ public class Enchants implements Listener {
     public static Enchantment glow;
 
     static {
-        Enchants.glow = (Enchantment) new GlowEnchant(69);
+        Enchants.glow = new GlowEnchant(69);
     }
 
     public static boolean registerNewEnchantment() {
@@ -59,7 +59,7 @@ public class Enchants implements Listener {
 
     public void onEnable() {
         PracticeServer.log.info("[Enchants] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         registerNewEnchantment();
     }
 
@@ -78,7 +78,7 @@ public class Enchants implements Listener {
             return;
         }
         if (e.getCursor() != null && e.getCursor().getType() == Material.EMPTY_MAP && e.getCursor().getItemMeta().getDisplayName() != null && e.getCursor().getItemMeta().getDisplayName().contains("Armor") && e.getCurrentItem() != null && (e.getCurrentItem().getType().name().contains("_HELMET") || e.getCurrentItem().getType().name().contains("_CHESTPLATE") || e.getCurrentItem().getType().name().contains("_LEGGINGS") || e.getCurrentItem().getType().name().contains("_BOOTS")) && e.getCurrentItem().getItemMeta().getLore() != null && e.getCurrentItem().getItemMeta().hasDisplayName() && ((e.getCurrentItem().getType().name().contains("GOLD_") && e.getCursor().getItemMeta().getDisplayName().contains("Gold")) || (e.getCurrentItem().getType().name().contains("DIAMOND_") && e.getCursor().getItemMeta().getDisplayName().contains("Diamond")) || (e.getCurrentItem().getType().name().contains("IRON_") && e.getCursor().getItemMeta().getDisplayName().contains("Iron")) || (e.getCurrentItem().getType().name().contains("CHAINMAIL_") && e.getCursor().getItemMeta().getDisplayName().contains("Chainmail")) || (e.getCurrentItem().getType().name().contains("LEATHER_") && e.getCursor().getItemMeta().getDisplayName().contains("Leather")))) {
-            final List<String> curlore = (List<String>) e.getCurrentItem().getItemMeta().getLore();
+            final List<String> curlore = e.getCurrentItem().getItemMeta().getLore();
             String name = e.getCurrentItem().getItemMeta().getDisplayName();
             if (name.startsWith(ChatColor.RED + "[+")) {
                 name = name.split("] ")[1];
@@ -91,7 +91,7 @@ public class Enchants implements Listener {
                 if (e.getCursor().getAmount() > 1) {
                     e.getCursor().setAmount(e.getCursor().getAmount() - 1);
                 } else if (e.getCursor().getAmount() == 1) {
-                    e.setCursor((ItemStack) null);
+                    e.setCursor(null);
                 }
                 p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.25f);
                 final Firework fw = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
@@ -109,7 +109,7 @@ public class Enchants implements Listener {
                 final ItemStack is = e.getCurrentItem();
                 final ItemMeta im = is.getItemMeta();
                 im.setDisplayName(ChatColor.RED + "[+" + (plus + 1) + "] " + name);
-                final List<String> lore = (List<String>) im.getLore();
+                final List<String> lore = im.getLore();
                 lore.set(1, ChatColor.RED + "HP: +" + newhp);
                 if (curlore.get(2).contains("ENERGY REGEN")) {
                     lore.set(2, ChatColor.RED + "ENERGY REGEN: +" + (beforenrg + 1) + "%");
@@ -121,7 +121,7 @@ public class Enchants implements Listener {
                     final int newhps = (int) (beforehpgen + addedhps);
                     lore.set(2, ChatColor.RED + "HP REGEN: +" + newhps + " HP/s");
                 }
-                im.setLore((List<String>) lore);
+                im.setLore(lore);
                 is.setItemMeta(im);
                 e.setCurrentItem(is);
             }
@@ -129,7 +129,7 @@ public class Enchants implements Listener {
                 if (e.getCursor().getAmount() > 1) {
                     e.getCursor().setAmount(e.getCursor().getAmount() - 1);
                 } else if (e.getCursor().getAmount() == 1) {
-                    e.setCursor((ItemStack) null);
+                    e.setCursor(null);
                 }
                 final Random random = new Random();
                 final int drop = random.nextInt(100) + 1;
@@ -164,8 +164,8 @@ public class Enchants implements Listener {
                 e.setCancelled(true);
                 if (drop <= doifail) {
                     p.getWorld().playSound(p.getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 2.0f, 1.25f);
-                    ParticleEffect.LAVA.display(0.0f, 0.0f, 0.0f, 5.0f, 10, p.getEyeLocation(), 20.0);
-                    e.setCurrentItem((ItemStack) null);
+                    Particles.LAVA.display(0.0f, 0.0f, 0.0f, 5.0f, 10, p.getEyeLocation(), 20.0);
+                    e.setCurrentItem(null);
                 } else {
                     p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.25f);
                     final Firework fw2 = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
@@ -183,7 +183,7 @@ public class Enchants implements Listener {
                     final ItemStack is2 = e.getCurrentItem();
                     final ItemMeta im2 = is2.getItemMeta();
                     im2.setDisplayName(ChatColor.RED + "[+" + (plus + 1) + "] " + name);
-                    final List<String> lore2 = (List<String>) im2.getLore();
+                    final List<String> lore2 = im2.getLore();
                     lore2.set(1, ChatColor.RED + "HP: +" + newhp2);
                     if (curlore.get(2).contains("ENERGY REGEN")) {
                         lore2.set(2, ChatColor.RED + "ENERGY REGEN: +" + (beforenrg + 1) + "%");
@@ -195,7 +195,7 @@ public class Enchants implements Listener {
                         final int newhps2 = (int) (beforehpgen + addedhps2);
                         lore2.set(2, ChatColor.RED + "HP REGEN: +" + newhps2 + " HP/s");
                     }
-                    im2.setLore((List<String>) lore2);
+                    im2.setLore(lore2);
                     is2.setItemMeta(im2);
                     is2.addUnsafeEnchantment(Enchants.glow, 1);
                     e.setCurrentItem(is2);
@@ -214,7 +214,7 @@ public class Enchants implements Listener {
                 if (e.getCursor().getAmount() > 1) {
                     e.getCursor().setAmount(e.getCursor().getAmount() - 1);
                 } else if (e.getCursor().getAmount() == 1) {
-                    e.setCursor((ItemStack) null);
+                    e.setCursor(null);
                 }
                 p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.25f);
                 final Firework fw3 = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
@@ -237,9 +237,9 @@ public class Enchants implements Listener {
                 final ItemStack is3 = e.getCurrentItem();
                 final ItemMeta im3 = is3.getItemMeta();
                 im3.setDisplayName(ChatColor.RED + "[+" + (plus2 + 1) + "] " + name2);
-                final List<String> lore3 = (List<String>) im3.getLore();
+                final List<String> lore3 = im3.getLore();
                 lore3.set(0, ChatColor.RED + "DMG: " + min + " - " + max);
-                im3.setLore((List<String>) lore3);
+                im3.setLore(lore3);
                 is3.setItemMeta(im3);
                 e.setCurrentItem(is3);
             }
@@ -247,7 +247,7 @@ public class Enchants implements Listener {
                 if (e.getCursor().getAmount() > 1) {
                     e.getCursor().setAmount(e.getCursor().getAmount() - 1);
                 } else if (e.getCursor().getAmount() == 1) {
-                    e.setCursor((ItemStack) null);
+                    e.setCursor(null);
                 }
                 final Random random2 = new Random();
                 final int drop2 = random2.nextInt(100) + 1;
@@ -282,8 +282,8 @@ public class Enchants implements Listener {
                 e.setCancelled(true);
                 if (drop2 <= doifail2) {
                     p.getWorld().playSound(p.getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 2.0f, 1.25f);
-                    ParticleEffect.LAVA.display(0.0f, 0.0f, 0.0f, 5.0f, 10, p.getEyeLocation(), 20.0);
-                    e.setCurrentItem((ItemStack) null);
+                    Particles.LAVA.display(0.0f, 0.0f, 0.0f, 5.0f, 10, p.getEyeLocation(), 20.0);
+                    e.setCurrentItem(null);
                 } else {
                     p.getWorld().playSound(p.getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 1.0f, 1.25f);
                     final Firework fw4 = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
@@ -306,9 +306,9 @@ public class Enchants implements Listener {
                     final ItemStack is4 = e.getCurrentItem();
                     final ItemMeta im4 = is4.getItemMeta();
                     im4.setDisplayName(ChatColor.RED + "[+" + (plus2 + 1) + "] " + name2);
-                    final List<String> lore4 = (List<String>) im4.getLore();
+                    final List<String> lore4 = im4.getLore();
                     lore4.set(0, ChatColor.RED + "DMG: " + min2 + " - " + max2);
-                    im4.setLore((List<String>) lore4);
+                    im4.setLore(lore4);
                     is4.setItemMeta(im4);
                     is4.addUnsafeEnchantment(Enchants.glow, 1);
                     e.setCurrentItem(is4);

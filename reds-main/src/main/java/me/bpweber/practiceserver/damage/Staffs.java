@@ -40,10 +40,11 @@
  */
 package me.bpweber.practiceserver.damage;
 
+import com.google.common.collect.Lists;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.player.Energy;
 import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.ParticleEffect;
+import me.bpweber.practiceserver.utils.Particles;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -61,16 +62,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class Staffs
         implements Listener {
     HashMap<Projectile, ItemStack> shots = new HashMap<Projectile, ItemStack>();
     public static HashMap<Player, ItemStack> staff = new HashMap<Player, ItemStack>();
-    ArrayList<UUID> canShoot = new ArrayList<UUID>();
+    List<UUID> canShoot = Collections.synchronizedList(Lists.newArrayList());
     public PracticeServer m;
 
     public void onEnable() {
@@ -94,7 +92,7 @@ public class Staffs
         if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) && (p = e.getPlayer()).getInventory().getItemInMainHand() != null && p.getInventory().getItemInMainHand().getType() != Material.AIR && p.getInventory().getItemInMainHand().getType().name().contains("_HOE") && p.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
             if (Alignments.isSafeZone(p.getLocation())) {
                 p.playSound(p.getLocation(), Sound.BLOCK_LAVA_EXTINGUISH, 1.0f, 1.25f);
-                ParticleEffect.CRIT_MAGIC.display(0.0f, 0.0f, 0.0f, 0.5f, 20, p.getLocation().add(0.0, 1.0, 0.0), 20.0);
+                Particles.CRIT_MAGIC.display(0.0f, 0.0f, 0.0f, 0.5f, 20, p.getLocation().add(0.0, 1.0, 0.0), 20.0);
             } else {
                 if (Energy.nodamage.containsKey(p.getName()) && System.currentTimeMillis() - Energy.nodamage.get(p.getName()) < 100) {
                     e.setCancelled(true);
@@ -111,6 +109,13 @@ public class Staffs
                         ep = p.launchProjectile(Snowball.class);
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 7;
+                        canShoot.add(p.getUniqueId());
+                        new BukkitRunnable() {
+
+                            public void run() {
+                                canShoot.remove(p.getUniqueId());
+                            }
+                        }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.STONE_HOE) {
                         ep = p.launchProjectile(Egg.class);
@@ -118,24 +123,52 @@ public class Staffs
                         ep.setBounce(false);
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 8;
+                        canShoot.add(p.getUniqueId());
+                        new BukkitRunnable() {
+
+                            public void run() {
+                                canShoot.remove(p.getUniqueId());
+                            }
+                        }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.IRON_HOE) {
                         ep = p.launchProjectile(EnderPearl.class);
                         ep.setVelocity(ep.getVelocity().multiply(1));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 9;
+                        canShoot.add(p.getUniqueId());
+                        new BukkitRunnable() {
+
+                            public void run() {
+                                canShoot.remove(p.getUniqueId());
+                            }
+                        }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_HOE) {
                         ep = p.launchProjectile(WitherSkull.class);
                         ep.setVelocity(ep.getVelocity().multiply(2));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 10;
+                        canShoot.add(p.getUniqueId());
+                        new BukkitRunnable() {
+
+                            public void run() {
+                                canShoot.remove(p.getUniqueId());
+                            }
+                        }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.GOLD_HOE) {
                         ep = p.launchProjectile(SmallFireball.class);
                         ep.setVelocity(ep.getVelocity().multiply(1));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 11;
+                        canShoot.add(p.getUniqueId());
+                        new BukkitRunnable() {
+
+                            public void run() {
+                                canShoot.remove(p.getUniqueId());
+                            }
+                        }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (((new Random()).nextInt(2000)) <= p.getInventory().getItemInMainHand().getType().getMaxDurability()) {
                         if (p.getInventory().getItemInMainHand().getDurability() >= p.getInventory().getItemInMainHand().getType().getMaxDurability()) {
@@ -148,12 +181,6 @@ public class Staffs
                     Energy.removeEnergy(p, amt);
                     p.playSound(p.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1.0f, 0.25f);
                     this.shots.put(ep, p.getInventory().getItemInMainHand());
-                    new BukkitRunnable() {
-
-                        public void run() {
-                            canShoot.remove(p.getUniqueId());
-                        }
-                    }.runTaskLaterAsynchronously(PracticeServer.plugin, 15);
                 } else {
                     Energy.setEnergy(p, 0.0f);
                     Energy.cd.put(p.getName(), System.currentTimeMillis());
