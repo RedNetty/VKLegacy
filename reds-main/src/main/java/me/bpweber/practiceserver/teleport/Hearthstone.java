@@ -48,7 +48,7 @@ public class Hearthstone
                     Hearthstone.casting.put(p.getName(), Hearthstone.casting.get(p.getName()) - 1);
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 20, 20);
+        }.runTaskTimer(PracticeServer.plugin, 20, 20);
     }
 
     public void onDisable() {

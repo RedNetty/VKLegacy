@@ -174,7 +174,6 @@ public class Listeners
                                 try {
                                     e.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&',
                                             "&6[&bAutism-Catcher&6]\n &cYou may not log in with a VPN/Proxy! You have been banned!"));
-                                    e.getPlayer().setBanned(true);
                                 } catch (Exception e) {
                                 }
                             }
