@@ -102,7 +102,7 @@ public class Damage
                     }
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 1, 1);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 3, 2);
         new BukkitRunnable() {
 
             public void run() {

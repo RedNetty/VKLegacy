@@ -3,6 +3,7 @@ package me.bpweber.practiceserver.mobs;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.drops.Drops;
 import me.bpweber.practiceserver.utils.Particles;
+import me.bpweber.practiceserver.utils.Util;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -55,7 +56,7 @@ public class Spawners implements Listener, CommandExecutor {
 
     static boolean isPlayerNearby(final Location loc) {
         for (final Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getLocation().distanceSquared(loc) < 6400.0) {
+            if (p.getLocation().distanceSquared(loc) < 64.0) {
                 return true;
             }
         }
@@ -252,8 +253,8 @@ public class Spawners implements Listener, CommandExecutor {
                             continue;
                         }
                         final Random r = new Random();
-                        final int randX = r.nextInt(7) - 3;
-                        final int randZ = r.nextInt(7) - 3;
+                        final int randX = Util.random.nextInt(7) - 3;
+                        final int randZ = Util.random.nextInt(7) - 3;
                         Location sloc = new Location(loc.getWorld(), loc.getX() + randX + 0.5, loc.getY() + 2.0,
                                 loc.getZ() + randZ + 0.5);
                         if (sloc.getWorld().getBlockAt(sloc).getType() != Material.AIR
@@ -279,7 +280,7 @@ public class Spawners implements Listener, CommandExecutor {
                     Spawners.mobs.remove(l);
                 });
             }
-        }.runTaskTimer(PracticeServer.plugin, 1L, 1L);
+        }.runTaskTimer(PracticeServer.plugin, 0L, 100L);
         new BukkitRunnable() {
             public void run() {
                 for (final Location loc : Spawners.spawners.keySet()) {
@@ -552,8 +553,8 @@ public class Spawners implements Listener, CommandExecutor {
 
     public void spawnMob(final Location loc, final String type, final int tier, final boolean elite) {
         final Random r = new Random();
-        final int randX = r.nextInt(7) - 3;
-        final int randZ = r.nextInt(7) - 3;
+        final int randX = Util.random.nextInt(7) - 3;
+        final int randZ = Util.random.nextInt(7) - 3;
         Location sloc = new Location(loc.getWorld(), loc.getX() + randX + 0.5, loc.getY() + 2.0,
                 loc.getZ() + randZ + 0.5);
         if (sloc.getWorld().getBlockAt(sloc).getType() != Material.AIR
@@ -564,9 +565,9 @@ public class Spawners implements Listener, CommandExecutor {
         }
         final LivingEntity s = this.mob(sloc, type);
         String name = "";
-        int gearcheck = r.nextInt(3) + 1;
+        int gearcheck = Util.random.nextInt(3) + 1;
         if (tier == 3) {
-            final int m_type = r.nextInt(2);
+            final int m_type = Util.random.nextInt(2);
             if (m_type == 0) {
                 gearcheck = 3;
             }
@@ -577,9 +578,9 @@ public class Spawners implements Listener, CommandExecutor {
         if (tier >= 4 || elite) {
             gearcheck = 4;
         }
-        int held = r.nextInt(2) + 2;
+        int held = Util.random.nextInt(2) + 2;
         if (s.getType() == EntityType.SKELETON || s.getType() == EntityType.ZOMBIE) {
-            held = r.nextInt(4);
+            held = Util.random.nextInt(4);
         }
         final ItemStack hand = Drops.createDrop(tier, held);
         if (elite) {
@@ -591,7 +592,7 @@ public class Spawners implements Listener, CommandExecutor {
         ItemStack boots = null;
         int a_type = 0;
         while (gearcheck > 0) {
-            a_type = r.nextInt(4) + 1;
+            a_type = Util.random.nextInt(4) + 1;
             if (a_type == 1 && head == null) {
                 head = Drops.createDrop(tier, 4);
                 if (elite) {

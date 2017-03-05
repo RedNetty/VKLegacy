@@ -72,7 +72,7 @@ import java.util.logging.Logger;
  *
  * Original Authors ->
  *  - I Can't Code (BPWeber - Naughty, Naughty, Naughty)
- *  - Randal Gay Boy (iFamasssRAWRxD - Hentai, Hentai, Hentai)
+ *  - Randal Gay Boy (iFamasssRAWRxD - Hentai,````````````` Hentai, Hentai)
  *
  * Updated to Minecraft 1.9 ->
  *  - Written by Giovanni (VawkeNetty) 2017.

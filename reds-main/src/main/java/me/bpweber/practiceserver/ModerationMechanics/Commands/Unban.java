@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class Unban implements CommandExecutor {
@@ -19,7 +20,7 @@ public class Unban implements CommandExecutor {
 			if (Setrank.ranks.containsKey(p.getName())) {
 				rank = Setrank.ranks.get(p.getName());
 			}
-			if (rank.equals("pmod") || p.isOp()) {
+			if (rank.equals("pmod") || p.isOp() || sender instanceof ConsoleCommandSender) {
 				if (args.length == 1) {
 					OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 					if (Ban.banned.containsKey(target.getUniqueId())) {

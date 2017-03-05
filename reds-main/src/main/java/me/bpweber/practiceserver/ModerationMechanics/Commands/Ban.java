@@ -1,16 +1,16 @@
 package me.bpweber.practiceserver.ModerationMechanics.Commands;
 
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
+import me.bpweber.practiceserver.pvp.Alignments;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import me.bpweber.practiceserver.pvp.Alignments;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Ban implements CommandExecutor {
 
@@ -28,7 +28,7 @@ public class Ban implements CommandExecutor {
 				if (Setrank.ranks.containsKey(p.getName())) {
 					rank = Setrank.ranks.get(p.getName());
 				}
-				if (rank.equals("pmod") || p.isOp()) {
+				if (rank.equals("pmod") || p.isOp() || sender instanceof ConsoleCommandSender) {
 					if (args.length == 2) {
 						player = args[0];
 						Player target  = Bukkit.getPlayer(player);
