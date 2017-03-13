@@ -1,25 +1,3 @@
-/*
- * Decompiled with CFR 0_118.
- * 
- * Could not load the following classes:
- *  com.sk89q.worldguard.bukkit.WorldGuardPlugin
- *  net.milkbowl.vault.economy.Economy
- *  org.bukkit.Bukkit
- *  org.bukkit.ChatColor
- *  org.bukkit.Server
- *  org.bukkit.World
- *  org.bukkit.command.CommandExecutor
- *  org.bukkit.command.PluginCommand
- *  org.bukkit.entity.Player
- *  org.bukkit.plugin.Plugin
- *  org.bukkit.plugin.PluginDescriptionFile
- *  org.bukkit.plugin.PluginManager
- *  org.bukkit.plugin.RegisteredServiceProvider
- *  org.bukkit.plugin.ServicesManager
- *  org.bukkit.plugin.java.JavaPlugin
- *  org.bukkit.scheduler.BukkitRunnable
- *  org.bukkit.scheduler.BukkitTask
- */
 package me.bpweber.practiceserver;
 
 import me.bpweber.practiceserver.Crates.Commands.giveCrate;
@@ -48,6 +26,7 @@ import me.bpweber.practiceserver.player.*;
 import me.bpweber.practiceserver.profession.Mining;
 import me.bpweber.practiceserver.profession.ProfessionMechanics;
 import me.bpweber.practiceserver.pvp.Alignments;
+import me.bpweber.practiceserver.pvp.ForceField;
 import me.bpweber.practiceserver.pvp.Respawn;
 import me.bpweber.practiceserver.teleport.Hearthstone;
 import me.bpweber.practiceserver.teleport.TeleportBooks;
@@ -65,20 +44,21 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.logging.Logger;
 
 /**
- * Jaxon's native Dungeon Realms practice server code.
+ * Jaxson's native Dungeon Realms practice server code.
  *
- * @author Jaxon (Red29 - uncureableAutism@outlook.com)
+ * @author Jaxson (Red29 - uncureableAutism@outlook.com)
  * @author Giovanni (VawkeNetty - development@vawke.io)
  *
  * Original Authors ->
  *  - I Can't Code (BPWeber - Naughty, Naughty, Naughty)
- *  - Randal Gay Boy (iFamasssRAWRxD - Hentai,````````````` Hentai, Hentai)
+ *  - Randal Gay Boy (iFamasssRAWRxD - Hentai, Hentai, Hentai)
  *
  * Updated to Minecraft 1.9 ->
  *  - Written by Giovanni (VawkeNetty) 2017.
+ *  - Written by Jaxson (Red29) 2016/2017.
  *
  * Development continued by ->
- *  - Written by Jaxon (Red29) 2016/2017.
+ *  - Written by Jaxson (Red29) 2016/2017.
  */
 public class PracticeServer extends JavaPlugin {
 
@@ -119,7 +99,12 @@ public class PracticeServer extends JavaPlugin {
     private static Trading trading;
     private static CratesMain cm;
     private static Economy em;
+    private static ForceField ff;
+    private static PracticeServer instance;
 
+    public static PracticeServer getInstance() {
+        return instance;
+    }
 
 
     public void onEnable() {
@@ -137,7 +122,7 @@ public class PracticeServer extends JavaPlugin {
             this.getDataFolder().mkdirs();
         }
         log = plugin.getLogger();
-        this.getCommand("reboot").setExecutor(new ChatMechanics());
+        this.getCommand("reboot").setExecutor(new Reboot());
         this.getCommand("tellall").setExecutor(new Tellall());
         this.getCommand("gl").setExecutor(new ChatMechanics());
         this.getCommand("givePouch").setExecutor(new Givepouch());
@@ -191,6 +176,7 @@ public class PracticeServer extends JavaPlugin {
         antibuild = new Antibuild();
         banks = new Banks();
         buddies = new Buddies();
+        ff = new ForceField();
         chatMechanics = new ChatMechanics();
         damage = new Damage();
         durability = new Durability();
@@ -233,6 +219,7 @@ public class PracticeServer extends JavaPlugin {
         hearthstone.onEnable();
         horses.onEnable();
         itemVendors.onEnable();
+        ff.onEnable();
         cm.onEnable();
         listeners.onEnable();
         logout.onEnable();

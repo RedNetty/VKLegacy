@@ -25,6 +25,7 @@
 package me.bpweber.practiceserver.world;
 
 import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.player.Listeners;
 import me.bpweber.practiceserver.pvp.Alignments;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -32,7 +33,6 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -54,7 +54,7 @@ public class Logout
 
     public void onEnable() {
         PracticeServer.log.info("[Logout] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
@@ -63,7 +63,11 @@ public class Logout
                     if (Logout.logging.get(p.getName()) == 0) {
                         Logout.logging.remove(p.getName());
                         Logout.loggingloc.remove(p.getName());
+
                         if (Alignments.tagged.containsKey(p.getName())) {
+                            Alignments.tagged.remove(p.getName());
+                        }
+                        if (Listeners.combat.containsKey(p.getName())) {
                             Alignments.tagged.remove(p.getName());
                         }
                         p.saveData();
@@ -74,7 +78,7 @@ public class Logout
                     Logout.logging.put(p.getName(), Logout.logging.get(p.getName()) - 1);
                 }
             }
-        }.runTaskTimer(PracticeServer.plugin, 20, 20);
+        }.runTaskTimer(PracticeServer.plugin, 10, 10);
     }
 
     public void onDisable() {
@@ -107,7 +111,7 @@ public class Logout
                     p.sendMessage(ChatColor.RED + "You already have a recent sync request -- please wait a few seconds.");
                 } else {
                     p.updateInventory();
-                    p.teleport((Entity) p);
+                    p.teleport(p);
                     p.saveData();
                     p.sendMessage(ChatColor.GREEN + "Synced player data to " + ChatColor.UNDERLINE + "HIVE" + ChatColor.GREEN + " server.");
                     syncing.put(p.getName(), System.currentTimeMillis());

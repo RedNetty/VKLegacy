@@ -158,7 +158,7 @@ public class Mobs
                     Particles.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 0.5f, 35, l.getLocation().add(0.0, 1.0, 0.0), 20.0);
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 20, 10);
+        }.runTaskTimer(PracticeServer.plugin, 20, 10);
         new BukkitRunnable() {
 
             public void run() {
@@ -177,21 +177,21 @@ public class Mobs
                         pj = c.launchProjectile(Snowball.class);
                     }
                     if (Mobs.getMobTier(c) == 2) {
-                        pj = c.launchProjectile(Snowball.class);
+                        pj = c.launchProjectile(Egg.class);
                     }
                     if (Mobs.getMobTier(c) == 3) {
                         pj = c.launchProjectile(Snowball.class);
                         pj.setVelocity(pj.getVelocity().multiply(1.25));
                     }
                     if (Mobs.getMobTier(c) == 4) {
-                        pj = c.launchProjectile(Snowball.class);
+                        pj = c.launchProjectile(WitherSkull.class);
                     }
                     if (Mobs.getMobTier(c) != 5) continue;
-                    pj = c.launchProjectile(Snowball.class);
+                    pj = c.launchProjectile(Fireball.class);
                     pj.setVelocity(pj.getVelocity().multiply(2));
                 }
             }
-        }.runTaskTimer(PracticeServer.plugin, 20, 25);
+        }.runTaskTimer(PracticeServer.plugin, 20L, 20L);
     }
 
     public void onDisable() {
@@ -205,7 +205,6 @@ public class Mobs
         }
         return false;
     }
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onHit(ProjectileHitEvent e) {
         Projectile pj = e.getEntity();

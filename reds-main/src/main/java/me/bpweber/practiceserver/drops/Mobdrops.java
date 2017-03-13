@@ -102,7 +102,7 @@ public class Mobdrops implements Listener {
                         if (rd < 24) {
                             dodrop = true;
                         }
-                    } else if (rd < 18) {
+                    } else if (rd < 20) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -140,7 +140,7 @@ public class Mobdrops implements Listener {
                         if (rd < 18) {
                             dodrop = true;
                         }
-                    } else if (rd < 15) {
+                    } else if (rd < 18) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -171,14 +171,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("DIAMOND_")) {
                     gemamt = random.nextInt(30) + 24;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 11) {
+                        if (rd < 14) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 10) {
+                        if (rd < 12) {
                             dodrop = true;
                         }
-                    } else if (rd < 7) {
+                    } else if (rd < 9) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 9) {
@@ -206,14 +206,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("GOLD_")) {
                     gemamt = random.nextInt(50) + 14;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 9) {
+                        if (rd < 11) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 8) {
+                        if (rd < 9) {
                             dodrop = true;
                         }
-                    } else if (rd < 3) {
+                    } else if (rd < 6) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {

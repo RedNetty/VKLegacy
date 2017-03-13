@@ -64,31 +64,34 @@ public class CratesMain implements Listener {
         Player p = (Player) e.getWhoClicked();
 
         ItemStack item = null;
+
         if (e.getWhoClicked() instanceof Player) {
-            if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
-                if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
-                    if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST) {
-                        if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
-                            item = unlockCrate(1);
-                        } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium")) {
-                            item = unlockCrate(2);
-                        } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
-                            item = unlockCrate(3);
-                        }else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
-                            item = unlockCrate(4);
-                        }
-                        if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
-                                e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
-                                e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")){
-                            if (e.getCurrentItem().getAmount() == 1) {
-                                e.setCurrentItem(null);
+            if (e.getWhoClicked() != null && e.getCurrentItem() != null && e.getClickedInventory() != null && e.getInventory() != null) {
+                if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+                    if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
+                        if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST) {
+                            if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
+                                item = unlockCrate(1);
+                            } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium")) {
+                                item = unlockCrate(2);
+                            } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
+                                item = unlockCrate(3);
+                            }else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
+                                item = unlockCrate(4);
                             }
-                            if (e.getCurrentItem().getAmount() > 1) {
-                                e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
-                            }
-                            if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
-                                p.getInventory().addItem(item);
-                                doFirework(p);
+                            if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
+                                    e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
+                                    e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")){
+                                if (e.getCurrentItem().getAmount() == 1) {
+                                    e.setCurrentItem(null);
+                                }
+                                if (e.getCurrentItem().getAmount() > 1) {
+                                    e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
+                                }
+                                if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
+                                    p.getInventory().addItem(item);
+                                    doFirework(p);
+                                }
                             }
                         }
                     }
@@ -175,27 +178,29 @@ public class CratesMain implements Listener {
     public void onInvClick(InventoryClickEvent e) {
         if (e.getWhoClicked() instanceof Player) {
             Player p = (Player) e.getWhoClicked();
-            if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
-                if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST && e.getCursor().getType() == Material.TRIPWIRE_HOOK) {
-                    ItemStack item1 = new ItemStack(Material.AIR);
-                    if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
-                        item1 = unlockCrate(5);
-                    }
-                    doFirework(p);
-                    if (e.getCursor().getAmount() == 1) {
-                        e.setCursor(null);
-                    }
-                    if (e.getCurrentItem().getAmount() == 1) {
-                        e.setCurrentItem(null);
-                    }
-                    if (e.getCursor().getAmount() > 1) {
-                        e.getCursor().setAmount(e.getCursor().getAmount() - 1);
-                    }
-                    if (e.getCurrentItem().getAmount() > 1) {
-                        e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
-                    }
-                    if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
-                        p.getInventory().addItem(item1);
+            if (e.getWhoClicked() != null && e.getCurrentItem() != null && e.getClickedInventory() != null && e.getInventory() != null) {
+                if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+                    if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST && e.getCursor().getType() == Material.TRIPWIRE_HOOK) {
+                        ItemStack item1 = new ItemStack(Material.AIR);
+                        if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
+                            item1 = unlockCrate(5);
+                        }
+                        doFirework(p);
+                        if (e.getCursor().getAmount() == 1) {
+                            e.setCursor(null);
+                        }
+                        if (e.getCurrentItem().getAmount() == 1) {
+                            e.setCurrentItem(null);
+                        }
+                        if (e.getCursor().getAmount() > 1) {
+                            e.getCursor().setAmount(e.getCursor().getAmount() - 1);
+                        }
+                        if (e.getCurrentItem().getAmount() > 1) {
+                            e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
+                        }
+                        if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
+                            p.getInventory().addItem(item1);
+                        }
                     }
                 }
             }

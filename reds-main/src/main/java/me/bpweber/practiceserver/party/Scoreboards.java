@@ -17,7 +17,6 @@ package me.bpweber.practiceserver.party;
 import me.bpweber.practiceserver.pvp.Alignments;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -30,7 +29,7 @@ public class Scoreboards {
     public static HashMap<Player, Scoreboard> boards = new HashMap<Player, Scoreboard>();
 
     public static Scoreboard getBoard(Player p) {
-        if (!boards.containsKey((Object) p)) {
+        if (!boards.containsKey(p)) {
             Scoreboard sb = Bukkit.getScoreboardManager().getNewScoreboard();
             Team red = sb.registerNewTeam("red");
             red.setPrefix(ChatColor.RED.toString());
@@ -39,16 +38,16 @@ public class Scoreboards {
             Team white = sb.registerNewTeam("white");
             white.setPrefix(ChatColor.WHITE.toString());
             Team gm = sb.registerNewTeam("gm");
-            gm.setPrefix(String.valueOf(ChatColor.AQUA.toString()) + (Object) ChatColor.BOLD + "GM " + (Object) ChatColor.AQUA);
+            gm.setPrefix(String.valueOf(ChatColor.AQUA.toString()) + ChatColor.BOLD + "GM " + ChatColor.AQUA);
             Team dev = sb.registerNewTeam("dev");
-            dev.setPrefix(String.valueOf(ChatColor.GOLD.toString()) + (Object) ChatColor.BOLD + "DEV " + (Object) ChatColor.GOLD);
+            dev.setPrefix(String.valueOf(ChatColor.GOLD.toString()) + ChatColor.BOLD + "DEV " + ChatColor.GOLD);
             Objective o = sb.registerNewObjective("showHealth", "health");
             o.setDisplaySlot(DisplaySlot.BELOW_NAME);
-            o.setDisplayName((Object) ChatColor.RED + "\u2764");
+            o.setDisplayName(ChatColor.RED + "\u2764");
             boards.put(p, sb);
             return sb;
         }
-        return boards.get((Object) p);
+        return boards.get(p);
     }
 
     @SuppressWarnings("deprecation")
@@ -56,7 +55,7 @@ public class Scoreboards {
         for (Player p : Bukkit.getOnlinePlayers()) {
             Scoreboard sb = Scoreboards.getBoard(p);
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                if (pl.getName().equalsIgnoreCase("RedsEmporium")) {
+                if (pl.getName().equalsIgnoreCase("Fatherhood")) {
                     sb.getTeam("dev").addPlayer(pl);
                     continue;
                 }

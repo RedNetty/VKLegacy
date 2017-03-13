@@ -54,9 +54,10 @@ public class Spawners implements Listener, CommandExecutor {
         this.creatingspawner = new HashMap<String, Location>();
     }
 
+    //Apparently according to vawke this causes lag! :O
     static boolean isPlayerNearby(final Location loc) {
         for (final Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getLocation().distanceSquared(loc) < 64.0) {
+            if (p.getLocation().distanceSquared(loc) < 640.0) {
                 return true;
             }
         }
@@ -280,7 +281,7 @@ public class Spawners implements Listener, CommandExecutor {
                     Spawners.mobs.remove(l);
                 });
             }
-        }.runTaskTimer(PracticeServer.plugin, 0L, 100L);
+        }.runTaskTimer(PracticeServer.plugin, 1, 1);
         new BukkitRunnable() {
             public void run() {
                 for (final Location loc : Spawners.spawners.keySet()) {
@@ -1015,7 +1016,7 @@ public class Spawners implements Listener, CommandExecutor {
                 if (isElite(s)) {
                     time *= 2L;
                 }
-                time *= 1000L;
+                time *= 500L;
                 time += System.currentTimeMillis();
                 if (!Spawners.respawntimer.containsKey(Spawners.mobs.get(s))
                         || Spawners.respawntimer.get(Spawners.mobs.get(s)) < time) {

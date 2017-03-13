@@ -191,7 +191,6 @@ public class Alignments
         }
     }
 
-
     @EventHandler
     public void onZoneMessage(PlayerMoveEvent e) {
         Player p = e.getPlayer();
@@ -277,7 +276,7 @@ public class Alignments
 
     public static void updatePlayerAlignment(Player p) {
         ChatColor cc = ChatColor.GRAY;
-        cc = p.getName().equalsIgnoreCase("RedsEmporium") ? ChatColor.GOLD : (p.isOp() ? ChatColor.AQUA : (neutral.containsKey(p.getName()) ? ChatColor.YELLOW : (chaotic.containsKey(p.getName()) ? ChatColor.RED : ChatColor.GRAY)));
+        cc = p.getName().equalsIgnoreCase("Fatherhood") ? ChatColor.GOLD : (p.isOp() ? ChatColor.AQUA : (neutral.containsKey(p.getName()) ? ChatColor.YELLOW : (chaotic.containsKey(p.getName()) ? ChatColor.RED : ChatColor.GRAY)));
         p.setDisplayName(String.valueOf(Alignments.getPlayerPrefix(p)) + cc + p.getName());
         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 1.0f);
         Scoreboards.updateAllColors();
@@ -301,10 +300,13 @@ public class Alignments
         if (rank.equals("pmod")) {
             prefix = ChatColor.WHITE.toString() + ChatColor.BOLD + "PMOD ";
         }
-        if (p.getName().equals("RedsEmporium")) {
+        if (p.getName().equals("Fatherhood")) {
             prefix = ChatColor.GOLD.toString() + ChatColor.BOLD + "DEV ";
         }
-        if (p.isOp() && !p.getName().equals("RedsEmporium")) {
+        if (p.getName().equals("Kav_")) {
+            prefix = ChatColor.RED.toString() + ChatColor.BOLD + "ALLAH ";
+        }
+        if (p.isOp() && !p.getName().equals("Fatherhood") && !p.getName().equalsIgnoreCase("KAV_")) {
             prefix = ChatColor.AQUA.toString() + ChatColor.BOLD + "GM ";
 
         }

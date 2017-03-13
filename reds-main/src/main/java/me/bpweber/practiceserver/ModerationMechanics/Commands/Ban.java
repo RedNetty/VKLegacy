@@ -17,11 +17,11 @@ public class Ban implements CommandExecutor {
 	public static ConcurrentHashMap<UUID, Integer> banned = new ConcurrentHashMap<UUID, Integer>();
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		Player p;
+		CommandSender p;
 		String rank;
 		String player;
 		block66: {
-			p = (Player) sender;
+			p = sender;
 
 			if (cmd.getName().equalsIgnoreCase("psban")) {
 				rank = "";

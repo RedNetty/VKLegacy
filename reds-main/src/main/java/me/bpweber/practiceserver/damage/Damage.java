@@ -91,18 +91,17 @@ public class Damage
                                 + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
                                 + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth(), BarColor.PINK, BarStyle.SOLID);
                         bossBar.addPlayer(p);
-
                         Alignments.playerBossBars.put(p, bossBar);
                         Alignments.playerBossBars.get(p).setProgress(pcnt);
                     } else {
-                        BossBar bossBar = Bukkit.createBossBar(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
+                        Alignments.playerBossBars.get(p).setTitle(ChatColor.LIGHT_PURPLE.toString() + ChatColor.BOLD + "HP " + ChatColor.LIGHT_PURPLE
                                 + (int) p.getHealth() + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + " / "
-                                + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth(), BarColor.PINK, BarStyle.SOLID);
+                                + ChatColor.LIGHT_PURPLE + (int) p.getMaxHealth());
                         Alignments.playerBossBars.get(p).setProgress(pcnt);
                     }
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 3, 2);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 0, 1);
         new BukkitRunnable() {
 
             public void run() {
@@ -138,6 +137,7 @@ public class Damage
         }
         return 0;
     }
+
     public static int getArmor(ItemStack is) {
         List<String> lore;
         if (is != null && is.getType() != Material.AIR && is.getItemMeta().hasLore() && (lore = is.getItemMeta().getLore()).size() > 0 && lore.get(0).contains("ARMOR")) {
@@ -215,6 +215,7 @@ public class Damage
         }
         return 0;
     }
+
     public static List<Integer> getDamageRange(ItemStack is) {
         List<String> lore;
         ArrayList<Integer> dmg = new ArrayList<Integer>();
@@ -330,34 +331,80 @@ public class Damage
         }
     }
 
+    public void callHGDMG(Player p, LivingEntity le, String d, int dmg) {
+        ArrayList<String> gettoggles = Toggles.getToggles(p.getName());
+
+        if (gettoggles.contains("holodmg")) {
+            Random r = new Random();
+            float x = r.nextFloat();
+            float y = r.nextFloat();
+            float z = r.nextFloat();
+            int dmgs = dmg;
+            Hologram hg = new Hologram("dmg", le.getLocation().add(x, 0.5 + y, z));
+            if (d.equalsIgnoreCase("dmg")) {
+                HologramLine line = new TextLine(hg, ChatColor.RED + "-" + dmg + "❤");
+                hg.addLine(line);
+                hg.spawn();
+            }
+            if (d.equalsIgnoreCase("dodge")) {
+                HologramLine line = new TextLine(hg, ChatColor.RED + "*DODGE*");
+                hg.addLine(line);
+                hg.spawn();
+            }
+            if (d.equalsIgnoreCase("block")) {
+                HologramLine line = new TextLine(hg, ChatColor.RED + "*BLOCK*");
+                hg.addLine(line);
+                hg.spawn();
+            }
+            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    hg.teleport(hg.getLocation().add(0, 0.15, 0));
+                }
+            }, 5L);
+            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    hg.teleport(hg.getLocation().add(0, 0.15, 0));
+                }
+            }, 8L);
+            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    hg.teleport(hg.getLocation().add(0, 0.15, 0));
+                }
+            }, 10L);
+            PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
+                @Override
+                public void run() {
+                    hg.teleport(hg.getLocation().add(0, 0.15, 0));
+                }
+            }, 15L);
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    hg.teleport(hg.getLocation().add(0, 0.15, 0));
+                    hg.despawn();
+                }
+            }.runTaskLaterAsynchronously(PracticeServer.plugin, 20L);
+        }
+    }
+
     @EventHandler
     public void holoDMG(EntityDamageByEntityEvent e) {
         ArrayList<String> gettoggles = Toggles.getToggles(e.getDamager().getName());
         if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player) {
-            if (gettoggles.contains("holodmg")) {
-                if (e.getDamage() > 0 && !e.isCancelled()) {
-                    Player p = (Player) e.getDamager();
-                    LivingEntity le = (LivingEntity) e.getEntity();
-                    Random r = new Random();
-                    float x = r.nextFloat();
-                    float y = r.nextFloat();
-                    float z = r.nextFloat();
-                    int dmg = (int) e.getDamage();
-                    Hologram hg = new Hologram("dmg", le.getLocation().add(x, 0.5 + y, z));
-                    HologramLine line = new TextLine(hg, ChatColor.RED + "-" + dmg + "❤");
-                    hg.addLine(line);
-                    hg.spawn();
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            hg.teleport(hg.getLocation().add(0, 0.8, 0));
-                            hg.despawn();
-                        }
-                    }.runTaskLaterAsynchronously(PracticeServer.plugin, 25);
-                }
+            if (e.getDamage() > 0 && !e.isCancelled()) {
+                Player p = (Player) e.getDamager();
+                LivingEntity le = (LivingEntity) e.getEntity();
+                int dmg = (int) e.getDamage();
+                callHGDMG(p, le, "dmg", dmg);
             }
         }
     }
+
+
 
     @EventHandler(priority = EventPriority.LOW)
     public void onBlodge(EntityDamageByEntityEvent e) {
@@ -427,16 +474,19 @@ public class Damage
                         e.setDamage(0.0);
                         e.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 1.0f);
+                        callHGDMG(d, p, "block", 0);
                         d.sendMessage("          " + ChatColor.RED + ChatColor.BOLD + "*OPPONENT BLOCKED* (" + p.getName() + ")");
                         p.sendMessage("          " + ChatColor.DARK_GREEN + ChatColor.BOLD + "*BLOCK* (" + d.getName() + ")");
                     } else if (dodger <= dodge) {
                         e.setDamage(0.0);
                         e.setCancelled(true);
                         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 1.0f, 1.0f);
+                        callHGDMG(d, p, "dodge", 0);
                         d.sendMessage("          " + ChatColor.RED + ChatColor.BOLD + "*OPPONENT DODGED* (" + p.getName() + ")");
                         p.sendMessage("          " + ChatColor.GREEN + ChatColor.BOLD + "*DODGE* (" + d.getName() + ")");
                     } else if (blockr <= 80 && p.isBlocking()) {
                         e.setDamage((double) ((int) e.getDamage() / 2));
+                        callHGDMG(d, p, "block", 0);
                         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 1.0f);
                         d.sendMessage("          " + ChatColor.RED + ChatColor.BOLD + "*OPPONENT BLOCKED* (" + p.getName() + ")");
                         p.sendMessage("          " + ChatColor.DARK_GREEN + ChatColor.BOLD + "*BLOCK* (" + d.getName() + ")");
@@ -450,15 +500,18 @@ public class Damage
                     if (blockr <= block) {
                         e.setDamage(0.0);
                         e.setCancelled(true);
+                        callHGDMG(p, li, "block", 0);
                         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 1.0f);
                         p.sendMessage("          " + ChatColor.DARK_GREEN + ChatColor.BOLD + "*BLOCK* (" + mname + ChatColor.DARK_GREEN + ")");
                     } else if (dodger <= dodge) {
                         e.setDamage(0.0);
                         e.setCancelled(true);
+                        callHGDMG(p, li, "dodge", 0);
                         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 1.0f, 1.0f);
                         p.sendMessage("          " + ChatColor.GREEN + ChatColor.BOLD + "*DODGE* (" + mname + ChatColor.GREEN + ")");
                     } else if (blockr <= 80 && p.isBlocking()) {
                         e.setDamage((double) ((int) e.getDamage() / 2));
+                        callHGDMG(p, li, "block", 0);
                         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 1.0f);
                         p.sendMessage("          " + ChatColor.DARK_GREEN + ChatColor.BOLD + "*BLOCK* (" + mname + ChatColor.DARK_GREEN + ")");
                     }

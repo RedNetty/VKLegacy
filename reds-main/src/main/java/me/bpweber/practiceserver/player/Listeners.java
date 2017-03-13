@@ -88,8 +88,8 @@ public class Listeners
                     refreshTabList(p);
                     Random r = new Random();
                     float y = r.nextFloat() - 0.2F;
-                    float x = r.nextFloat() - 0.01F;
-                    float z = r.nextFloat() - 0.01F;
+                    float x = r.nextFloat() - 0.2F;
+                    float z = r.nextFloat() - 0.2F;
 
                     if (!ModerationMechanics.isSub(p) || ToggleTrail.toggletrail.contains(p.getName().toLowerCase()))
                         continue;
@@ -136,7 +136,7 @@ public class Listeners
 
     @EventHandler
     public void dropItem(PlayerDropItemEvent e) {
-        if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().getName().equalsIgnoreCase("RedsEmporium")) {
+        if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().getName().equalsIgnoreCase("Fatherhood")) {
             e.setCancelled(true);
         }
     }
@@ -144,7 +144,7 @@ public class Listeners
     @EventHandler
     public void onMiddleClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (player.getGameMode() == GameMode.CREATIVE && !event.getWhoClicked().getName().equalsIgnoreCase("RedsEmporium")) {
+        if (player.getGameMode() == GameMode.CREATIVE && !event.getWhoClicked().getName().equalsIgnoreCase("Fatherhood")) {
             if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK) {
                 player.getInventory().clear();
                 event.getCursor().setType(null);
@@ -197,7 +197,7 @@ public class Listeners
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.isOp()) {
                 if (e.getHackType() != HackType.FLY && e.getHackType() != HackType.INTERACT && e.getHackType() != HackType.BADPACKETS) {
-                    if (e.getViolations() > 35) {
+                    if (e.getViolations() > 100) {
                         if (!previo.contains(e.getPlayer())) {
                             StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GOLD + "]");
                             StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
@@ -213,7 +213,7 @@ public class Listeners
                             }.runTaskLaterAsynchronously(PracticeServer.plugin, 80);
                         }
                     }
-                    if (e.getViolations() > 200 && TTA_Methods.getPing(e.getPlayer()) < 170) {
+                    if (e.getViolations() > 600 && TTA_Methods.getPing(e.getPlayer()) < 170) {
                         Alignments.tagged.remove(e.getPlayer());
                         e.getPlayer().kickPlayer(ChatColor.RED + "You have been kicked!\n" +
                                 ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "]\n" +
