@@ -12,7 +12,7 @@ public class Createdrop implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player p = (Player) sender;
-        if (cmd.getName().equalsIgnoreCase("createdrop") && p.getName().equals("Fatherhood")) {
+        if (cmd.getName().equalsIgnoreCase("createdrop") && p.getName().equals("RedsEmporium")) {
             if (args.length == 3) {
 				try {
 					p.getInventory().addItem(new ItemStack(CreateDrop.createDrop(Integer.parseInt(args[0]),

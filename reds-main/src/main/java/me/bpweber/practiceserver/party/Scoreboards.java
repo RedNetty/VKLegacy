@@ -55,7 +55,7 @@ public class Scoreboards {
         for (Player p : Bukkit.getOnlinePlayers()) {
             Scoreboard sb = Scoreboards.getBoard(p);
             for (Player pl : Bukkit.getOnlinePlayers()) {
-                if (pl.getName().equalsIgnoreCase("Fatherhood")) {
+                if (pl.getName().equalsIgnoreCase("RedsEmporium")) {
                     sb.getTeam("dev").addPlayer(pl);
                     continue;
                 }

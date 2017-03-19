@@ -58,16 +58,17 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class ChatMechanics
         implements Listener,
         CommandExecutor {
     private static HashMap<Player, Player> reply = new HashMap<Player, Player>();
+    public static List<String> bad_words;
 
+    static {
+        bad_words = new ArrayList<String>(Arrays.asList("shit", "fuck", "cunt", "bitch", "whore", "slut", "wank", "asshole", "cock", "dick", "clit", "homo", "fag", "queer", "nigger", "dike", "dyke", "retard", "motherfucker", "vagina", "boob", "pussy", "rape", "gay", "penis", "cunt", "titty", "anus", "faggot", "xFinity", "destiny"));
+    }
     public void onEnable() {
         PracticeServer.log.info("[ChatMechanics] has been enabled.");
         Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
@@ -77,6 +78,40 @@ public class ChatMechanics
         PracticeServer.log.info("[ChatMechanics] has been disabled.");
     }
 
+    public static String censorMessage(String msg) {
+        String personal_msg = "";
+        if (msg == null) {
+            return "";
+        }
+        if (!msg.contains(" ")) {
+            msg = String.valueOf(msg) + " ";
+        }
+        String[] split;
+        for (int length = (split = msg.split(" ")).length, i = 0; i < length; ++i) {
+            String s = split[i];
+            for (final String bad : bad_words) {
+                if (s.toLowerCase().contains(bad.toLowerCase())) {
+                    int letters = bad.length();
+                    String replace_char = "";
+                    while (letters > 0) {
+                        replace_char = String.valueOf(replace_char) + "*";
+                        --letters;
+                    }
+                    int censor_start = 0;
+                    int censor_end = 1;
+                    censor_start = s.toLowerCase().indexOf(bad);
+                    censor_end = censor_start + bad.length();
+                    final String real_bad_word = s.substring(censor_start, censor_end);
+                    s = s.replaceAll(real_bad_word, replace_char);
+                }
+            }
+            personal_msg = String.valueOf(personal_msg) + s + " ";
+        }
+        if (personal_msg.endsWith(" ")) {
+            personal_msg = personal_msg.substring(0, personal_msg.lastIndexOf(" "));
+        }
+        return personal_msg;
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             int hours2;

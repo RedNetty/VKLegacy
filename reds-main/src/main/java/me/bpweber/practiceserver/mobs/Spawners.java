@@ -90,7 +90,7 @@ public class Spawners implements Listener, CommandExecutor {
                     return false;
                 }
                 final String type = s.split(":")[0];
-                if (!type.equalsIgnoreCase("skeleton") && !type.equalsIgnoreCase("zombie")
+                if (!type.equalsIgnoreCase("skeleton") && !type.equalsIgnoreCase("zombie") && !type.equalsIgnoreCase("silverfish")
                         && !type.equalsIgnoreCase("magmacube") && !type.equalsIgnoreCase("spider")
                         && !type.equalsIgnoreCase("cavespider") && !type.equalsIgnoreCase("imp")
                         && !type.equalsIgnoreCase("witherskeleton") && !type.equalsIgnoreCase("daemon")
@@ -138,7 +138,7 @@ public class Spawners implements Listener, CommandExecutor {
             return true;
         }
         final String type2 = data.split(":")[0];
-        if (!type2.equalsIgnoreCase("skeleton") && !type2.equalsIgnoreCase("zombie")
+        if (!type2.equalsIgnoreCase("skeleton") && !type2.equalsIgnoreCase("zombie") && !type2.equalsIgnoreCase("silverfish")
                 && !type2.equalsIgnoreCase("magmacube") && !type2.equalsIgnoreCase("spider")
                 && !type2.equalsIgnoreCase("cavespider") && !type2.equalsIgnoreCase("imp")
                 && !type2.equalsIgnoreCase("witherskeleton") && !type2.equalsIgnoreCase("daemon")
@@ -524,6 +524,10 @@ public class Spawners implements Listener, CommandExecutor {
             zombie.setBaby(false);
             return zombie;
         }
+        if (type.equalsIgnoreCase("silverfish")) {
+            Silverfish fish = (Silverfish) loc.getWorld().spawnEntity(loc, EntityType.SILVERFISH);
+            return fish;
+        }
         if (type.equalsIgnoreCase("magmacube")) {
             MagmaCube cube = (MagmaCube) loc.getWorld().spawnEntity(loc, EntityType.MAGMA_CUBE);
             cube.setSize(3);
@@ -727,6 +731,23 @@ public class Spawners implements Listener, CommandExecutor {
                 name = "Unstoppable Magma Cube";
             }
         }
+        if (type.equalsIgnoreCase("silverfish")) {
+            if (tier == 1) {
+                name = "Weak SilverFish";
+            }
+            if (tier == 2) {
+                name = "Pointy SilverFish";
+            }
+            if (tier == 3) {
+                name = "Unstable SilverFish";
+            }
+            if (tier == 4) {
+                name = "Mean SilverFish";
+            }
+            if (tier == 5) {
+                name = "Rude SilverFish";
+            }
+        }
         if (type.equalsIgnoreCase("spider") || type.equalsIgnoreCase("cavespider")) {
             if (tier == 1) {
                 name = "Harmless ";
@@ -741,7 +762,7 @@ public class Spawners implements Listener, CommandExecutor {
                 name = "Dangerous ";
             }
             if (tier == 5) {
-                name = "Lethal ";
+                name = "Asshole ";
             }
             if (type.equalsIgnoreCase("cavespider")) {
                 name = String.valueOf(name) + "Cave ";
@@ -1016,7 +1037,7 @@ public class Spawners implements Listener, CommandExecutor {
                 if (isElite(s)) {
                     time *= 2L;
                 }
-                time *= 500L;
+                time *= 800L;
                 time += System.currentTimeMillis();
                 if (!Spawners.respawntimer.containsKey(Spawners.mobs.get(s))
                         || Spawners.respawntimer.get(Spawners.mobs.get(s)) < time) {

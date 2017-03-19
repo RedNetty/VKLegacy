@@ -2,7 +2,9 @@ package me.bpweber.practiceserver;
 
 import me.bpweber.practiceserver.Crates.Commands.giveCrate;
 import me.bpweber.practiceserver.Crates.Commands.giveKey;
+import me.bpweber.practiceserver.Crates.Commands.giveNameTag;
 import me.bpweber.practiceserver.Crates.CratesMain;
+import me.bpweber.practiceserver.Crates.Nametag;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
 import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.chat.ChatMechanics;
@@ -23,6 +25,7 @@ import me.bpweber.practiceserver.money.Economy.Economy;
 import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.party.Parties;
 import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.player.Stats.StatsMain;
 import me.bpweber.practiceserver.profession.Mining;
 import me.bpweber.practiceserver.profession.ProfessionMechanics;
 import me.bpweber.practiceserver.pvp.Alignments;
@@ -100,6 +103,8 @@ public class PracticeServer extends JavaPlugin {
     private static CratesMain cm;
     private static Economy em;
     private static ForceField ff;
+    private static Nametag nt;
+    private static StatsMain stat;
     private static PracticeServer instance;
 
     public static PracticeServer getInstance() {
@@ -148,6 +153,7 @@ public class PracticeServer extends JavaPlugin {
         this.getCommand("toggletrail").setExecutor(new ToggleTrail());
         this.getCommand("toggleholodmg").setExecutor(new Toggles());
         this.getCommand("invsee").setExecutor(new Invsee());
+        this.getCommand("giveNameTag").setExecutor(new giveNameTag());
         this.getCommand("speed").setExecutor(new Speed());
         this.getCommand("createdrop").setExecutor(new Createdrop());
         this.getCommand("sc").setExecutor(new StaffChat());
@@ -168,10 +174,11 @@ public class PracticeServer extends JavaPlugin {
         this.getCommand("dump").setExecutor(new FixItem());
 
 
-        // Start VawkeNetty Game
 
         cm = new CratesMain();
+        stat = new StatsMain();
         trading = new Trading();
+        nt = new Nametag();
         alignments = new Alignments();
         antibuild = new Antibuild();
         banks = new Banks();
@@ -214,9 +221,11 @@ public class PracticeServer extends JavaPlugin {
         damage.onEnable();
         durability.onEnable();
         enchants.onEnable();
+        nt.onEnable();
         energy.onEnable();
         gemPouches.onEnable();
         hearthstone.onEnable();
+        stat.onEnable();
         horses.onEnable();
         itemVendors.onEnable();
         ff.onEnable();
@@ -269,6 +278,7 @@ public class PracticeServer extends JavaPlugin {
         mobs.onDisable();
         moderationMechanics.onDisable();
         orbs.onDisable();
+        stat.onDisable();
         parties.onDisable();
         professionMechanics.onDisable();
         repairing.onDisable();

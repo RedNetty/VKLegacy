@@ -23,7 +23,7 @@ public class Reboot implements CommandExecutor {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     player.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "60s" + ChatColor.RED + "..");
                 }
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.getInstance(), new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                     @Override
                     public void run() {
                         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -32,7 +32,7 @@ public class Reboot implements CommandExecutor {
                     }
                 }, 600);
 
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.getInstance(), new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                     @Override
                     public void run() {
                         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -40,7 +40,7 @@ public class Reboot implements CommandExecutor {
                         }
                     }
                 }, 1000);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.getInstance(), new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                     @Override
                     public void run() {
                         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -50,7 +50,7 @@ public class Reboot implements CommandExecutor {
                         }
                     }
                 }, 1100);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.getInstance(), new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                     @Override
                     public void run() {
                         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -58,7 +58,7 @@ public class Reboot implements CommandExecutor {
                         }
                     }
                 }, 1120);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.getInstance(), new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                     @Override
                     public void run() {
                         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -66,21 +66,21 @@ public class Reboot implements CommandExecutor {
                         }
                     }
                 }, 1140);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.getInstance(), new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                     @Override
                     public void run() {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             player.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "2s" + ChatColor.RED + "..");
+                            TTA_Methods.sendTitle(player, ChatColor.RED + "Rebooting..", 20, 20, 20, ChatColor.GRAY + "Join back in a few moments!", 20, 20, 20);
                         }
                     }
                 }, 1180);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.getInstance(), new Runnable() {
+                PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                     @Override
                     public void run() {
                         for (Player player : Bukkit.getOnlinePlayers()) {
                             player.sendMessage(ChatColor.RED + "Rebooting in " + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "1s" + ChatColor.RED + "..");
-                            TTA_Methods.sendTitle(player, ChatColor.RED + "Rebooting..", 20, 20, 20, ChatColor.GRAY + "Join back in a few moments!", 20, 20, 20);
-                            Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "restart");
+                            PracticeServer.plugin.getServer().dispatchCommand(PracticeServer.plugin.getServer().getConsoleSender(), "restart");
                         }
                     }
                 }, 1200);

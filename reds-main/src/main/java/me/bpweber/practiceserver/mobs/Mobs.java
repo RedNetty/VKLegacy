@@ -326,12 +326,17 @@ public class Mobs
                 if ((e.getEntity() instanceof Spider || e.getEntity() instanceof CaveSpider) && e.getDamage() >= l.getHealth()) {
                     l.getWorld().playSound(l.getLocation(), Sound.ENTITY_SPIDER_DEATH, 1.0f, 1.0f);
                 }
+                if ((e.getEntity() instanceof Silverfish && e.getDamage() >= l.getHealth())) {
+                    l.getWorld().playSound(l.getLocation(), Sound.ENTITY_SILVERFISH_DEATH, 1.0f, 1.0f);
+                }
                 if (e.getEntity() instanceof PigZombie) {
                     if (e.getDamage() >= l.getHealth()) {
                         l.getWorld().playSound(l.getLocation(), Sound.ENTITY_ZOMBIE_PIG_DEATH, 1.0f, 1.0f);
                     }
                     l.getWorld().playSound(l.getLocation(), Sound.ENTITY_ZOMBIE_PIG_HURT, 1.0f, 1.0f);
                 }
+
+
             }
         }
     }

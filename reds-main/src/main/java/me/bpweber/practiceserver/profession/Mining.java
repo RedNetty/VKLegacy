@@ -1,5 +1,6 @@
 package me.bpweber.practiceserver.profession;
 
+import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.PracticeServer;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class Mining
         }
     }
 
-    public static ItemStack ore(int tier) {
+    public static ItemStack ore(Player p, int tier) {
         Material m = null;
         ChatColor cc = ChatColor.WHITE;
         String name = "";
@@ -88,8 +89,11 @@ public class Mining
         }
         ItemStack is = new ItemStack(m);
         ItemMeta im = is.getItemMeta();
+        if (ModerationMechanics.isSub(p)) {
+            is.setAmount(2);
+            p.sendMessage(ChatColor.AQUA + "Sub Rank: " + ChatColor.GRAY + "Since you are sub you got double the ore!");
+        }
         im.setDisplayName(cc + name + " Ore");
-        is.setAmount(2);
         im.setLore(Arrays.asList(ChatColor.GRAY.toString() + ChatColor.ITALIC + lore));
         is.setItemMeta(im);
         return is;
@@ -129,7 +133,7 @@ public class Mining
                 }
                 this.regenores.put(e.getBlock().getLocation(), oretier * 30);
                 if (fail < ProfessionMechanics.getFailPercent(oretier, level)) {
-                    this.addToInv(p, Mining.ore(oretier));
+                    this.addToInv(p, Mining.ore(p, oretier));
                     int gemfind = random.nextInt(100);
                     int dore = random.nextInt(100);
                     int tore = random.nextInt(100);
@@ -171,12 +175,12 @@ public class Mining
                     }
                     if (dore < ProfessionMechanics.getPickEnchants(p.getInventory().getItemInMainHand(), "DOUBLE ORE")) {
                         p.sendMessage("          " + ChatColor.YELLOW + ChatColor.BOLD + "DOUBLE ORE DROP" + ChatColor.YELLOW + " (2x)");
-                        this.addToInv(p, Mining.ore(oretier));
+                        this.addToInv(p, Mining.ore(p, oretier));
                     }
                     if (tore < ProfessionMechanics.getPickEnchants(p.getInventory().getItemInMainHand(), "TRIPLE ORE")) {
                         p.sendMessage("          " + ChatColor.YELLOW + ChatColor.BOLD + "TRIPLE ORE DROP" + ChatColor.YELLOW + " (3x)");
-                        this.addToInv(p, Mining.ore(oretier));
-                        this.addToInv(p, Mining.ore(oretier));
+                        this.addToInv(p, Mining.ore(p, oretier));
+                        this.addToInv(p, Mining.ore(p, oretier));
                     }
                     int xp = ProfessionMechanics.getExpFromOre(oretier);
                     ProfessionMechanics.addExp(p, p.getInventory().getItemInMainHand(), xp);

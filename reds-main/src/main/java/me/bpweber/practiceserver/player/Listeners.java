@@ -13,6 +13,7 @@ import me.bpweber.practiceserver.damage.Damage;
 import me.bpweber.practiceserver.enchants.Enchants;
 import me.bpweber.practiceserver.item.Journal;
 import me.bpweber.practiceserver.mobs.Mobs;
+import me.bpweber.practiceserver.player.Stats.StatsMain;
 import me.bpweber.practiceserver.pvp.Alignments;
 import me.bpweber.practiceserver.teleport.Hearthstone;
 import me.bpweber.practiceserver.teleport.TeleportBooks;
@@ -113,18 +114,25 @@ public class Listeners
 
     public void refreshTabList(Player p) {
         int ping = TTA_Methods.getPing(p);
-        if (TTA_Methods.getPing(p) > 400) {
-            TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS"
-                            + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n",
-                    ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
-                            + ChatColor.DARK_AQUA + "Your Ping: \n" + ChatColor.GRAY + "Loading Ping.." + "\n\n" +
-                            ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
-        } else {
-            TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS"
-                            + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n",
-                    ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
-                            + ChatColor.DARK_AQUA + "Your Ping: \n" + ChatColor.GRAY + TTA_Methods.getPing(p) + "\n\n" +
-                            ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
+        {
+            if (StatsMain.getAlignment(p).contains("LAWFUL")) {
+                TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS"
+                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n",
+                        ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
+                                + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
+                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n"
+                                + ChatColor.DARK_AQUA + "Alignment: \n" + ChatColor.GRAY + StatsMain.getAlignment(p) + "\n\n" +
+                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
+            } else {
+                TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS"
+                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n",
+                        ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
+                                + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
+                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n"
+                                + ChatColor.DARK_AQUA + "Alignment: \n" + StatsMain.getAlignment(p) + "\n" + StatsMain.getAlignTime(p) + "\n\n" +
+                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
+            }
+
         }
     }
     @EventHandler(priority = EventPriority.HIGH)
@@ -136,16 +144,17 @@ public class Listeners
 
     @EventHandler
     public void dropItem(PlayerDropItemEvent e) {
-        if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().getName().equalsIgnoreCase("Fatherhood")) {
+        if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().getName().equalsIgnoreCase("RedsEmporium")) {
             e.setCancelled(true);
         }
     }
 
+
     @EventHandler
     public void onMiddleClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (player.getGameMode() == GameMode.CREATIVE && !event.getWhoClicked().getName().equalsIgnoreCase("Fatherhood")) {
-            if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK) {
+        if (player.isOp() && !event.getWhoClicked().getName().equalsIgnoreCase("RedsEmporium")) {
+            if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK || event.getCurrentItem().getType() == Material.PAPER) {
                 player.getInventory().clear();
                 event.getCursor().setType(null);
                 event.getCurrentItem().setType(null);

@@ -59,10 +59,10 @@ public class Drops {
 		int hps = 0;
 		int nrg = 0;
 		int r = random.nextInt(260);
-		if (r < 3) {
+		if (r < 7) {
 			rarity = 3;
 			rare = ChatColor.YELLOW.toString() + ChatColor.ITALIC + "Unique";
-		} else if (r < 6) {
+		} else if (r < 14) {
 			rarity = 2;
 			rare = ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare";
 		} else if (r < 100) {

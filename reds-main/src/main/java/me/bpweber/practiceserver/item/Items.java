@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Items {
     public static ItemStack orb(boolean inshop) {
@@ -31,6 +32,24 @@ public class Items {
         return orb;
     }
 
+    public static ItemStack signNewCustomItem(final Material m, final String name, final String desc) {
+        final ItemStack is = new ItemStack(m);
+        final ItemMeta im = is.getItemMeta();
+        im.setDisplayName(name);
+        final List<String> new_lore = new ArrayList<String>();
+        if (desc.contains(",")) {
+            String[] split;
+            for (int length = (split = desc.split(",")).length, i = 0; i < length; ++i) {
+                final String s = split[i];
+                new_lore.add(s);
+            }
+        } else {
+            new_lore.add(desc);
+        }
+        im.setLore(new_lore);
+        is.setItemMeta(im);
+        return is;
+    }
     public static ItemStack enchant(int tier, int type, boolean inshop) {
         ItemStack is = new ItemStack(Material.EMPTY_MAP);
         ItemMeta im = is.getItemMeta();

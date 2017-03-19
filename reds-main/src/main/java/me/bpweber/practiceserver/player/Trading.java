@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -82,6 +83,13 @@ public class Trading implements Listener {
         return orig_i;
     }
 
+    @EventHandler
+    public void onTradeClick(InventoryClickEvent e) {
+        if (!(e.getClick() == ClickType.LEFT) && trade_map.containsKey(e.getWhoClicked())) {
+            e.setCancelled(true);
+            e.getWhoClicked().sendMessage(ChatColor.RED + "ez fix lul");
+        }
+    }
     @SuppressWarnings("unused")
     public static Player getTarget(final Player trader) {
         final List<Entity> nearbyE = trader.getNearbyEntities(4.0, 4.0, 4.0);

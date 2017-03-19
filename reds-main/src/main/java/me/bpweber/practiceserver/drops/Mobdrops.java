@@ -4,6 +4,7 @@ import me.bpweber.practiceserver.Crates.CratesMain;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.money.Money;
+import me.bpweber.practiceserver.player.Stats.StatsMain;
 import me.bpweber.practiceserver.teleport.TeleportBooks;
 import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
@@ -13,6 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,6 +42,17 @@ public class Mobdrops implements Listener {
         e.setDroppedExp(0);
     }
 
+    @EventHandler
+    public void mobDeathStatFix(EntityDamageByEntityEvent e) {
+        if (e.getDamager() instanceof Player && !(e.getEntity() instanceof Player) && e.getEntity() instanceof LivingEntity) {
+            Player d = (Player) e.getDamager();
+            final LivingEntity s = (LivingEntity) e.getEntity();
+            if (e.getDamage() >= s.getHealth()) {
+                StatsMain.currentMonsterKills.put(d.getUniqueId(), StatsMain.currentMonsterKills.get(d.getUniqueId()) + 1);
+
+            }
+        }
+    }
     @EventHandler
     public void onMobDeath(final EntityDamageEvent e) {
         if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player)) {
@@ -137,7 +150,7 @@ public class Mobdrops implements Listener {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 18) {
+                        if (rd < 19) {
                             dodrop = true;
                         }
                     } else if (rd < 18) {
@@ -171,14 +184,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("DIAMOND_")) {
                     gemamt = random.nextInt(30) + 24;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 14) {
+                        if (rd < 17) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 12) {
+                        if (rd < 14) {
                             dodrop = true;
                         }
-                    } else if (rd < 9) {
+                    } else if (rd < 13) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 9) {
@@ -206,14 +219,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("GOLD_")) {
                     gemamt = random.nextInt(50) + 14;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 11) {
+                        if (rd < 15) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 9) {
+                        if (rd < 13) {
                             dodrop = true;
                         }
-                    } else if (rd < 6) {
+                    } else if (rd < 12) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {

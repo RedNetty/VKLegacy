@@ -51,11 +51,15 @@ public class ProfessionMechanics
         implements Listener {
     public void onEnable() {
         PracticeServer.log.info("[ProfessionMechanics] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
     }
 
     public void onDisable() {
         PracticeServer.log.info("[ProfessionMechanics] has been disabled.");
+    }
+
+    public static boolean isSkillItem(final ItemStack is) {
+        return ((is.getType() == Material.WOOD_PICKAXE || is.getType() == Material.STONE_PICKAXE || is.getType() == Material.IRON_PICKAXE || is.getType() == Material.DIAMOND_PICKAXE || is.getType() == Material.GOLD_PICKAXE) && is.hasItemMeta() && is.getItemMeta().hasDisplayName()) || (is.getType() == Material.FISHING_ROD && is.hasItemMeta() && is.getItemMeta().hasDisplayName());
     }
 
     @EventHandler
@@ -81,7 +85,7 @@ public class ProfessionMechanics
                 lore.add(ChatColor.GREEN + "Price: " + ChatColor.WHITE + "100g");
                 pickmeta.setLore(lore);
                 P.setItemMeta(pickmeta);
-                inv.addItem(new ItemStack[]{P});
+                inv.addItem(P);
                 e.getPlayer().openInventory(inv);
                 e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_WOOD_BUTTON_CLICK_ON, 1.0f, 1.0f);
             }
@@ -94,7 +98,7 @@ public class ProfessionMechanics
         if (e.getCurrentItem() != null && e.getInventory().getTitle().equals("Skill Trainer")) {
             List<String> lore;
             e.setCancelled(true);
-            if (e.getCurrentItem() != null && e.getCurrentItem().getType() == Material.WOOD_PICKAXE && e.getCurrentItem().getItemMeta().hasLore() && ((String) (lore = e.getCurrentItem().getItemMeta().getLore()).get(lore.size() - 1)).contains("Price:")) {
+            if (e.getCurrentItem() != null && e.getCurrentItem().getType() == Material.WOOD_PICKAXE && e.getCurrentItem().getItemMeta().hasLore() && (lore = e.getCurrentItem().getItemMeta().getLore()).get(lore.size() - 1).contains("Price:")) {
                 int price = ItemVendors.getPriceFromLore(e.getCurrentItem());
                 if (Money.hasEnoughGems(p, price)) {
                     ItemStack is = new ItemStack(e.getCurrentItem().getType());
@@ -121,8 +125,8 @@ public class ProfessionMechanics
         ArrayList<Integer> exp = new ArrayList<Integer>();
         exp.add(0);
         exp.add(0);
-        if (is != null && is.getType().name().contains("_PICKAXE") && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() > 1 && ((String) is.getItemMeta().getLore().get(1)).contains(" / ")) {
-            String line = ChatColor.stripColor((String) ((String) is.getItemMeta().getLore().get(1)));
+        if (is != null && is.getType().name().contains("_PICKAXE") && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() > 1 && is.getItemMeta().getLore().get(1).contains(" / ")) {
+            String line = ChatColor.stripColor(is.getItemMeta().getLore().get(1));
             try {
                 exp.set(0, Integer.parseInt(line.split(" / ")[0]));
                 exp.set(1, Integer.parseInt(line.split(" / ")[1]));
@@ -135,8 +139,8 @@ public class ProfessionMechanics
 
     public static int getPickaxeLevel(ItemStack is) {
         int level = 0;
-        if (is != null && is.getType().name().contains("_PICKAXE") && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() > 0 && ((String) is.getItemMeta().getLore().get(0)).contains("Level: ")) {
-            String line = ChatColor.stripColor((String) ((String) is.getItemMeta().getLore().get(0)));
+        if (is != null && is.getType().name().contains("_PICKAXE") && is.getItemMeta().hasLore() && is.getItemMeta().getLore().size() > 0 && is.getItemMeta().getLore().get(0).contains("Level: ")) {
+            String line = ChatColor.stripColor(is.getItemMeta().getLore().get(0));
             try {
                 level = Integer.parseInt(line.split("Level: ")[1]);
             } catch (Exception e) {
@@ -277,7 +281,7 @@ public class ProfessionMechanics
         int ench = r.nextInt(3);
         ItemMeta im = is.getItemMeta();
         CopyOnWriteArrayList<String> lore = new CopyOnWriteArrayList<String>(im.getLore());
-        String desc = (String) lore.get(lore.size() - 1);
+        String desc = lore.get(lore.size() - 1);
         if (ench == 0) {
             if (ProfessionMechanics.getPickEnchants(is, "GEM FIND") == 10) {
                 return;

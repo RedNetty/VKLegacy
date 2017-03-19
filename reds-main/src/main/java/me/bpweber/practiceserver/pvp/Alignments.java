@@ -12,6 +12,7 @@ import me.bpweber.practiceserver.damage.Damage;
 import me.bpweber.practiceserver.damage.Staffs;
 import me.bpweber.practiceserver.party.Scoreboards;
 import me.bpweber.practiceserver.player.Listeners;
+import me.bpweber.practiceserver.player.Stats.StatsMain;
 import me.bpweber.practiceserver.teleport.TeleportBooks;
 import me.bpweber.practiceserver.utils.StringUtil;
 import org.bukkit.*;
@@ -276,7 +277,7 @@ public class Alignments
 
     public static void updatePlayerAlignment(Player p) {
         ChatColor cc = ChatColor.GRAY;
-        cc = p.getName().equalsIgnoreCase("Fatherhood") ? ChatColor.GOLD : (p.isOp() ? ChatColor.AQUA : (neutral.containsKey(p.getName()) ? ChatColor.YELLOW : (chaotic.containsKey(p.getName()) ? ChatColor.RED : ChatColor.GRAY)));
+        cc = p.getName().equalsIgnoreCase("RedsEmporium") ? ChatColor.GOLD : (p.isOp() ? ChatColor.AQUA : (neutral.containsKey(p.getName()) ? ChatColor.YELLOW : (chaotic.containsKey(p.getName()) ? ChatColor.RED : ChatColor.GRAY)));
         p.setDisplayName(String.valueOf(Alignments.getPlayerPrefix(p)) + cc + p.getName());
         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 1.0f);
         Scoreboards.updateAllColors();
@@ -300,13 +301,13 @@ public class Alignments
         if (rank.equals("pmod")) {
             prefix = ChatColor.WHITE.toString() + ChatColor.BOLD + "PMOD ";
         }
-        if (p.getName().equals("Fatherhood")) {
+        if (p.getName().equals("RedsEmporium")) {
             prefix = ChatColor.GOLD.toString() + ChatColor.BOLD + "DEV ";
         }
         if (p.getName().equals("Kav_")) {
             prefix = ChatColor.RED.toString() + ChatColor.BOLD + "ALLAH ";
         }
-        if (p.isOp() && !p.getName().equals("Fatherhood") && !p.getName().equalsIgnoreCase("KAV_")) {
+        if (p.isOp() && !p.getName().equals("RedsEmporium") && !p.getName().equalsIgnoreCase("KAV_")) {
             prefix = ChatColor.AQUA.toString() + ChatColor.BOLD + "GM ";
 
         }
@@ -426,6 +427,7 @@ public class Alignments
                     String wepname = "";
                     wepname = wep != null && wep.getType() != Material.AIR && wep.getItemMeta().hasDisplayName() ? wep.getItemMeta().getDisplayName() : String.valueOf(wep.getType().name().substring(0, 1).toUpperCase()) + wep.getType().name().substring(1, wep.getType().name().length()).toLowerCase();
                     reason = " was killed by " + ChatColor.RESET + d.getDisplayName() + ChatColor.WHITE + " with a(n) " + wepname;
+                    StatsMain.currentPlayerKills.put(d.getUniqueId(), StatsMain.currentPlayerKills.get(d.getUniqueId()) + 1);
                 } else if (et.getDamager() instanceof LivingEntity) {
                     LivingEntity l = (LivingEntity) et.getDamager();
                     String name = "";

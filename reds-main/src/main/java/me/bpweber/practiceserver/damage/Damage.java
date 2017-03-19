@@ -762,7 +762,6 @@ public class Damage
             }
         }
     }
-
     @EventHandler(priority = EventPriority.HIGH)
     public void onKnockback(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof LivingEntity) {
@@ -778,7 +777,7 @@ public class Damage
                 if (v.getX() != 0.0 || v.getY() != 0.0 || v.getZ() != 0.0) {
                     v.normalize();
                 }
-                p.setVelocity(v.multiply(0.15f));
+                p.setVelocity(v.multiply(0.24f));
             } else if (!this.kb.containsKey(p.getUniqueId()) || this.kb.containsKey(p.getUniqueId()) && System.currentTimeMillis() - this.kb.get(p.getUniqueId()) > 500) {
                 this.kb.put(p.getUniqueId(), System.currentTimeMillis());
                 Vector v = p.getLocation().toVector().subtract(d.getLocation().toVector());
@@ -788,7 +787,7 @@ public class Damage
                 if (d instanceof Player) {
                     Player dam = (Player) d;
                     if (dam.getInventory().getItemInMainHand() != null && dam.getInventory().getItemInMainHand().getType().name().contains("_SPADE")) {
-                        p.setVelocity(v.multiply(0.7f).setY(0.38));
+                        p.setVelocity(v.multiply(0.7F).setY(0.));
                     } else {
                         p.setVelocity(v.multiply(0.5f).setY(0.35));
                     }
@@ -813,23 +812,25 @@ public class Damage
     @EventHandler(priority = EventPriority.HIGH)
     public void onPolearmAOE(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player) {
-            LivingEntity p = (LivingEntity) e.getEntity();
-            Player d = (Player) e.getDamager();
+            LivingEntity le = (LivingEntity) e.getEntity();
+            Player p = (Player) e.getDamager();
             if (e.getDamage() <= 0.0) {
                 return;
             }
-            if (d.getInventory().getItemInMainHand() != null && d.getInventory().getItemInMainHand().getType().name().contains("_SPADE") && !this.p_arm.contains(d.getName())) {
-                for (Entity near : p.getNearbyEntities(2.5, 3.0, 2.5)) {
-                    if (!(near instanceof LivingEntity) || near == p || near == d || near == null) continue;
+            if (p.getInventory().getItemInMainHand() != null && p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") && !this.p_arm.contains(p.getName())) {
+                int amt = 5;
+                Energy.removeEnergy(p, amt);
+                for (Entity near : le.getNearbyEntities(1, 2, 1)) {
+                    if (!(near instanceof LivingEntity) || near == le || near == p || near == null) continue;
                     LivingEntity n = (LivingEntity) near;
-                    p.setNoDamageTicks(0);
+                    le.setNoDamageTicks(0);
                     n.setNoDamageTicks(0);
-                    if (Energy.nodamage.containsKey(d.getName())) {
-                        Energy.nodamage.remove(d.getName());
+                    if (Energy.nodamage.containsKey(p.getName())) {
+                        Energy.nodamage.remove(p.getName());
                     }
-                    this.p_arm.add(d.getName());
-                    n.damage(1.0, d);
-                    this.p_arm.remove(d.getName());
+                    this.p_arm.add(p.getName());
+                    n.damage(1.0, p);
+                    this.p_arm.remove(p.getName());
                 }
             }
         }
