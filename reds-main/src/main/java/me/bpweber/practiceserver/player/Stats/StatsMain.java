@@ -1,17 +1,14 @@
 package me.bpweber.practiceserver.player.Stats;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.pvp.Alignments;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.pvp.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
+import org.bukkit.scheduler.*;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by jaxon on 3/18/2017.

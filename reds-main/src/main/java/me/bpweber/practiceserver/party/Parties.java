@@ -1,23 +1,16 @@
 package me.bpweber.practiceserver.party;
 
-import me.bpweber.practiceserver.PracticeServer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
+import me.bpweber.practiceserver.*;
+import org.bukkit.*;
+import org.bukkit.command.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
+import org.bukkit.scheduler.*;
+import org.bukkit.scoreboard.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class Parties implements CommandExecutor, Listener {
     public static ConcurrentHashMap<Player, ArrayList<Player>> parties;
@@ -53,7 +46,7 @@ public class Parties implements CommandExecutor, Listener {
                         String name = pl.getName();
                         if (name.length() > 16) {
                             name = name.substring(0, 16);
-                        o.getScore(pl).setScore((int) pl.getHealth());
+                            o.getScore(pl).setScore((int) pl.getHealth());
                         }
                     }
                 }
@@ -231,9 +224,9 @@ public class Parties implements CommandExecutor, Listener {
         new BukkitRunnable() {
             public void run() {
                 for (final Player p : Bukkit.getOnlinePlayers()) {
-                	if(p != null) {
-                    Parties.refreshScoreboard(p);
-                	}
+                    if (p != null) {
+                        Parties.refreshScoreboard(p);
+                    }
                 }
             }
         }.runTaskTimerAsynchronously(PracticeServer.plugin, 1L, 1L);

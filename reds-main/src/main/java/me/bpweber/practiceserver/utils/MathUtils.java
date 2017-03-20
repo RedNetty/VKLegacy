@@ -1,12 +1,10 @@
 package me.bpweber.practiceserver.utils;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
-import java.util.Random;
+import java.util.*;
 
 /**
  * Utility and fast math functions.

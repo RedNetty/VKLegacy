@@ -1,26 +1,20 @@
 package me.bpweber.practiceserver.teleport;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.player.Horses;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.Particles;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.pvp.*;
+import me.bpweber.practiceserver.utils.*;
 import org.bukkit.*;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.scheduler.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class Hearthstone
         implements Listener {

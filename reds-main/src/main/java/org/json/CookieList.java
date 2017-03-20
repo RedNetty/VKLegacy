@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Convert a web browser cookie list string to a JSONObject and back.

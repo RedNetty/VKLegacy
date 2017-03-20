@@ -34,32 +34,21 @@
  */
 package me.bpweber.practiceserver.damage;
 
-import com.sainttx.holograms.api.Hologram;
-import com.sainttx.holograms.api.line.HologramLine;
-import com.sainttx.holograms.api.line.TextLine;
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.player.Energy;
-import me.bpweber.practiceserver.player.Toggles;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.Particles;
-import me.bpweber.practiceserver.vendors.Merchant;
+import com.sainttx.holograms.api.*;
+import com.sainttx.holograms.api.line.*;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.pvp.*;
+import me.bpweber.practiceserver.utils.*;
+import me.bpweber.practiceserver.vendors.*;
 import org.bukkit.*;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.boss.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.inventory.*;
+import org.bukkit.potion.*;
+import org.bukkit.scheduler.*;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -403,7 +392,6 @@ public class Damage
             }
         }
     }
-
 
 
     @EventHandler(priority = EventPriority.LOW)
@@ -762,10 +750,11 @@ public class Damage
             }
         }
     }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onKnockback(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof LivingEntity) {
-        	
+
             LivingEntity p = (LivingEntity) e.getEntity();
             LivingEntity d = (LivingEntity) e.getDamager();
             p.setNoDamageTicks(0);

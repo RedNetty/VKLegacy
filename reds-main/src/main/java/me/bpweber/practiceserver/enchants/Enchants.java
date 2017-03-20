@@ -1,24 +1,18 @@
 package me.bpweber.practiceserver.enchants;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.utils.Particles;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.damage.*;
+import me.bpweber.practiceserver.utils.*;
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.enchantments.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Random;
+import java.lang.reflect.*;
+import java.util.*;
 
 public class Enchants implements Listener {
     public static Enchantment glow;

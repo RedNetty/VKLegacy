@@ -1,12 +1,10 @@
 package me.bpweber.practiceserver.mobs;
 
-import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Giovanni on 11-2-2017.
@@ -20,7 +18,7 @@ public class NameFixer implements Listener {
 
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
-        if(this.checkedEntities.contains(event.getEntityType())) {
+        if (this.checkedEntities.contains(event.getEntityType())) {
             event.getEntity().setCustomNameVisible(true);
         }
     }

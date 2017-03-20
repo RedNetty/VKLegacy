@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Convert an HTTP header to a JSONObject and back.

@@ -29,32 +29,21 @@
  */
 package me.bpweber.practiceserver.player;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.party.Parties;
-import me.bpweber.practiceserver.pvp.Alignments;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.party.*;
+import me.bpweber.practiceserver.pvp.*;
+import org.bukkit.*;
+import org.bukkit.command.*;
+import org.bukkit.configuration.file.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 public class Toggles
         implements Listener,

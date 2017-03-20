@@ -1,0 +1,24 @@
+package me.kayaba.guilds.enums;
+
+public enum PreparedStatements {
+    GUILDS_SELECT,
+    GUILDS_INSERT,
+    GUILDS_DELETE,
+    GUILDS_UPDATE,
+
+    PLAYERS_SELECT,
+    PLAYERS_INSERT,
+    PLAYERS_UPDATE,
+    PLAYERS_DELETE,
+
+    REGIONS_SELECT,
+    REGIONS_INSERT,
+    REGIONS_DELETE,
+    REGIONS_UPDATE,
+
+    RANKS_SELECT,
+    RANKS_INSERT,
+    RANKS_DELETE,
+    RANKS_DELETE_GUILD,
+    RANKS_UPDATE
+}

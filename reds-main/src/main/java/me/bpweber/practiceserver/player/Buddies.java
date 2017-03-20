@@ -1,23 +1,15 @@
 package me.bpweber.practiceserver.player;
 
-import me.bpweber.practiceserver.PracticeServer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import me.bpweber.practiceserver.*;
+import org.bukkit.*;
+import org.bukkit.command.*;
+import org.bukkit.configuration.file.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 public class Buddies
         implements Listener,

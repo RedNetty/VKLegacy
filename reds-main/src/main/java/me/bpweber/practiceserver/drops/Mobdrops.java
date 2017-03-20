@@ -1,26 +1,18 @@
 package me.bpweber.practiceserver.drops;
 
-import me.bpweber.practiceserver.Crates.CratesMain;
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.money.GemPouches;
-import me.bpweber.practiceserver.money.Money;
-import me.bpweber.practiceserver.player.Stats.StatsMain;
-import me.bpweber.practiceserver.teleport.TeleportBooks;
-import org.bukkit.Bukkit;
-import org.bukkit.EntityEffect;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.inventory.ItemStack;
+import me.bpweber.practiceserver.Crates.*;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.money.*;
+import me.bpweber.practiceserver.player.Stats.*;
+import me.bpweber.practiceserver.teleport.*;
+import org.bukkit.*;
+import org.bukkit.enchantments.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.inventory.*;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 
 public class Mobdrops implements Listener {
@@ -53,6 +45,7 @@ public class Mobdrops implements Listener {
             }
         }
     }
+
     @EventHandler
     public void onMobDeath(final EntityDamageEvent e) {
         if (e.getEntity() instanceof LivingEntity && !(e.getEntity() instanceof Player)) {
@@ -257,13 +250,13 @@ public class Mobdrops implements Listener {
                 if (gems == 1) {
                     if (gemamt > 0) {
                         ItemStack itemStack = Money.makeGems(1);
-                        
+
                         itemStack.setAmount(gemamt);
                         // Prevent potential gems stuck in ground, higher the Y axis by 1
                         s.getWorld().dropItemNaturally(s.getLocation().add(0, 1, 0), itemStack);
                         s.getWorld().dropItemNaturally(s.getLocation().add(0, 1, 0), itemStack);
                         s.getWorld().dropItemNaturally(s.getLocation().add(0, 1, 0), itemStack);
-                        
+
                     }
                 }
                 if (dodrop) {

@@ -9,13 +9,11 @@
  */
 package me.bpweber.practiceserver.item;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Items {
     public static ItemStack orb(boolean inshop) {
@@ -50,6 +48,7 @@ public class Items {
         is.setItemMeta(im);
         return is;
     }
+
     public static ItemStack enchant(int tier, int type, boolean inshop) {
         ItemStack is = new ItemStack(Material.EMPTY_MAP);
         ItemMeta im = is.getItemMeta();

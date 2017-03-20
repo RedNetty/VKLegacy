@@ -9,14 +9,11 @@
  */
 package me.bpweber.practiceserver.drops;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class EliteDrops {
     public static ItemStack createCustomEliteDrop(String mobname) {

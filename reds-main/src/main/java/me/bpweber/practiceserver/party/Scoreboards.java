@@ -14,16 +14,12 @@
  */
 package me.bpweber.practiceserver.party;
 
-import me.bpweber.practiceserver.pvp.Alignments;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
+import me.bpweber.practiceserver.pvp.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.scoreboard.*;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class Scoreboards {
     public static HashMap<Player, Scoreboard> boards = new HashMap<Player, Scoreboard>();
@@ -51,7 +47,7 @@ public class Scoreboards {
     }
 
     @SuppressWarnings("deprecation")
-	public static void updateAllColors() {
+    public static void updateAllColors() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             Scoreboard sb = Scoreboards.getBoard(p);
             for (Player pl : Bukkit.getOnlinePlayers()) {
@@ -79,7 +75,7 @@ public class Scoreboards {
     }
 
     @SuppressWarnings("deprecation")
-	public static void updatePlayerHealth() {
+    public static void updatePlayerHealth() {
         for (Player p : Bukkit.getOnlinePlayers()) {
             Scoreboard sb = Scoreboards.getBoard(p);
             for (Player pl : Bukkit.getOnlinePlayers()) {

@@ -40,37 +40,25 @@
  */
 package me.bpweber.practiceserver.teleport;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.money.GemPouches;
-import me.bpweber.practiceserver.player.Horses;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.Particles;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.money.*;
+import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.pvp.*;
+import me.bpweber.practiceserver.utils.*;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.*;
+import org.bukkit.scheduler.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class TeleportBooks
         implements Listener {

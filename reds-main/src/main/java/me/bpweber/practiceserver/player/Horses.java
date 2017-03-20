@@ -55,36 +55,32 @@
  */
 package me.bpweber.practiceserver.player;
 
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
-import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.money.Money;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.Particles;
-import me.bpweber.practiceserver.vendors.ItemVendors;
-import net.minecraft.server.v1_9_R2.GenericAttributes;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
+import me.bpweber.practiceserver.ModerationMechanics.*;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.money.*;
+import me.bpweber.practiceserver.pvp.*;
+import me.bpweber.practiceserver.utils.*;
+import me.bpweber.practiceserver.vendors.*;
+import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftLivingEntity;
+import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_9_R2.entity.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
-import org.bukkit.event.vehicle.VehicleExitEvent;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.event.vehicle.*;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.*;
+import org.bukkit.scheduler.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Horses
         implements Listener {
@@ -197,6 +193,7 @@ public class Horses
         }
         return 0;
     }
+
     public static Horse horse(Player p, int tier) {
         double speed = 0.25;
         double jump = 0.75;
@@ -327,7 +324,7 @@ public class Horses
             if (e.getCause() == EntityDamageEvent.DamageCause.FALL || e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION
                     || e.getCause() == EntityDamageEvent.DamageCause.CONTACT || e.getCause() == EntityDamageEvent.DamageCause.FALLING_BLOCK ||
                     e.getCause() == EntityDamageEvent.DamageCause.FLY_INTO_WALL || e.getCause() == EntityDamageEvent.DamageCause.CUSTOM || e.getCause() == EntityDamageEvent.DamageCause.DROWNING
-                    || e.getCause() == EntityDamageEvent.DamageCause.DROWNING){
+                    || e.getCause() == EntityDamageEvent.DamageCause.DROWNING) {
                 if (p.isInsideVehicle() && p.getVehicle().getType() == EntityType.HORSE) {
                     e.setDamage(0.0);
                     e.setCancelled(true);
@@ -387,8 +384,8 @@ public class Horses
     @EventHandler
     public void onDismount(VehicleExitEvent e) {
         if (e.getExited() instanceof Player && e.getVehicle() instanceof Horse) {
-                e.getVehicle().remove();
-            }
+            e.getVehicle().remove();
+        }
 
     }
 

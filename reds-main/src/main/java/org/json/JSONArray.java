@@ -24,13 +24,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * A JSONArray is an ordered sequence of values. Its external text form is a

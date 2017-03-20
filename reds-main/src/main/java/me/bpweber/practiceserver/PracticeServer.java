@@ -1,69 +1,81 @@
 package me.bpweber.practiceserver;
 
-import me.bpweber.practiceserver.Crates.Commands.giveCrate;
-import me.bpweber.practiceserver.Crates.Commands.giveKey;
-import me.bpweber.practiceserver.Crates.Commands.giveNameTag;
-import me.bpweber.practiceserver.Crates.CratesMain;
-import me.bpweber.practiceserver.Crates.Nametag;
+import me.bpweber.practiceserver.Crates.Commands.*;
+import me.bpweber.practiceserver.Crates.*;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
-import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
-import me.bpweber.practiceserver.chat.ChatMechanics;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.damage.Staffs;
-import me.bpweber.practiceserver.drops.Mobdrops;
-import me.bpweber.practiceserver.enchants.Enchants;
-import me.bpweber.practiceserver.enchants.Orbs;
-import me.bpweber.practiceserver.item.Durability;
-import me.bpweber.practiceserver.item.Repairing;
-import me.bpweber.practiceserver.item.Untradeable;
-import me.bpweber.practiceserver.loot.LootChests;
-import me.bpweber.practiceserver.mobs.Mobs;
-import me.bpweber.practiceserver.mobs.Spawners;
-import me.bpweber.practiceserver.money.Banks;
-import me.bpweber.practiceserver.money.Commands.Givepouch;
-import me.bpweber.practiceserver.money.Economy.Economy;
-import me.bpweber.practiceserver.money.GemPouches;
-import me.bpweber.practiceserver.party.Parties;
+import me.bpweber.practiceserver.ModerationMechanics.*;
+import me.bpweber.practiceserver.chat.*;
+import me.bpweber.practiceserver.damage.*;
+import me.bpweber.practiceserver.drops.*;
+import me.bpweber.practiceserver.enchants.*;
+import me.bpweber.practiceserver.item.*;
+import me.bpweber.practiceserver.loot.*;
+import me.bpweber.practiceserver.mobs.*;
+import me.bpweber.practiceserver.money.*;
+import me.bpweber.practiceserver.money.Commands.*;
+import me.bpweber.practiceserver.money.Economy.*;
+import me.bpweber.practiceserver.party.*;
 import me.bpweber.practiceserver.player.*;
-import me.bpweber.practiceserver.player.Stats.StatsMain;
-import me.bpweber.practiceserver.profession.Mining;
-import me.bpweber.practiceserver.profession.ProfessionMechanics;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.pvp.ForceField;
-import me.bpweber.practiceserver.pvp.Respawn;
-import me.bpweber.practiceserver.teleport.Hearthstone;
-import me.bpweber.practiceserver.teleport.TeleportBooks;
-import me.bpweber.practiceserver.vendors.ItemVendors;
-import me.bpweber.practiceserver.vendors.MerchantMechanics;
-import me.bpweber.practiceserver.world.Antibuild;
-import me.bpweber.practiceserver.world.Logout;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import me.bpweber.practiceserver.player.Stats.*;
+import me.bpweber.practiceserver.profession.*;
+import me.bpweber.practiceserver.pvp.*;
+import me.bpweber.practiceserver.teleport.*;
+import me.bpweber.practiceserver.vendors.*;
+import me.bpweber.practiceserver.world.*;
+import me.kayaba.guilds.api.*;
+import me.kayaba.guilds.api.basic.*;
+import me.kayaba.guilds.api.event.PlayerInteractEntityEvent;
+import me.kayaba.guilds.api.manager.ErrorManager;
+import me.kayaba.guilds.api.storage.*;
+import me.kayaba.guilds.api.util.*;
+import me.kayaba.guilds.api.util.packet.*;
+import me.kayaba.guilds.api.util.reflect.*;
+import me.kayaba.guilds.enums.*;
+import me.kayaba.guilds.exception.*;
+import me.kayaba.guilds.impl.storage.*;
+import me.kayaba.guilds.impl.util.*;
+import me.kayaba.guilds.impl.util.bossbar.*;
+import me.kayaba.guilds.impl.util.logging.*;
+import me.kayaba.guilds.impl.versionimpl.v1_8_R1.*;
+import me.kayaba.guilds.listener.*;
+import me.kayaba.guilds.manager.*;
+import me.kayaba.guilds.util.*;
+import me.kayaba.guilds.util.reflect.*;
+import org.bukkit.*;
+import org.bukkit.enchantments.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
+import org.bukkit.plugin.*;
+import org.bukkit.plugin.java.*;
+import org.bukkit.scheduler.*;
 
-import java.util.logging.Logger;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.logging.*;
 
 /**
  * Jaxson's native Dungeon Realms practice server code.
  *
  * @author Jaxson (Red29 - uncureableAutism@outlook.com)
  * @author Giovanni (VawkeNetty - development@vawke.io)
- *
- * Original Authors ->
- *  - I Can't Code (BPWeber - Naughty, Naughty, Naughty)
- *  - Randal Gay Boy (iFamasssRAWRxD - Hentai, Hentai, Hentai)
- *
- * Updated to Minecraft 1.9 ->
- *  - Written by Giovanni (VawkeNetty) 2017.
- *  - Written by Jaxson (Red29) 2016/2017.
- *
- * Development continued by ->
- *  - Written by Jaxson (Red29) 2016/2017.
+ *         <p>
+ *         Original Authors ->
+ *         - I Can't Code (BPWeber - Naughty, Naughty, Naughty)
+ *         - Randal Gay Boy (iFamasssRAWRxD - Hentai, Hentai, Hentai)
+ *         <p>
+ *         Updated to Minecraft 1.9 ->
+ *         - Written by Giovanni (VawkeNetty) 2017.
+ *         - Written by Jaxson (Red29) 2016/2017.
+ *         <p>
+ *         Development continued by ->
+ *         - Written by Jaxson (Red29) 2016/2017.
+ *         - Written by Brandon (Kayaba) 2017
  */
-public class PracticeServer extends JavaPlugin {
+
+
+public class PracticeServer extends JavaPlugin implements GuildsAPI {
 
     public static Plugin plugin;
     public static Logger log;
@@ -103,17 +115,224 @@ public class PracticeServer extends JavaPlugin {
     private static CratesMain cm;
     private static Economy em;
     private static ForceField ff;
-    private static Nametag nt;
+    //private static Nametag nt;
     private static StatsMain stat;
     private static PracticeServer instance;
+
+    private final DependencyManager dependencyManager;
+    private final ListenerManager listenerManager;
+    private final CommandManager commandManager;
+    private final MessageManager messageManager;
+    private final RegionManager regionManager;
+    private final PlayerManager playerManager;
+    private final ConfigManager configManager;
+    private final ErrorManager errorManager;
+    private final GuildManager guildManager;
+    private final GroupManager groupManager;
+    private final RankManager rankManager;
+    private final TaskManager taskManager;
+
+    private PacketExtension packetExtension;
+    private Storage storage;
+    private SignGUI signGUI;
+    private final Map<ConfigManager.ServerVersion, Constructor<? extends TabList>> tabListConstructorMap = new HashMap<>();
+
 
     public static PracticeServer getInstance() {
         return instance;
     }
 
+    public PracticeServer() {
 
+        instance = this; // Making sure this shit will work.
+        dependencyManager = new DependencyManager();
+        listenerManager = new ListenerManager();
+        messageManager = new MessageManager();
+        commandManager = new CommandManager();
+        regionManager = new RegionManager();
+        playerManager = new PlayerManager();
+        configManager = new ConfigManager();
+        errorManager = new ErrorManagerImpl();
+        guildManager = new GuildManager();
+        groupManager = new GroupManager();
+        rankManager = new RankManager();
+        taskManager = new TaskManager();
+    }
+
+    @Override
+    public void onLoad() {
+        System.out.println("Stuff is loading...");
+        try {
+            getConfigManager().reload();
+            getDependencyManager().setUp();
+        } catch (Exception e) {
+            LoggerUtils.exception(e);
+        }
+        System.out.println("Stuff is done!");
+    }
+
+    @Override
     public void onEnable() {
         plugin = this;
+
+        try {
+            getMessageManager().load();
+        } catch (FatalKayabaGuildsException e) {
+            e.printStackTrace();
+        }
+        getCommandManager().setUp();
+        getGroupManager().load();
+        getListenerManager().registerListeners();
+
+        try {
+            setupWrappedLogger();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            setUpStorage();
+        } catch (FatalKayabaGuildsException e) {
+            e.printStackTrace();
+        }
+
+
+        getGuildManager().load();
+        LoggerUtils.info("Guilds data loaded");
+        getRegionManager().load();
+        LoggerUtils.info("Regions data loaded");
+        getRankManager().loadDefaultRanks();
+        getPlayerManager().load();
+        LoggerUtils.info("Players data loaded");
+
+        LoggerUtils.info("Post checks running");
+        getGuildManager().postCheck();
+
+        getRankManager().load();
+        LoggerUtils.info("Ranks data loaded");
+
+        ConfigManager.ServerVersion serverVersion = ConfigManager.getServerVersion();
+
+        switch (serverVersion) {
+            case MINECRAFT_1_8_R1:
+            case MINECRAFT_1_8_R2:
+            case MINECRAFT_1_8_R3:
+            case MINECRAFT_1_9_R1:
+            case MINECRAFT_1_9_R2:
+            case MINECRAFT_1_10_R1:
+            case MINECRAFT_1_10_R2:
+            case MINECRAFT_1_11_R1:
+            default:
+                packetExtension = new me.kayaba.guilds.impl.versionimpl.v1_8_R3.PacketExtensionImpl();
+                break;
+        }
+
+
+        if (Config.SIGNGUI_ENABLED.getBoolean()) {
+            switch (serverVersion) {
+                case MINECRAFT_1_8_R1:
+                    signGUI = new SignGUIImpl();
+                    break;
+                case MINECRAFT_1_8_R2:
+                case MINECRAFT_1_8_R3:
+                    signGUI = new me.kayaba.guilds.impl.versionimpl.v1_8_R3.SignGUIImpl();
+                    break;
+                case MINECRAFT_1_9_R1:
+                    signGUI = new me.kayaba.guilds.impl.versionimpl.v1_9_R1.SignGUIImpl();
+                    break;
+                case MINECRAFT_1_9_R2:
+                case MINECRAFT_1_10_R1:
+                case MINECRAFT_1_10_R2:
+                case MINECRAFT_1_11_R1:
+                default:
+                    signGUI = new me.kayaba.guilds.impl.versionimpl.v1_9_R2.SignGUIImpl();
+                    break;
+            }
+        }
+
+        if (Config.TABLIST_ENABLED.getBoolean()) {
+            final Map<ConfigManager.ServerVersion, Class<? extends TabList>> tabListClassMap = new HashMap<>();
+            tabListClassMap.put(ConfigManager.ServerVersion.MINECRAFT_1_8_R1, me.kayaba.guilds.impl.versionimpl.v1_8_R1.TabListImpl.class);
+            tabListClassMap.put(ConfigManager.ServerVersion.MINECRAFT_1_8_R2, me.kayaba.guilds.impl.versionimpl.v1_8_R3.TabListImpl.class);
+            tabListClassMap.put(ConfigManager.ServerVersion.MINECRAFT_1_8_R3, me.kayaba.guilds.impl.versionimpl.v1_8_R3.TabListImpl.class);
+            tabListClassMap.put(ConfigManager.ServerVersion.MINECRAFT_1_9_R1, me.kayaba.guilds.impl.versionimpl.v1_8_R3.TabListImpl.class);
+            tabListClassMap.put(ConfigManager.ServerVersion.MINECRAFT_1_9_R2, me.kayaba.guilds.impl.versionimpl.v1_8_R3.TabListImpl.class);
+            tabListClassMap.put(ConfigManager.ServerVersion.MINECRAFT_1_10_R1, me.kayaba.guilds.impl.versionimpl.v1_10_R1.TabListImpl.class);
+            tabListClassMap.put(ConfigManager.ServerVersion.MINECRAFT_1_11_R1, me.kayaba.guilds.impl.versionimpl.v1_10_R1.TabListImpl.class);
+
+            for (ConfigManager.ServerVersion version : ConfigManager.ServerVersion.values()) {
+                Class<? extends TabList> tabListClass = tabListClassMap.get(version);
+                Constructor<? extends TabList> tabListConstructor = null;
+
+                if (tabListClass != null) {
+                    try {
+                        tabListConstructor = tabListClass.getConstructor(GPlayer.class);
+                    } catch (NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                tabListConstructorMap.put(version, tabListConstructor);
+            }
+
+            if (tabListConstructorMap.get(serverVersion) == null) {
+                Config.TABLIST_ENABLED.set(false);
+                LoggerUtils.error("TabList not found for version " + serverVersion.getString());
+            }
+        }
+
+
+        for (Player p : CompatibilityUtils.getOnlinePlayers()) {
+            getPacketExtension().registerPlayer(p);
+        }
+
+        if (!Config.ADVANCEDENTITYUSE.getBoolean()) {
+            new AbstractListener() {
+                @EventHandler(priority = EventPriority.LOWEST)
+                public void onPlayerInteractEntity(org.bukkit.event.player.PlayerInteractEntityEvent event) {
+                    PlayerInteractEntityEvent clickEvent = new PlayerInteractEntityEvent(event.getPlayer(), event.getRightClicked(), EntityUseAction.INTERACT);
+                    getServer().getPluginManager().callEvent(clickEvent);
+                    event.setCancelled(clickEvent.isCancelled());
+                }
+            };
+
+            if (ConfigManager.getServerVersion().isNewerThan(ConfigManager.ServerVersion.MINECRAFT_1_7_R4)) {
+                new AbstractListener() {
+                    @EventHandler(priority = EventPriority.LOWEST)
+                    public void onPlayerInteractAtEntity(PlayerInteractAtEntityEvent event) {
+                        PlayerInteractEntityEvent interactEntityEvent = new PlayerInteractEntityEvent(event.getPlayer(), event.getRightClicked(), EntityUseAction.INTERACT_AT);
+                        ListenerManager.getLoggedPluginManager().callEvent(interactEntityEvent);
+                        event.setCancelled(interactEntityEvent.isCancelled());
+                    }
+                };
+            }
+        }
+
+        if (signGUI == null) {
+            Config.SIGNGUI_ENABLED.set(false);
+        }
+
+        if (getDependencyManager().isEnabled(Dependency.VANISHNOPACKET)) {
+            new VanishListener();
+        }
+
+
+        TagUtils.refresh();
+        TabUtils.refresh();
+
+        try {
+            FieldAccessor<Boolean> acceptingNewField = Reflections.getField(Enchantment.class, "acceptingNew", boolean.class);
+            acceptingNewField.set(true);
+            Enchantment.registerEnchantment(new EnchantmentGlow());
+            acceptingNewField.set(false);
+        } catch (Exception e) {
+            LoggerUtils.exception(e);
+        }
+
+
+        getTaskManager().runTasks();
         Bukkit.getWorlds().get(0).setAutoSave(false);
         Bukkit.getWorlds().get(0).setTime(14000);
         Bukkit.getWorlds().get(0).setGameRuleValue("doDaylightCycle", "false");
@@ -153,7 +372,7 @@ public class PracticeServer extends JavaPlugin {
         this.getCommand("toggletrail").setExecutor(new ToggleTrail());
         this.getCommand("toggleholodmg").setExecutor(new Toggles());
         this.getCommand("invsee").setExecutor(new Invsee());
-        this.getCommand("giveNameTag").setExecutor(new giveNameTag());
+        //this.getCommand("giveNameTag").setExecutor(new giveNameTag());
         this.getCommand("speed").setExecutor(new Speed());
         this.getCommand("createdrop").setExecutor(new Createdrop());
         this.getCommand("sc").setExecutor(new StaffChat());
@@ -174,11 +393,10 @@ public class PracticeServer extends JavaPlugin {
         this.getCommand("dump").setExecutor(new FixItem());
 
 
-
         cm = new CratesMain();
         stat = new StatsMain();
         trading = new Trading();
-        nt = new Nametag();
+        //nt = new Nametag();
         alignments = new Alignments();
         antibuild = new Antibuild();
         banks = new Banks();
@@ -221,7 +439,7 @@ public class PracticeServer extends JavaPlugin {
         damage.onEnable();
         durability.onEnable();
         enchants.onEnable();
-        nt.onEnable();
+        //nt.onEnable();
         energy.onEnable();
         gemPouches.onEnable();
         hearthstone.onEnable();
@@ -290,6 +508,41 @@ public class PracticeServer extends JavaPlugin {
         teleportBooks.onDisable();
         toggles.onDisable();
         untradeable.onDisable();
+        if (FatalKayabaGuildsException.fatal) {
+            return;
+        }
+
+        getTaskManager().stopTasks();
+        getGuildManager().save();
+        getRegionManager().save();
+        getPlayerManager().save();
+        getRankManager().save();
+        LoggerUtils.info("Saved all data");
+
+        if (getPacketExtension() != null) {
+            getPacketExtension().unregisterChannel();
+        }
+
+        if (getSignGUI() != null) {
+            getSignGUI().destroy();
+        }
+
+
+        if (Config.BOSSBAR_ENABLED.getBoolean()) {
+            for (Player player : CompatibilityUtils.getOnlinePlayers()) {
+                BossBarUtils.removeBar(player);
+            }
+        }
+
+        for (Player p : CompatibilityUtils.getOnlinePlayers()) {
+            PlayerManager.getPlayer(p).cancelToolProgress();
+        }
+
+        for (GPlayer nPlayer : getPlayerManager().getPlayers()) {
+            if (nPlayer.getActiveSelection() != null) {
+                nPlayer.getActiveSelection().reset();
+            }
+        }
         plugin = null;
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (Alignments.tagged.containsKey(p.getName())) {
@@ -298,6 +551,138 @@ public class PracticeServer extends JavaPlugin {
             p.saveData();
             p.kickPlayer(String.valueOf(ChatColor.GREEN.toString()) + "You have been safely logged out by the server." + "\n\n" + ChatColor.GRAY.toString() + "Your player data has been synced.");
         }
+    }
+
+    @Override
+    public GuildManager getGuildManager() {
+        return guildManager;
+    }
+
+    @Override
+    public RegionManager getRegionManager() {
+        return regionManager;
+    }
+
+    @Override
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    @Override
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    @Override
+    public MessageManager getMessageManager() {
+        return messageManager;
+    }
+
+    @Override
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    @Override
+    public GroupManager getGroupManager() {
+        return groupManager;
+    }
+
+    @Override
+    public TaskManager getTaskManager() {
+        return taskManager;
+    }
+
+    @Override
+    public ListenerManager getListenerManager() {
+        return listenerManager;
+    }
+
+    @Override
+    public ErrorManager getErrorManager() {
+        return errorManager;
+    }
+
+    @Override
+    public Storage getStorage() {
+        return storage;
+    }
+
+    @Override
+    public TabList createTabList(ConfigManager.ServerVersion serverVersion, GPlayer nPlayer) {
+        if (!Config.TABLIST_ENABLED.getBoolean()) {
+            throw new IllegalArgumentException("TabList is disabled");
+        }
+
+        try {
+            return tabListConstructorMap.get(serverVersion).newInstance(nPlayer);
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            LoggerUtils.exception(e);
+            Config.TABLIST_ENABLED.set(false);
+            return null;
+        }
+    }
+
+    @Override
+    public TabList createTabList(GPlayer nPlayer) {
+        return createTabList(ConfigManager.getServerVersion(), nPlayer);
+    }
+
+    @Override
+    public RankManager getRankManager() {
+        return rankManager;
+    }
+
+    @Override
+    public PacketExtension getPacketExtension() {
+        return packetExtension;
+    }
+
+    @Override
+    public DependencyManager getDependencyManager() {
+        return dependencyManager;
+    }
+
+    public void setUpStorage() throws FatalKayabaGuildsException {
+        try {
+            storage = new StorageConnector(getConfigManager().getDataStorageType()).getStorage();
+        } catch (StorageConnectionFailedException | IllegalArgumentException e) {
+            if (e instanceof IllegalArgumentException) {
+                if (e.getCause() == null || !(e.getCause() instanceof StorageConnectionFailedException)) {
+                    throw (IllegalArgumentException) e;
+                }
+
+                LoggerUtils.error(e.getMessage());
+            }
+
+            if (getConfigManager().isSecondaryDataStorageType()) {
+                throw new FatalKayabaGuildsException("Storage connection failed", e);
+            }
+
+            getConfigManager().setToSecondaryDataStorageType();
+            setUpStorage();
+        }
+    }
+
+
+    public static void runTaskLater(Runnable runnable, long delay, TimeUnit timeUnit) {
+        Bukkit.getScheduler().runTaskLater(instance, runnable, timeUnit.toSeconds(delay) * 20);
+    }
+
+
+    public static void runTask(Runnable runnable) {
+        Bukkit.getScheduler().runTask(instance, runnable);
+    }
+
+
+    public SignGUI getSignGUI() {
+        return signGUI;
+    }
+
+
+    private void setupWrappedLogger() throws NoSuchFieldException, IllegalAccessException {
+        FieldAccessor<PluginLogger> loggerField = Reflections.getField(JavaPlugin.class, "logger", PluginLogger.class);
+        loggerField.set(this, new WrappedLogger(this));
     }
 
 }

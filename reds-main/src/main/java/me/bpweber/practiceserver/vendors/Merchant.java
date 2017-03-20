@@ -8,8 +8,8 @@
  */
 package me.bpweber.practiceserver.vendors;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.*;
+import org.bukkit.inventory.*;
 
 public class Merchant {
     public static int getTier(ItemStack is) {

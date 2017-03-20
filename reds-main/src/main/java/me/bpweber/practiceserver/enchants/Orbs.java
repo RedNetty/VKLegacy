@@ -1,22 +1,15 @@
 package me.bpweber.practiceserver.enchants;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.utils.Particles;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.utils.*;
 import org.bukkit.*;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Orbs implements Listener {
 

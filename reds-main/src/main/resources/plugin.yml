@@ -1,7 +1,8 @@
 name: PracticeServer
 main: me.bpweber.practiceserver.PracticeServer
 version: Version 1.1
-authors: [bpweber, Red29, VawkeNetty]
+authors: [bpweber, Red29, VawkeNetty, Kayaba]
+softdepend: [HolographicDisplays, BarAPI, BossBarAPI, VanishNoPacket, Vault, WorldGuard, ScoreboardStats, Essentials]
 loadbefore:
   [Essentials, VoxelSniper]
 commands:
@@ -60,3 +61,22 @@ commands:
   gmotd:
   gtest:
   ginfo:
+  guilds:
+  ga:
+  guild:
+  guildmenu:
+  gi:
+  create:
+  abandon:
+  invite:
+  join:
+  leave:
+  playerinfo:
+  confirm:
+permissions:
+   PracticeServer.group.default:
+      default: true
+   PracticeServer.info:
+       default: true
+   PracticeServer.novaguilds:
+      default: true

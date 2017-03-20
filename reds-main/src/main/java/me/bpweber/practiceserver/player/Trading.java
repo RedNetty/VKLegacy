@@ -1,38 +1,25 @@
 package me.bpweber.practiceserver.player;
 
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.money.Banks;
-import me.bpweber.practiceserver.utils.JsonBuilder;
-import me.bpweber.practiceserver.vendors.MerchantMechanics;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.money.*;
+import me.bpweber.practiceserver.utils.*;
+import me.bpweber.practiceserver.vendors.*;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.BlockIterator;
+import org.bukkit.block.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.metadata.*;
+import org.bukkit.scheduler.*;
+import org.bukkit.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.logging.*;
 
 public class Trading implements Listener {
     public static HashMap<Player, Player> trade_map;
@@ -90,6 +77,7 @@ public class Trading implements Listener {
             e.getWhoClicked().sendMessage(ChatColor.RED + "ez fix lul");
         }
     }
+
     @SuppressWarnings("unused")
     public static Player getTarget(final Player trader) {
         final List<Entity> nearbyE = trader.getNearbyEntities(4.0, 4.0, 4.0);

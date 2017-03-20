@@ -5,15 +5,11 @@ package me.bpweber.practiceserver.utils;
  */
 
 
-import org.bukkit.Bukkit;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.bukkit.*;
+import org.json.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 
 public class CheckIP {
     public static boolean checkone;

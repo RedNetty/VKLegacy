@@ -1,21 +1,18 @@
 package me.bpweber.practiceserver.profession;
 
-import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
-import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.ModerationMechanics.*;
+import me.bpweber.practiceserver.*;
 import org.bukkit.*;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.*;
+import org.bukkit.scheduler.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class Mining
         implements Listener {

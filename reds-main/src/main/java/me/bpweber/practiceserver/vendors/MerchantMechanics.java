@@ -1,36 +1,20 @@
 package me.bpweber.practiceserver.vendors;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.item.*;
+import me.bpweber.practiceserver.money.*;
+import me.bpweber.practiceserver.profession.*;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.item.Durability;
-import me.bpweber.practiceserver.item.Items;
-import me.bpweber.practiceserver.item.Repairing;
-import me.bpweber.practiceserver.money.Money;
-import me.bpweber.practiceserver.profession.ProfessionMechanics;
+import java.util.*;
+import java.util.logging.*;
 
 public class MerchantMechanics implements Listener {
     public static List<String> in_npc_shop;

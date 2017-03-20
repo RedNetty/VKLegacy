@@ -52,32 +52,22 @@
  */
 package me.bpweber.practiceserver.mobs;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.player.Listeners;
-import me.bpweber.practiceserver.utils.Particles;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.damage.*;
+import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.utils.*;
+import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.entity.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.inventory.*;
+import org.bukkit.potion.*;
+import org.bukkit.scheduler.*;
 import org.bukkit.util.Vector;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Random;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class Mobs
         implements Listener {
@@ -205,6 +195,7 @@ public class Mobs
         }
         return false;
     }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onHit(ProjectileHitEvent e) {
         Projectile pj = e.getEntity();

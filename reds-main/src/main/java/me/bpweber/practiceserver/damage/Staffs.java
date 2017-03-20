@@ -40,27 +40,20 @@
  */
 package me.bpweber.practiceserver.damage;
 
-import com.google.common.collect.Lists;
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.player.Energy;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.utils.Particles;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import com.google.common.collect.*;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.pvp.*;
+import me.bpweber.practiceserver.utils.*;
+import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.potion.*;
+import org.bukkit.scheduler.*;
 
 import java.util.*;
 
@@ -86,6 +79,7 @@ public class Staffs
             event.setCancelled(true);
         }
     }
+
     @EventHandler
     public void onStaffShot(PlayerInteractEvent e) {
         Player p;
@@ -98,7 +92,7 @@ public class Staffs
                     e.setCancelled(true);
                     return;
                 }
-                if(canShoot.contains(p.getUniqueId())) {
+                if (canShoot.contains(p.getUniqueId())) {
                     e.setCancelled(true);
                     return;
                 }

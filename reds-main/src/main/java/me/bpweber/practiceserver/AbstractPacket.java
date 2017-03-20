@@ -6,16 +6,15 @@
  */
 package me.bpweber.practiceserver;
 
-import net.minecraft.server.v1_9_R2.ItemStack;
-import net.minecraft.server.v1_9_R2.NBTTagCompound;
-import net.minecraft.server.v1_9_R2.NBTTagList;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.entity.Player;
+import net.minecraft.server.v1_9_R2.*;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.*;
+import org.bukkit.entity.*;
 
 public class AbstractPacket {
 
     /**
      * KEEP THIS HERE FOR NOTHING HEHE
+     *
      * @param p
      * @param pcnt
      */

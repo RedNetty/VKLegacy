@@ -1,12 +1,9 @@
 package me.bpweber.practiceserver.money.Commands;
 
-import me.bpweber.practiceserver.money.GemPouches;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
+import me.bpweber.practiceserver.money.*;
+import org.bukkit.*;
+import org.bukkit.command.*;
+import org.bukkit.entity.*;
 
 public class Givepouch implements CommandExecutor {
     @Override

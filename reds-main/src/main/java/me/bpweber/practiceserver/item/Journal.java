@@ -10,13 +10,11 @@
  */
 package me.bpweber.practiceserver.item;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Journal {
     public static ItemStack journal() {

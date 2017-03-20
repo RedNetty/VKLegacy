@@ -1,13 +1,11 @@
 package me.bpweber.practiceserver.money;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Money {
     public static boolean hasEnoughGems(Player p, int amt) {

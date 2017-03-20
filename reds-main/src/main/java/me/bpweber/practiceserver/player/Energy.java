@@ -31,30 +31,21 @@
  */
 package me.bpweber.practiceserver.player;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.pvp.Alignments;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.damage.*;
+import me.bpweber.practiceserver.pvp.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.metadata.*;
+import org.bukkit.potion.*;
+import org.bukkit.scheduler.*;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class Energy
         implements Listener {
@@ -204,11 +195,11 @@ public class Energy
                     amt = 7;
                 } else if (p.getInventory().getItemInMainHand().getType() == Material.STONE_HOE || p.getInventory().getItemInMainHand().getType() == Material.WOOD_AXE || p.getInventory().getItemInMainHand().getType() == Material.STONE_SWORD) {
                     amt = 8;
-                } else if (p.getInventory().getItemInMainHand().getType() == Material.IRON_HOE ||p.getInventory().getItemInMainHand().getType() == Material.STONE_AXE || p.getInventory().getItemInMainHand().getType() == Material.IRON_SWORD) {
+                } else if (p.getInventory().getItemInMainHand().getType() == Material.IRON_HOE || p.getInventory().getItemInMainHand().getType() == Material.STONE_AXE || p.getInventory().getItemInMainHand().getType() == Material.IRON_SWORD) {
                     amt = 9;
-                } else if (p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_HOE ||p.getInventory().getItemInMainHand().getType() == Material.IRON_AXE || p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_SWORD) {
+                } else if (p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_HOE || p.getInventory().getItemInMainHand().getType() == Material.IRON_AXE || p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_SWORD) {
                     amt = 10;
-                } else if (p.getInventory().getItemInMainHand().getType() == Material.GOLD_HOE ||p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_AXE || p.getInventory().getItemInMainHand().getType() == Material.GOLD_SWORD) {
+                } else if (p.getInventory().getItemInMainHand().getType() == Material.GOLD_HOE || p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_AXE || p.getInventory().getItemInMainHand().getType() == Material.GOLD_SWORD) {
                     amt = 11;
                 } else if (p.getInventory().getItemInMainHand().getType() == Material.GOLD_AXE) {
                     amt = 12;

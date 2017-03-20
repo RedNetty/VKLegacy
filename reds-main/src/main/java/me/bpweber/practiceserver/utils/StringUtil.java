@@ -1,7 +1,7 @@
 package me.bpweber.practiceserver.utils;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.entity.*;
 
 /**
  * Created by Giovanni on 12-2-2017.

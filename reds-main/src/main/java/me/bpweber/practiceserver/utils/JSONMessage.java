@@ -1,19 +1,16 @@
 package me.bpweber.practiceserver.utils;
 
 
-import java.util.List;
-
-import net.minecraft.server.v1_9_R2.IChatBaseComponent;
-import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
-import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
-import org.bukkit.entity.Player;
+import com.google.gson.*;
+import net.minecraft.server.v1_9_R2.*;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_9_R2.entity.*;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.json.simple.JSONArray;
+import org.bukkit.inventory.meta.*;
+import org.json.simple.*;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import java.util.*;
 
 
 /**

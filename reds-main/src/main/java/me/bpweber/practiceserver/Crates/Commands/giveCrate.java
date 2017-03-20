@@ -1,12 +1,9 @@
 package me.bpweber.practiceserver.Crates.Commands;
 
-import me.bpweber.practiceserver.Crates.CratesMain;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
+import me.bpweber.practiceserver.Crates.*;
+import org.bukkit.*;
+import org.bukkit.command.*;
+import org.bukkit.entity.*;
 
 public class giveCrate implements CommandExecutor {
     @Override

@@ -1,28 +1,20 @@
 package me.bpweber.practiceserver.Crates;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.drops.CreateDrop;
-import me.bpweber.practiceserver.vendors.MerchantMechanics;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.drops.*;
+import me.bpweber.practiceserver.vendors.*;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.scheduler.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class CratesMain implements Listener {
     public ArrayList<Player> meme = new ArrayList<Player>();
@@ -76,12 +68,12 @@ public class CratesMain implements Listener {
                                 item = unlockCrate(2);
                             } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
                                 item = unlockCrate(3);
-                            }else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
+                            } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
                                 item = unlockCrate(4);
                             }
                             if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
                                     e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
-                                    e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")){
+                                    e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
                                 if (e.getCurrentItem().getAmount() == 1) {
                                     e.setCurrentItem(null);
                                 }

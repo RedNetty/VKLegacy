@@ -1,14 +1,11 @@
 package me.bpweber.practiceserver.ModerationMechanics.Commands;
 
-import de.Herbystar.TTA.TTA_Methods;
-import me.bpweber.practiceserver.PracticeServer;
+import de.Herbystar.TTA.*;
+import me.bpweber.practiceserver.*;
 import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.*;
+import org.bukkit.command.*;
+import org.bukkit.entity.*;
 
 /**
  * Created by jaxon on 3/12/2017.

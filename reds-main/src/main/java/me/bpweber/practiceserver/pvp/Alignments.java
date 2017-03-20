@@ -1,45 +1,30 @@
 package me.bpweber.practiceserver.pvp;
 
-import com.google.common.collect.Maps;
-import com.sk89q.worldguard.bukkit.WGBukkit;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import de.Herbystar.TTA.TTA_Methods;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.damage.Staffs;
-import me.bpweber.practiceserver.party.Scoreboards;
-import me.bpweber.practiceserver.player.Listeners;
-import me.bpweber.practiceserver.player.Stats.StatsMain;
-import me.bpweber.practiceserver.teleport.TeleportBooks;
-import me.bpweber.practiceserver.utils.StringUtil;
+import com.google.common.collect.*;
+import com.sk89q.worldguard.bukkit.*;
+import com.sk89q.worldguard.protection.*;
+import com.sk89q.worldguard.protection.flags.*;
+import de.Herbystar.TTA.*;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.damage.*;
+import me.bpweber.practiceserver.party.*;
+import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.player.Stats.*;
+import me.bpweber.practiceserver.teleport.*;
+import me.bpweber.practiceserver.utils.*;
 import org.bukkit.*;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.boss.*;
+import org.bukkit.configuration.file.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.scheduler.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 public class Alignments
         implements Listener {
@@ -111,7 +96,7 @@ public class Alignments
                         amt += (double) ((int) Math.round((double) vit * 0.3));
                     }
                     double healthToSet = p.getHealth() + amt;
-                    if(healthToSet > p.getMaxHealth()) {
+                    if (healthToSet > p.getMaxHealth()) {
                         p.setHealth(p.getMaxHealth());
                     } else p.setHealth(healthToSet);
                     double healthPercentage = (p.getHealth() / p.getMaxHealth());
@@ -223,7 +208,7 @@ public class Alignments
             StringUtil.sendCenteredMessage(p, ChatColor.GREEN.toString() + ChatColor.BOLD + "*** SAFE ZONE (DMG-OFF)***");
             TTA_Methods.sendTitle(p, ChatColor.GREEN.toString() + ChatColor.BOLD + "*** SAFE ZONE ***", 20, 20, 20, ChatColor.GRAY + "(PVP-OFF) (MONSTERS-OFF)", 20, 20, 20);
             p.playSound(p.getLocation(), Sound.ENTITY_WITHER_SHOOT, 0.25f, 0.3f);
-            
+
 
         }
         if (Alignments.isSafeZone(e.getFrom()) && !Alignments.isSafeZone(e.getTo())) {

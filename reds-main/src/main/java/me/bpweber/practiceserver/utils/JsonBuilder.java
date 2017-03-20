@@ -4,10 +4,9 @@
 
 package me.bpweber.practiceserver.utils;
 
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class JsonBuilder {
     private JsonObject json;

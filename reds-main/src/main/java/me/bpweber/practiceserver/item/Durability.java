@@ -1,21 +1,17 @@
 package me.bpweber.practiceserver.item;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.enchants.Orbs;
-import me.bpweber.practiceserver.player.Listeners;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.enchants.*;
+import me.bpweber.practiceserver.player.*;
 import org.bukkit.*;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Durability implements Listener {
 

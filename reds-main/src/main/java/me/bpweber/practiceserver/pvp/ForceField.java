@@ -1,25 +1,18 @@
 package me.bpweber.practiceserver.pvp;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import me.bpweber.practiceserver.PracticeServer;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.server.PluginDisableEvent;
+import com.google.common.collect.*;
+import com.google.common.util.concurrent.*;
+import me.bpweber.practiceserver.*;
+import org.bukkit.*;
+import org.bukkit.block.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.*;
+import org.bukkit.event.server.*;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class ForceField implements Listener {
     private final ExecutorService executorService = Executors.newSingleThreadExecutor(new ThreadFactoryBuilder().setNameFormat("PvP ForceField Thread").build());

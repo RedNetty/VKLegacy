@@ -24,28 +24,20 @@
  */
 package me.bpweber.practiceserver.profession;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.item.Durability;
-import me.bpweber.practiceserver.money.Money;
-import me.bpweber.practiceserver.vendors.ItemVendors;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.item.*;
+import me.bpweber.practiceserver.money.*;
+import me.bpweber.practiceserver.vendors.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class ProfessionMechanics
         implements Listener {

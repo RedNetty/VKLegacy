@@ -4,10 +4,10 @@ package me.bpweber.practiceserver.utils;
  * Created by jaxon on 2/26/2017.
  */
 
-import me.bpweber.practiceserver.PracticeServer;
-import org.bukkit.Location;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
+import me.bpweber.practiceserver.*;
+import org.bukkit.*;
+import org.bukkit.scheduler.*;
+import org.bukkit.util.*;
 
 public class UtilParticles {
 

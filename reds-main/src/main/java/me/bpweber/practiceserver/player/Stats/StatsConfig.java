@@ -1,13 +1,10 @@
 package me.bpweber.practiceserver.player.Stats;
 
-import me.bpweber.practiceserver.PracticeServer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import me.bpweber.practiceserver.*;
+import org.bukkit.*;
+import org.bukkit.configuration.file.*;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 public class StatsConfig {
     static FileConfiguration statFile;
