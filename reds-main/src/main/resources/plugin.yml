@@ -6,6 +6,7 @@ softdepend: [HolographicDisplays, BarAPI, BossBarAPI, VanishNoPacket, Vault, Wor
 loadbefore:
   [Essentials, VoxelSniper]
 commands:
+  giveOrb:
   giveNameTag:
   gcreate:
   toggleholodmg:

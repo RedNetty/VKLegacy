@@ -458,7 +458,7 @@ tablist:
  refresh: 30s
 
 # header and footer                               #
- header: "AutismRealms"
+ header: "AtherialRunes"
  footer: "play.mckillzone.net"
 
 # The skin to be displayed in the tab             #

@@ -1,10 +1,14 @@
 package me.bpweber.practiceserver.ModerationMechanics.Commands;
 
-import me.bpweber.practiceserver.pvp.*;
-import org.bukkit.*;
-import org.bukkit.command.*;
+import me.bpweber.practiceserver.pvp.Alignments;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Setrank implements CommandExecutor {
     public static ConcurrentHashMap<String, String> ranks = new ConcurrentHashMap<String, String>();
@@ -25,7 +29,7 @@ public class Setrank implements CommandExecutor {
                     }
                     if (Bukkit.getServer().getPlayer(player2) != null) {
                         sender.sendMessage(ChatColor.GREEN + "You have set the user " + player2 + " to the rank of " + r
-                                + " on all Autism Realms servers.");
+                                + " on all Atherial Runes servers.");
                         Alignments.updatePlayerAlignment(Bukkit.getServer().getPlayer(player2));
                     }
                 } else {

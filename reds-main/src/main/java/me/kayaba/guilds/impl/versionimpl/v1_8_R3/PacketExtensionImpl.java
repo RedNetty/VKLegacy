@@ -1,15 +1,17 @@
 package me.kayaba.guilds.impl.versionimpl.v1_8_R3;
 
 import io.netty.channel.*;
-import me.kayaba.guilds.api.event.*;
-import me.kayaba.guilds.api.util.packet.*;
-import me.kayaba.guilds.api.util.reflect.*;
-import me.kayaba.guilds.manager.*;
-import me.kayaba.guilds.util.*;
-import me.kayaba.guilds.util.reflect.*;
-import org.bukkit.entity.*;
+import me.kayaba.guilds.api.event.PacketReceiveEvent;
+import me.kayaba.guilds.api.event.PacketSendEvent;
+import me.kayaba.guilds.api.util.packet.PacketExtension;
+import me.kayaba.guilds.api.util.reflect.FieldAccessor;
+import me.kayaba.guilds.manager.ListenerManager;
+import me.kayaba.guilds.util.LoggerUtils;
+import me.kayaba.guilds.util.reflect.Reflections;
+import org.bukkit.entity.Player;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 @SuppressWarnings("ConstantConditions")
 public class PacketExtensionImpl implements PacketExtension {
@@ -92,8 +94,8 @@ public class PacketExtensionImpl implements PacketExtension {
 
         ChannelPipeline cp = c.pipeline();
         if (cp.names().contains("packet_handler")) {
-            if (cp.names().contains("KayabaGuilds")) {
-                cp.replace("KayabaGuilds", "KayabaGuilds", handler);
+            if (cp.names().contains("Guilds")) {
+                cp.replace("Guilds", "Guilds", handler);
             } else {
                 cp.addBefore("packet_handler", "KayabaGuilds", handler);
             }

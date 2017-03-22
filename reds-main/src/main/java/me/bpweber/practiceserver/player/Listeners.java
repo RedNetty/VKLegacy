@@ -1,38 +1,63 @@
 package me.bpweber.practiceserver.player;
 
-import de.Herbystar.TTA.*;
-import fr.neatmonster.nocheatplus.checks.*;
-import fr.neatmonster.nocheatplus.hooks.*;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
-import me.bpweber.practiceserver.ModerationMechanics.*;
-import me.bpweber.practiceserver.*;
-import me.bpweber.practiceserver.damage.*;
-import me.bpweber.practiceserver.enchants.*;
-import me.bpweber.practiceserver.item.*;
-import me.bpweber.practiceserver.mobs.*;
-import me.bpweber.practiceserver.player.Stats.*;
-import me.bpweber.practiceserver.pvp.*;
-import me.bpweber.practiceserver.teleport.*;
-import me.bpweber.practiceserver.utils.*;
+import de.Herbystar.TTA.TTA_Methods;
+import fr.neatmonster.nocheatplus.checks.CheckType;
+import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Ban;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.ToggleTrail;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
+import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.damage.Damage;
+import me.bpweber.practiceserver.enchants.Enchants;
+import me.bpweber.practiceserver.item.Journal;
+import me.bpweber.practiceserver.mobs.Mobs;
+import me.bpweber.practiceserver.player.Stats.StatsMain;
+import me.bpweber.practiceserver.pvp.Alignments;
+import me.bpweber.practiceserver.teleport.Hearthstone;
+import me.bpweber.practiceserver.teleport.TeleportBooks;
+import me.bpweber.practiceserver.utils.CheckIP;
+import me.bpweber.practiceserver.utils.Particles;
+import me.bpweber.practiceserver.utils.StringUtil;
+import me.kayaba.guilds.api.basic.Guild;
 import me.kayaba.guilds.enums.Permission;
-import me.konsolas.aac.*;
-import me.konsolas.aac.api.*;
+import me.kayaba.guilds.manager.PlayerManager;
+import me.konsolas.aac.AAC;
+import me.konsolas.aac.api.HackType;
+import me.konsolas.aac.api.PlayerViolationCommandEvent;
+import me.konsolas.aac.api.PlayerViolationEvent;
 import org.bukkit.*;
-import org.bukkit.attribute.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.block.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.MagmaCube;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.entity.EntityDamageEvent.*;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
-import org.bukkit.event.server.*;
-import org.bukkit.event.weather.*;
-import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.permissions.*;
-import org.bukkit.potion.*;
-import org.bukkit.scheduler.*;
+import org.bukkit.event.server.ServerCommandEvent;
+import org.bukkit.event.server.ServerListPingEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -94,27 +119,37 @@ public class Listeners
     public void refreshTabList(Player p) {
         int ping = TTA_Methods.getPing(p);
         {
-            if (StatsMain.getAlignment(p).contains("LAWFUL")) {
-                TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS"
-                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n",
-                        ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Alignment: \n" + ChatColor.GRAY + StatsMain.getAlignment(p) + "\n\n" +
-                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
-            } else {
-                TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AUTISM REALMS"
-                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n",
-                        ChatColor.DARK_AQUA + "Server TPS: \n" + ChatColor.GRAY + (int) TTA_Methods.getTPS(20) + "\n\n"
+            if (PlayerManager.getPlayer(p.getUniqueId()).hasGuild()) {
+                Guild g = PlayerManager.getPlayer(p.getUniqueId()).getGuild();
+                TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Atherial Runes\n"
+                                + ChatColor.GRAY + "     ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
+                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + g.getName() + "\n\n" +
+                                ChatColor.DARK_AQUA + "Guild Leader: " + ChatColor.GRAY + "\n" + g.getLeader().getName() + "\n\n" +
+                                ChatColor.DARK_AQUA + "Online Players: " + ChatColor.GRAY + "\n" + g.getOnlinePlayers().size() + " / " + g.getPlayers().size() + "\n\n" +
+                                ChatColor.DARK_AQUA + "Guild Points: " + ChatColor.GRAY + "\n" + g.getPoints() + "\n\n" +
+                                ChatColor.DARK_AQUA + "Guild Lives: " + ChatColor.GRAY + "\n" + g.getLives() + "\n" +
+                                ChatColor.GRAY + "==============================\n",
+                        ChatColor.GRAY + "   ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " INFO " + ChatColor.GRAY + "============\n\n"
                                 + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
                                 + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n"
                                 + ChatColor.DARK_AQUA + "Alignment: \n" + StatsMain.getAlignment(p) + "\n" + StatsMain.getAlignTime(p) + "\n\n" +
-                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100");
+                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n" +
+                                ChatColor.GRAY + "==============================\n");
+            } else {
+                TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Atherial Runes\n"
+                                + ChatColor.GRAY + "       ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
+                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n" +
+                                ChatColor.GRAY + "==============================\n",
+                        ChatColor.GRAY + "   ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " INFO " + ChatColor.GRAY + "============\n\n"
+                                + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
+                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n"
+                                + ChatColor.DARK_AQUA + "Alignment: \n" + StatsMain.getAlignment(p) + "\n" + StatsMain.getAlignTime(p) + "\n\n" +
+                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n" +
+                                ChatColor.GRAY + "==============================\n");
             }
 
         }
     }
-
     @EventHandler(priority = EventPriority.HIGH)
     public void onFallDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Horse && event.getCause() == DamageCause.FALL)
@@ -163,7 +198,7 @@ public class Listeners
                             public void run() {
                                 try {
                                     e.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&',
-                                            "&6[&bAutism-Catcher&6]\n &cYou may not log in with a VPN/Proxy! You have been banned!"));
+                                            "&6[&bAtherial-Catcher&6]\n &cYou may not log in with a VPN/Proxy! You have been banned!"));
                                 } catch (Exception e) {
                                 }
                             }
@@ -190,7 +225,7 @@ public class Listeners
                 if (e.getHackType() != HackType.FLY && e.getHackType() != HackType.INTERACT && e.getHackType() != HackType.BADPACKETS) {
                     if (e.getViolations() > 100) {
                         if (!previo.contains(e.getPlayer())) {
-                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GOLD + "]");
+                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "[" + ChatColor.AQUA + "Atherial-Catcher" + ChatColor.GOLD + "]");
                             StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
                             StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Player Suspected: " + ChatColor.GRAY + e.getPlayer().getName());
                             StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Violation Level: " + ChatColor.GRAY + e.getViolations());
@@ -207,7 +242,7 @@ public class Listeners
                     if (e.getViolations() > 600 && TTA_Methods.getPing(e.getPlayer()) < 170) {
                         Alignments.tagged.remove(e.getPlayer());
                         e.getPlayer().kickPlayer(ChatColor.RED + "You have been kicked!\n" +
-                                ChatColor.GRAY + "[" + ChatColor.AQUA + "Autism-Catcher" + ChatColor.GRAY + "]\n" +
+                                ChatColor.GRAY + "[" + ChatColor.AQUA + "Atherial-Catcher" + ChatColor.GRAY + "]\n" +
                                 ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
                         AAC.j.setViolationLevel(e.getPlayer(), e.getHackType(), 0);
 
@@ -254,7 +289,7 @@ public class Listeners
     //ANTICHEAT END
     @EventHandler
     public void onMOTD(ServerListPingEvent e) {
-        String motd = ChatColor.AQUA.toString() + ChatColor.BOLD + "Autism Realms";
+        String motd = ChatColor.AQUA.toString() + ChatColor.BOLD + "Atherial Runes";
         int i = 0;
         while (i < 30) {
             motd = String.valueOf(motd) + " ";
@@ -290,8 +325,8 @@ public class Listeners
             if (ModerationMechanics.isSub(p) || p.isOp()) {
                 e.allow();
             } else {
-                e.setKickMessage(String.valueOf(ChatColor.RED.toString()) + "Autism Realms is currently FULL." + "\n" +
-                        ChatColor.GRAY.toString() + "You can subscribe at http://AutismRealms.buycraft.net/ to get instant access.");
+                e.setKickMessage(String.valueOf(ChatColor.RED.toString()) + "Atherial Runes is currently FULL." + "\n" +
+                        ChatColor.GRAY.toString() + "You can subscribe at http://store.atherialrunes.net/ to get instant access.");
                 e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
                 return;
             }
@@ -329,8 +364,8 @@ public class Listeners
             p.sendMessage(" ");
             ++i;
         }
-        StringUtil.sendCenteredMessage(p, ChatColor.WHITE.toString() + ChatColor.BOLD + "Autism Realms Patch " + PracticeServer.plugin.getDescription().getVersion());
-        StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "http://AutismRealms.buycraft.net/");
+        StringUtil.sendCenteredMessage(p, ChatColor.WHITE.toString() + ChatColor.BOLD + "Atherial Runes Patch " + PracticeServer.plugin.getDescription().getVersion());
+        StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "http://store.atherialrunes.net/");
         p.sendMessage("");
         StringUtil.sendCenteredMessage(p, ChatColor.YELLOW + "You are on the " + ChatColor.BOLD + "US-1" + ChatColor.YELLOW + " shard.");
         StringUtil.sendCenteredMessage(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To manage your gameplay settings, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggles");

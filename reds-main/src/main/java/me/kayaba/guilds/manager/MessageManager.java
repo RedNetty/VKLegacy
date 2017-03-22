@@ -1,21 +1,29 @@
 package me.kayaba.guilds.manager;
 
-import com.earth2me.essentials.*;
-import me.bpweber.practiceserver.*;
-import me.kayaba.guilds.api.basic.*;
-import me.kayaba.guilds.api.util.*;
+import com.earth2me.essentials.Essentials;
+import me.bpweber.practiceserver.PracticeServer;
+import me.kayaba.guilds.api.basic.Guild;
+import me.kayaba.guilds.api.basic.MessageWrapper;
+import me.kayaba.guilds.api.util.Title;
 import me.kayaba.guilds.enums.*;
-import me.kayaba.guilds.exception.*;
-import me.kayaba.guilds.impl.versionimpl.v1_9_R1.*;
-import me.kayaba.guilds.util.*;
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.configuration.file.*;
-import org.bukkit.entity.*;
-import org.yaml.snakeyaml.scanner.*;
+import me.kayaba.guilds.exception.FatalKayabaGuildsException;
+import me.kayaba.guilds.impl.versionimpl.v1_9_R1.TitleImpl;
+import me.kayaba.guilds.util.CompatibilityUtils;
+import me.kayaba.guilds.util.LoggerUtils;
+import me.kayaba.guilds.util.StringUtils;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.yaml.snakeyaml.scanner.ScannerException;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MessageManager {
     private static final PracticeServer plugin = PracticeServer.getInstance();
@@ -76,8 +84,8 @@ public class MessageManager {
         String prefix = Message.CHAT_PREFIX.get();
         prefix = StringUtils.removeColors(StringUtils.fixColors(prefix));
 
-        if (!prefix.contains("KayabaGuilds")) {
-            Message.CHAT_PREFIX.set("&4&l[&7KayabaGuilds&4&l] &6");
+        if (!prefix.contains("Guilds")) {
+            Message.CHAT_PREFIX.set("&3<&lGUILDS&r&3> ");
             LoggerUtils.info("Prefix restored.");
         }
     }

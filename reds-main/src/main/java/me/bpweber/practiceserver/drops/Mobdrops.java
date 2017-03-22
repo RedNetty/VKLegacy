@@ -1,18 +1,26 @@
 package me.bpweber.practiceserver.drops;
 
-import me.bpweber.practiceserver.Crates.*;
-import me.bpweber.practiceserver.*;
-import me.bpweber.practiceserver.money.*;
-import me.bpweber.practiceserver.player.Stats.*;
-import me.bpweber.practiceserver.teleport.*;
-import org.bukkit.*;
-import org.bukkit.enchantments.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.entity.*;
-import org.bukkit.inventory.*;
+import me.bpweber.practiceserver.Crates.CratesMain;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.money.GemPouches;
+import me.bpweber.practiceserver.money.Money;
+import me.bpweber.practiceserver.player.Stats.StatsMain;
+import me.bpweber.practiceserver.teleport.TeleportBooks;
+import org.bukkit.Bukkit;
+import org.bukkit.EntityEffect;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 
 public class Mobdrops implements Listener {
@@ -71,14 +79,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("WOOD_")) {
                     gemamt = random.nextInt(3) + 3;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 40) {
+                        if (rd < 58) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 35) {
+                        if (rd < 55) {
                             dodrop = true;
                         }
-                    } else if (rd < 23) {
+                    } else if (rd < 53) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -101,14 +109,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("STONE_")) {
                     gemamt = random.nextInt(5) + 5;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 30) {
+                        if (rd < 47) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 24) {
+                        if (rd < 44) {
                             dodrop = true;
                         }
-                    } else if (rd < 20) {
+                    } else if (rd < 40) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -139,14 +147,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("IRON_")) {
                     gemamt = random.nextInt(10) + 10;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 22) {
+                        if (rd < 38) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 19) {
+                        if (rd < 35) {
                             dodrop = true;
                         }
-                    } else if (rd < 18) {
+                    } else if (rd < 34) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -177,14 +185,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("DIAMOND_")) {
                     gemamt = random.nextInt(30) + 24;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 17) {
+                        if (rd < 30) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 14) {
+                        if (rd < 28) {
                             dodrop = true;
                         }
-                    } else if (rd < 13) {
+                    } else if (rd < 27) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 9) {
@@ -212,14 +220,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("GOLD_")) {
                     gemamt = random.nextInt(50) + 14;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 15) {
+                        if (rd < 24) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 13) {
+                        if (rd < 20) {
                             dodrop = true;
                         }
-                    } else if (rd < 12) {
+                    } else if (rd < 19) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {

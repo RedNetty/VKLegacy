@@ -1,20 +1,28 @@
 package me.bpweber.practiceserver.Crates;
 
-import me.bpweber.practiceserver.*;
-import me.bpweber.practiceserver.drops.*;
-import me.bpweber.practiceserver.vendors.*;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.drops.CreateDrop;
+import me.bpweber.practiceserver.vendors.MerchantMechanics;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.block.*;
-import org.bukkit.event.inventory.*;
-import org.bukkit.event.player.*;
-import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.scheduler.*;
+import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
 
 public class CratesMain implements Listener {
     public ArrayList<Player> meme = new ArrayList<Player>();
@@ -27,9 +35,18 @@ public class CratesMain implements Listener {
         new BukkitRunnable() {
 
             public void run() {
-                String prefix = ChatColor.GRAY + "[" + ChatColor.AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AR" + ChatColor.GRAY + "]";
+                String prefix = ChatColor.GRAY + "[" + ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "AR" + ChatColor.GRAY + "]";
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    p.sendMessage(prefix + ChatColor.GREEN + " Help pay for the server today @ AutismRealms.buycraft.net! Buy Gem Pouches, Ranks, And Unbans!");
+                    Random random = new Random();
+                    int ran = random.nextInt(2) + 1;
+                    if (ran == 1) {
+                        p.sendMessage(prefix + ChatColor.GRAY + " Help pay for the server today at http://store.atherialrunes.net! Buy Gem Pouches, Ranks, And Unbans!");
+                    } else {
+                        p.sendMessage(prefix + ChatColor.GREEN + " Vote for prizes like orbs!");
+                        p.sendMessage(ChatColor.GRAY + " http://minecraft-server-list.com/server/391844/vote/");
+                        p.sendMessage(ChatColor.GRAY + " http://minecraft-mp.com/server/154080/vote/");
+
+                    }
                 }
             }
         }.runTaskTimerAsynchronously(PracticeServer.plugin, 2200, 2200);
