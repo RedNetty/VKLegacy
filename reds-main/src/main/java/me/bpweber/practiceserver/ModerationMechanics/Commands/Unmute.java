@@ -1,8 +1,11 @@
 package me.bpweber.practiceserver.ModerationMechanics.Commands;
 
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Unmute implements CommandExecutor {
 
@@ -17,13 +20,14 @@ public class Unmute implements CommandExecutor {
             }
             if (rank.equals("pmod") || p.isOp()) {
                 if (args.length == 1) {
-                    if (Mute.muted.containsKey(args[0].toLowerCase())) {
+                    Player pa = Bukkit.getPlayer(args[0].toLowerCase());
+                    if (Mute.muted.containsKey(pa.getUniqueId())) {
                         Player m;
-                        Mute.muted.remove(args[0].toLowerCase());
+                        Mute.muted.remove(pa.getUniqueId());
                         p.sendMessage(
                                 ChatColor.AQUA + "You have " + ChatColor.BOLD + "UNMUTED " + ChatColor.AQUA + args[0]);
-                        if (Bukkit.getPlayer((String) args[0]) != null
-                                && (m = Bukkit.getPlayer((String) args[0])).isOnline()) {
+                        if (Bukkit.getPlayer(args[0]) != null
+                                && (m = Bukkit.getPlayer(args[0])).isOnline()) {
                             m.sendMessage("");
                             m.sendMessage(ChatColor.GREEN + "Your " + ChatColor.BOLD + "GLOBAL MUTE" + ChatColor.GREEN
                                     + " has been removed.");

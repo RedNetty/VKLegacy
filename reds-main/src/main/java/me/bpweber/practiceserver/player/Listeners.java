@@ -122,7 +122,7 @@ public class Listeners
             if (PlayerManager.getPlayer(p.getUniqueId()).hasGuild()) {
                 Guild g = PlayerManager.getPlayer(p.getUniqueId()).getGuild();
                 TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Atherial Runes\n"
-                                + ChatColor.GRAY + "     ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
+                                + ChatColor.GRAY + "      \n===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
                                 + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + g.getName() + "\n\n" +
                                 ChatColor.DARK_AQUA + "Guild Leader: " + ChatColor.GRAY + "\n" + g.getLeader().getName() + "\n\n" +
                                 ChatColor.DARK_AQUA + "Online Players: " + ChatColor.GRAY + "\n" + g.getOnlinePlayers().size() + " / " + g.getPlayers().size() + "\n\n" +
@@ -137,7 +137,7 @@ public class Listeners
                                 ChatColor.GRAY + "==============================\n");
             } else {
                 TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Atherial Runes\n"
-                                + ChatColor.GRAY + "       ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
+                                + ChatColor.GRAY + "        \n===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
                                 + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n" +
                                 ChatColor.GRAY + "==============================\n",
                         ChatColor.GRAY + "   ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " INFO " + ChatColor.GRAY + "============\n\n"

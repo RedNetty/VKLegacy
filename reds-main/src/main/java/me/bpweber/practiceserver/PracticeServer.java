@@ -26,6 +26,7 @@ import me.bpweber.practiceserver.money.Economy.Economy;
 import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.party.Parties;
 import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.player.GamePlayer.GamePlayer;
 import me.bpweber.practiceserver.player.Stats.StatsMain;
 import me.bpweber.practiceserver.profession.Mining;
 import me.bpweber.practiceserver.profession.ProfessionMechanics;
@@ -142,7 +143,9 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
     private static ForceField ff;
     private static Nametag nt;
     private static StatsMain stat;
+    private static GamePlayer gp;
     private static PracticeServer instance;
+
 
     private final DependencyManager dependencyManager;
     private final ListenerManager listenerManager;
@@ -417,8 +420,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         this.getCommand("giveCrate").setExecutor(new giveCrate());
         this.getCommand("dump").setExecutor(new FixItem());
         this.getCommand("giveOrb").setExecutor(new giveOrb());
-
-
+        gp = new GamePlayer();
         cm = new CratesMain();
         stat = new StatsMain();
         trading = new Trading();
@@ -490,6 +492,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         spawners.onEnable();
         speedfish.onEnable();
         staffs.onEnable();
+        gp.onEnable();
         teleportBooks.onEnable();
         em.onEnable();
         toggles.onEnable();

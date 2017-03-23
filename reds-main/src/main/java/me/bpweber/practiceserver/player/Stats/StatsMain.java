@@ -1,14 +1,16 @@
 package me.bpweber.practiceserver.player.Stats;
 
-import me.bpweber.practiceserver.*;
-import me.bpweber.practiceserver.pvp.*;
-import org.bukkit.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.player.*;
-import org.bukkit.scheduler.*;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.player.GamePlayer.GameConfig;
+import me.bpweber.practiceserver.pvp.Alignments;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.UUID;
 
 /**
  * Created by jaxon on 3/18/2017.
@@ -21,9 +23,6 @@ public class StatsMain implements Listener {
     public void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         PracticeServer.log.info("[Practice Server] Stats Tracker has been enabled");
-        StatsConfig.setup();
-        StatsConfig.get().options().copyDefaults(true);
-        StatsConfig.save();
         serverStart();
         new BukkitRunnable() {
 
@@ -43,21 +42,22 @@ public class StatsMain implements Listener {
     public void saveAllStats() {
         for (UUID id : currentPlayerKills.keySet()) {
             int val = currentPlayerKills.get(id);
-            StatsConfig.get().set(id.toString() + ".Player Kills", val);
-            StatsConfig.save();
+            GameConfig.get().set(id + ".Stats.Player Kills", val);
+
         }
         for (UUID id : currentMonsterKills.keySet()) {
             int val = currentMonsterKills.get(id);
-            StatsConfig.get().set(id.toString() + ".Monster Kills", val);
-            StatsConfig.save();
+            GameConfig.get().set(id.toString() + ".Stats.Monster Kills", val);
+
         }
     }
 
     public void serverStart() {
-        for (String key : StatsConfig.get().getKeys(false)) {
-            int pkval = StatsConfig.get().getInt(key + ".Player Kills");
-            int mkval = StatsConfig.get().getInt(key + ".Monster Kills");
-            UUID id = UUID.fromString(key);
+        for (String ke : GameConfig.get().getKeys(false)) {
+            UUID key = UUID.fromString(ke);
+            int pkval = GameConfig.get().getInt(key + ".Stats.Player Kills");
+            int mkval = GameConfig.get().getInt(key + ".Stats.Monster Kills");
+            UUID id = key;
             currentPlayerKills.put(id, pkval);
             currentMonsterKills.put(id, mkval);
         }
@@ -102,29 +102,5 @@ public class StatsMain implements Listener {
         } else {
             return 0;
         }
-    }
-
-
-    @EventHandler
-    public void onLoginCheck(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-
-        if (!(currentPlayerKills.containsKey(p.getUniqueId()))) {
-            currentPlayerKills.put(p.getUniqueId(), 0);
-        }
-        if (!(currentMonsterKills.containsKey(p.getUniqueId()))) {
-            currentMonsterKills.put(p.getUniqueId(), 0);
-        }
-        new BukkitRunnable() {
-
-            public void run() {
-                int def = 0;
-                if (StatsConfig.get().contains(e.getPlayer().getUniqueId().toString())) {
-                    StatsConfig.get().addDefault(e.getPlayer().getUniqueId().toString() + ".Player Kills", def);
-                    StatsConfig.get().addDefault(e.getPlayer().getUniqueId().toString() + ".Monster Kills", def);
-                    StatsConfig.save();
-                }
-            }
-        }.runTaskLater(PracticeServer.plugin, 40);
     }
 }

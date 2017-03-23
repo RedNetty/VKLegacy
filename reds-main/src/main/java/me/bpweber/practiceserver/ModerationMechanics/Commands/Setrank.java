@@ -7,16 +7,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Setrank implements CommandExecutor {
-    public static ConcurrentHashMap<String, String> ranks = new ConcurrentHashMap<String, String>();
+    public static ConcurrentHashMap<UUID, String> ranks = new ConcurrentHashMap<UUID, String>();
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("setrank") && sender.isOp() || sender instanceof ConsoleCommandSender) {
             if (args.length == 2) {
-                String player2 = args[0];
+                Player player2 = Bukkit.getPlayer(args[0]);
                 String r = args[1].toLowerCase();
                 if (r.equals("pmod") || r.equals("sub") || r.equals("sub+") || r.equals("sub++")
                         || r.equals("default")) {
@@ -25,12 +27,12 @@ public class Setrank implements CommandExecutor {
                             ranks.remove(player2);
                         }
                     } else {
-                        ranks.put(player2, r);
+                        ranks.put(player2.getUniqueId(), r);
                     }
-                    if (Bukkit.getServer().getPlayer(player2) != null) {
+                    if (Bukkit.getServer().getPlayer(player2.getUniqueId()) != null) {
                         sender.sendMessage(ChatColor.GREEN + "You have set the user " + player2 + " to the rank of " + r
                                 + " on all Atherial Runes servers.");
-                        Alignments.updatePlayerAlignment(Bukkit.getServer().getPlayer(player2));
+                        Alignments.updatePlayerAlignment(player2);
                     }
                 } else {
                     sender.sendMessage(ChatColor.RED.toString() + ChatColor.BOLD + "Incorrect Syntax");

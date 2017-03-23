@@ -1,24 +1,21 @@
 package me.bpweber.practiceserver.money.Economy;
 
-import me.bpweber.practiceserver.*;
-import org.bukkit.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.player.*;
-import org.bukkit.scheduler.*;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.player.GamePlayer.GameConfig;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class Economy implements Listener {
 
     public static HashMap<UUID, Integer> currentBalance = new HashMap<UUID, Integer>();
 
     public void onEnable() {
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         PracticeServer.log.info("[Practice Server] Economy has been enabled");
-        EcoConfig.setup();
-        EcoConfig.get().options().copyDefaults(true);
-        EcoConfig.save();
         serverStart();
         new BukkitRunnable() {
 
@@ -38,15 +35,15 @@ public class Economy implements Listener {
     public void saveAllBalance() {
         for (UUID id : currentBalance.keySet()) {
             int bal = currentBalance.get(id);
-            EcoConfig.get().set(id.toString(), bal);
-            EcoConfig.save();
+            GameConfig.get().set(id + ".Economy.Money Balance", bal);
+
         }
     }
 
     public void serverStart() {
-        for (String key : EcoConfig.get().getKeys(false)) {
-            int val = EcoConfig.get().getInt(key);
+        for (String key : GameConfig.get().getKeys(false)) {
             UUID id = UUID.fromString(key);
+            int val = GameConfig.get().getInt(id + ".Economy.Money Balance");
             currentBalance.put(id, val);
         }
 
@@ -79,24 +76,5 @@ public class Economy implements Listener {
             currentBalance.remove(id);
             currentBalance.put(id, nB);
         }
-    }
-
-    @EventHandler
-    public void onLoginCheck(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-
-        if (!(currentBalance.containsKey(p.getUniqueId()))) {
-            currentBalance.put(p.getUniqueId(), 0);
-        }
-        new BukkitRunnable() {
-
-            public void run() {
-                int bal = 0;
-                if (EcoConfig.get().contains(e.getPlayer().getUniqueId().toString())) {
-                    EcoConfig.get().addDefault(e.getPlayer().getUniqueId().toString(), bal);
-                    EcoConfig.save();
-                }
-            }
-        }.runTaskLater(PracticeServer.plugin, 40);
     }
 }

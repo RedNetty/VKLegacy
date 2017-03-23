@@ -1,14 +1,16 @@
 package me.bpweber.practiceserver.ModerationMechanics;
 
-import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
-import me.bpweber.practiceserver.*;
-import org.bukkit.*;
-import org.bukkit.configuration.file.*;
-import org.bukkit.entity.*;
-import org.bukkit.scheduler.*;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Ban;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.player.GamePlayer.GameConfig;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.*;
-import java.util.*;
+import java.util.UUID;
 
 public class ModerationMechanics {
     public Setrank setrank;
@@ -19,13 +21,13 @@ public class ModerationMechanics {
         new BukkitRunnable() {
 
             public void run() {
-                for (String s2 : Mute.muted.keySet()) {
+                for (UUID s2 : Mute.muted.keySet()) {
                     if (s2 == null)
                         continue;
                     if (Mute.muted.get(s2) <= 0) {
                         Player p;
                         Mute.muted.remove(s2);
-                        if (Bukkit.getPlayer((String) s2) == null || !(p = Bukkit.getPlayer((String) s2)).isOnline())
+                        if (Bukkit.getPlayer(s2) == null || !(p = Bukkit.getPlayer(s2)).isOnline())
                             continue;
                         p.sendMessage(ChatColor.GREEN + "Your " + ChatColor.BOLD + "GLOBAL MUTE" + ChatColor.GREEN
                                 + " has expired.");
@@ -48,48 +50,18 @@ public class ModerationMechanics {
                 }
             }
         }.runTaskTimerAsynchronously(PracticeServer.plugin, 20, 20);
-        File file = new File(PracticeServer.plugin.getDataFolder(), "bans.yml");
-        YamlConfiguration config = new YamlConfiguration();
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-        try {
-            config.load(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (config.getConfigurationSection("banned") != null) {
-            for (String key : config.getConfigurationSection("banned").getKeys(false)) {
-                time = config.getConfigurationSection("banned").getInt(key);
-                UUID id = UUID.fromString(key);
-                Ban.banned.put(id, time);
-            }
-        }
-        if (config.getConfigurationSection("muted") != null) {
-            for (String key : config.getConfigurationSection("muted").getKeys(false)) {
-                time = config.getConfigurationSection("muted").getInt(key);
-                Mute.muted.put(key, time);
-            }
-        }
-        this.loadranks();
     }
 
     public void onDisable() {
         PracticeServer.log.info("[ModerationMechanics] has been disabled.");
-        File file = new File(PracticeServer.plugin.getDataFolder(), "bans.yml");
-        YamlConfiguration config = new YamlConfiguration();
         for (UUID s2 : Ban.banned.keySet()) {
-            config.set("banned." + s2, Ban.banned.get(s2));
+            GameConfig.get().set(s2 + ".Main.Banned", Ban.banned.get(s2));
         }
-        for (String s2 : Mute.muted.keySet()) {
-            config.set("muted." + s2, Mute.muted.get(s2));
+        for (UUID s2 : Mute.muted.keySet()) {
+            GameConfig.get().set(s2 + ".Main.Muted", Mute.muted.get(s2));
         }
         try {
-            config.save(file);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -98,53 +70,32 @@ public class ModerationMechanics {
 
     public static boolean isSub(Player p) {
         String rank;
-        if (Setrank.ranks.containsKey(p.getName()) && ((rank = Setrank.ranks.get(p.getName())).equalsIgnoreCase("sub")
-                || rank.equalsIgnoreCase("sub+") || rank.equalsIgnoreCase("sub++") || p.isOp())) {
-            return true;
-        }
-        return false;
+        return Setrank.ranks.containsKey(p.getUniqueId()) && ((rank = Setrank.ranks.get(p.getUniqueId())).equalsIgnoreCase("sub")
+                || rank.equalsIgnoreCase("sub+") || rank.equalsIgnoreCase("sub++") || p.isOp());
     }
 
     public static boolean isStaff(Player p) {
 
-        if (Setrank.ranks.containsKey(p.getName()) && (Setrank.ranks.get(p.getName())).equalsIgnoreCase("PMOD")
-                || p.isOp()) {
-            return true;
-        }
-        return false;
+        return Setrank.ranks.containsKey(p.getUniqueId()) && (Setrank.ranks.get(p.getUniqueId())).equalsIgnoreCase("PMOD")
+                || p.isOp();
     }
 
     void loadranks() {
-        File file = new File(PracticeServer.plugin.getDataFolder(), "ranks.yml");
-        YamlConfiguration config = new YamlConfiguration();
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-        try {
-            config.load(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (config.getConfigurationSection("ranks") != null) {
-            for (String key : config.getConfigurationSection("ranks").getKeys(false)) {
-                String p = config.getConfigurationSection("ranks").getString(key);
-                Setrank.ranks.put(key, p);
-            }
+        for (String ke : GameConfig.get().getKeys(false)) {
+            UUID key = UUID.fromString(ke);
+            String p = GameConfig.get().get(key + ".Main.Rank").toString();
+            Setrank.ranks.put(key, p);
         }
     }
 
+
+
     void saveranks() {
-        File file = new File(PracticeServer.plugin.getDataFolder(), "ranks.yml");
-        YamlConfiguration config = new YamlConfiguration();
-        for (String s : Setrank.ranks.keySet()) {
-            config.set("ranks." + s, Setrank.ranks.get(s));
+        for (UUID s : Setrank.ranks.keySet()) {
+            GameConfig.get().set(s + ".Main.Rank", Setrank.ranks.get(s));
         }
         try {
-            config.save(file);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

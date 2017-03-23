@@ -1,13 +1,17 @@
 package me.bpweber.practiceserver.ModerationMechanics.Commands;
 
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-import java.util.concurrent.*;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Mute implements CommandExecutor {
-    public static ConcurrentHashMap<String, Integer> muted = new ConcurrentHashMap<String, Integer>();
+    public static ConcurrentHashMap<UUID, Integer> muted = new ConcurrentHashMap<UUID, Integer>();
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player p = (Player) sender;
@@ -26,7 +30,7 @@ public class Mute implements CommandExecutor {
                                 + " a players mute.");
                     } else {
                         try {
-                            muted.put(player.toLowerCase(), Integer.parseInt(args[1]) * 60);
+                            muted.put(p.getUniqueId(), Integer.parseInt(args[1]) * 60);
                             p.sendMessage(ChatColor.AQUA + "You have issued a " + args[1] + " minute " + ChatColor.BOLD
                                     + "MUTE" + ChatColor.AQUA + " on the user " + ChatColor.BOLD + player);
                             p.sendMessage(
