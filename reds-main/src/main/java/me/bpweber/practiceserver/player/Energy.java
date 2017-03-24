@@ -31,21 +31,29 @@
  */
 package me.bpweber.practiceserver.player;
 
-import me.bpweber.practiceserver.*;
-import me.bpweber.practiceserver.damage.*;
-import me.bpweber.practiceserver.pvp.*;
-import org.bukkit.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.block.*;
-import org.bukkit.event.entity.*;
-import org.bukkit.event.player.*;
-import org.bukkit.inventory.*;
-import org.bukkit.metadata.*;
-import org.bukkit.potion.*;
-import org.bukkit.scheduler.*;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.damage.Damage;
+import me.bpweber.practiceserver.pvp.Alignments;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashMap;
 
 public class Energy
         implements Listener {
@@ -54,7 +62,7 @@ public class Energy
 
     public void onEnable() {
         PracticeServer.log.info("[Energy] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         new BukkitRunnable() {
 
             public void run() {
@@ -84,7 +92,7 @@ public class Energy
                     p.setSprinting(false);
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 1, 1);
+        }.runTaskTimerAsynchronously(PracticeServer.plugin, 0, 1);
         new BukkitRunnable() {
 
             public void run() {
@@ -134,10 +142,10 @@ public class Energy
         if (Alignments.isSafeZone(p.getLocation())) {
             return;
         }
-        if (p.hasMetadata("lastenergy") && System.currentTimeMillis() - ((MetadataValue) p.getMetadata("lastenergy").get(0)).asLong() < 100) {
+        if (p.hasMetadata("lastenergy") && System.currentTimeMillis() - p.getMetadata("lastenergy").get(0).asLong() < 100) {
             return;
         }
-        p.setMetadata("lastenergy", (MetadataValue) new FixedMetadataValue(PracticeServer.plugin, (Object) System.currentTimeMillis()));
+        p.setMetadata("lastenergy", new FixedMetadataValue(PracticeServer.plugin, System.currentTimeMillis()));
         Energy.setEnergy(p, Energy.getEnergy(p) - (float) amt);
     }
 

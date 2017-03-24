@@ -20,17 +20,17 @@ public class Setrank implements CommandExecutor {
             if (args.length == 2) {
                 Player player2 = Bukkit.getPlayer(args[0]);
                 String r = args[1].toLowerCase();
-                if (r.equals("pmod") || r.equals("sub") || r.equals("sub+") || r.equals("sub++")
-                        || r.equals("default")) {
-                    if (r.equals("default")) {
-                        if (ranks.containsKey(player2)) {
-                            ranks.remove(player2);
+                if (r.equalsIgnoreCase("pmod") || r.equalsIgnoreCase("sub") || r.equalsIgnoreCase("sub+") || r.equalsIgnoreCase("sub++")
+                        || r.equalsIgnoreCase("default")) {
+                    if (r.equalsIgnoreCase("default")) {
+                        if (ranks.containsKey(player2.getUniqueId())) {
+                            ranks.remove(player2.getUniqueId());
                         }
                     } else {
                         ranks.put(player2.getUniqueId(), r);
                     }
                     if (Bukkit.getServer().getPlayer(player2.getUniqueId()) != null) {
-                        sender.sendMessage(ChatColor.GREEN + "You have set the user " + player2 + " to the rank of " + r
+                        sender.sendMessage(ChatColor.GREEN + "You have set the user " + player2.getName() + " to the rank of " + r
                                 + " on all Atherial Runes servers.");
                         Alignments.updatePlayerAlignment(player2);
                     }

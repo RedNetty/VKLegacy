@@ -43,21 +43,22 @@ public class StatsMain implements Listener {
         for (UUID id : currentPlayerKills.keySet()) {
             int val = currentPlayerKills.get(id);
             GameConfig.get().set(id + ".Stats.Player Kills", val);
+            GameConfig.save();
 
         }
         for (UUID id : currentMonsterKills.keySet()) {
             int val = currentMonsterKills.get(id);
             GameConfig.get().set(id.toString() + ".Stats.Monster Kills", val);
+            GameConfig.save();
 
         }
     }
 
     public void serverStart() {
-        for (String ke : GameConfig.get().getKeys(false)) {
-            UUID key = UUID.fromString(ke);
+        for (String key : GameConfig.get().getKeys(false)) {
             int pkval = GameConfig.get().getInt(key + ".Stats.Player Kills");
             int mkval = GameConfig.get().getInt(key + ".Stats.Monster Kills");
-            UUID id = key;
+            UUID id = UUID.fromString(key);
             currentPlayerKills.put(id, pkval);
             currentMonsterKills.put(id, mkval);
         }

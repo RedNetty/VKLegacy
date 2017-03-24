@@ -28,6 +28,8 @@ import me.bpweber.practiceserver.party.Parties;
 import me.bpweber.practiceserver.player.*;
 import me.bpweber.practiceserver.player.GamePlayer.GamePlayer;
 import me.bpweber.practiceserver.player.Stats.StatsMain;
+import me.bpweber.practiceserver.player.Tutorial.Commands.Skip;
+import me.bpweber.practiceserver.player.Tutorial.TutorialMain;
 import me.bpweber.practiceserver.profession.Mining;
 import me.bpweber.practiceserver.profession.ProfessionMechanics;
 import me.bpweber.practiceserver.pvp.Alignments;
@@ -143,7 +145,8 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
     private static ForceField ff;
     private static Nametag nt;
     private static StatsMain stat;
-    private static GamePlayer gp;
+    private static GamePlayer gap;
+    private static TutorialMain tut;
     private static PracticeServer instance;
 
 
@@ -420,8 +423,10 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         this.getCommand("giveCrate").setExecutor(new giveCrate());
         this.getCommand("dump").setExecutor(new FixItem());
         this.getCommand("giveOrb").setExecutor(new giveOrb());
-        gp = new GamePlayer();
+        this.getCommand("Skip").setExecutor(new Skip());
+        gap = new GamePlayer();
         cm = new CratesMain();
+        tut = new TutorialMain();
         stat = new StatsMain();
         trading = new Trading();
         nt = new Nametag();
@@ -459,9 +464,11 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         teleportBooks = new TeleportBooks();
         toggles = new Toggles();
         untradeable = new Untradeable();
+        gap.onEnable();
         alignments.onEnable();
         antibuild.onEnable();
         banks.onEnable();
+        moderationMechanics.onEnable();
         buddies.onEnable();
         chatMechanics.onEnable();
         damage.onEnable();
@@ -482,8 +489,8 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         merchantMechanics.onEnable();
         mining.onEnable();
         mobdrops.onEnable();
+        tut.onEnable();
         mobs.onEnable();
-        moderationMechanics.onEnable();
         orbs.onEnable();
         parties.onEnable();
         professionMechanics.onEnable();
@@ -492,7 +499,6 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         spawners.onEnable();
         speedfish.onEnable();
         staffs.onEnable();
-        gp.onEnable();
         teleportBooks.onEnable();
         em.onEnable();
         toggles.onEnable();

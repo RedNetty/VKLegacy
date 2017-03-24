@@ -98,13 +98,13 @@ public class Listeners
 
                     if (!ModerationMechanics.isSub(p) || ToggleTrail.toggletrail.contains(p.getName().toLowerCase()))
                         continue;
-                    if (Setrank.ranks.get(p.getName()).equalsIgnoreCase("sub")) {
+                    if (Setrank.ranks.get(p.getUniqueId()).equalsIgnoreCase("sub")) {
                         Particles.VILLAGER_HAPPY.display(0.125f, 0.125f, 0.125f, 0.02f, 10, p.getLocation().add(x, y, z), 20.0);
                     }
-                    if (Setrank.ranks.get(p.getName()).equalsIgnoreCase("sub+")) {
+                    if (Setrank.ranks.get(p.getUniqueId()).equalsIgnoreCase("sub+")) {
                         Particles.FLAME.display(0.0f, 0.0f, 0.0f, 0.02f, 10, p.getLocation().add(x, y, z), 20.0);
                     }
-                    if (!Setrank.ranks.get(p.getName()).equalsIgnoreCase("sub++")) continue;
+                    if (!Setrank.ranks.get(p.getUniqueId()).equalsIgnoreCase("sub++")) continue;
                     Particles.SPELL_WITCH.display(0.0f, 0.0f, 0.0f, 1.0f, 10, p.getLocation().add(x, y, z), 20.0);
 
                 }
@@ -122,7 +122,7 @@ public class Listeners
             if (PlayerManager.getPlayer(p.getUniqueId()).hasGuild()) {
                 Guild g = PlayerManager.getPlayer(p.getUniqueId()).getGuild();
                 TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Atherial Runes\n"
-                                + ChatColor.GRAY + "      \n===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
+                                + ChatColor.GRAY + "\n      ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
                                 + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + g.getName() + "\n\n" +
                                 ChatColor.DARK_AQUA + "Guild Leader: " + ChatColor.GRAY + "\n" + g.getLeader().getName() + "\n\n" +
                                 ChatColor.DARK_AQUA + "Online Players: " + ChatColor.GRAY + "\n" + g.getOnlinePlayers().size() + " / " + g.getPlayers().size() + "\n\n" +
@@ -137,7 +137,7 @@ public class Listeners
                                 ChatColor.GRAY + "==============================\n");
             } else {
                 TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Atherial Runes\n"
-                                + ChatColor.GRAY + "        \n===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
+                                + ChatColor.GRAY + "\n      ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
                                 + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n" +
                                 ChatColor.GRAY + "==============================\n",
                         ChatColor.GRAY + "   ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " INFO " + ChatColor.GRAY + "============\n\n"
@@ -159,7 +159,7 @@ public class Listeners
 
     @EventHandler
     public void dropItem(PlayerDropItemEvent e) {
-        if (e.getPlayer().getGameMode() == GameMode.CREATIVE && !e.getPlayer().getName().equalsIgnoreCase("RedsEmporium")) {
+        if (e.getPlayer().isOp() && !e.getPlayer().getName().equalsIgnoreCase("RedsEmporium")) {
             e.setCancelled(true);
         }
     }

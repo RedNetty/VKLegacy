@@ -17,6 +17,7 @@ public class GamePlayer implements Listener {
         Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         GameConfig.setup();
         GameConfig.get().options().copyDefaults(true);
+        GameConfig.save();
 
     }
 
@@ -34,7 +35,8 @@ public class GamePlayer implements Listener {
                 @Override
                 public void run() {
                     Player p = e.getPlayer();
-                    GameConfig.get().set(p.getUniqueId() + ".Username", p.getName());
+                    GameConfig.get().set(p.getUniqueId() + ".Info.Username", p.getName());
+                    GameConfig.get().set(p.getUniqueId() + ".Info.IP Address", p.getAddress().toString());
                     GameConfig.get().set(p.getUniqueId() + ".Main.Rank", "Default");
                     GameConfig.get().set(p.getUniqueId() + ".Main.Banned", 0);
                     GameConfig.get().set(p.getUniqueId() + ".Main.Muted", 0);

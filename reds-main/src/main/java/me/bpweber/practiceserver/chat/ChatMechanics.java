@@ -32,19 +32,31 @@
  */
 package me.bpweber.practiceserver.chat;
 
-import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
-import me.bpweber.practiceserver.*;
-import me.bpweber.practiceserver.utils.*;
-import net.minecraft.server.v1_9_R2.*;
-import org.bukkit.*;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
+import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.utils.JSONMessage;
+import net.minecraft.server.v1_9_R2.IChatBaseComponent;
+import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.*;
-import org.bukkit.craftbukkit.v1_9_R2.entity.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.player.*;
+import org.bukkit.Sound;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerChatTabCompleteEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
@@ -285,7 +297,7 @@ public class ChatMechanics
         }
         return true;
     }
-    /*
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(PlayerCommandPreprocessEvent e) {
         Player p = e.getPlayer();
@@ -320,7 +332,7 @@ public class ChatMechanics
                     p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
                 }
             } else if (ModerationMechanics.isSub(p)) {
-                if (!(s.equals("roll") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("toggletrail"))) {
+                if (!(s.equals("roll") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("toggletrail") || s.equals("g") || s.equals("guild") || s.equals("guilds") || s.equals("abandon") || s.equals("create") || s.equals("join") || s.equals("gi"))) {
                     e.setCancelled(true);
                     p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
                 }
@@ -329,7 +341,7 @@ public class ChatMechanics
                 p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
             }
         }
-    } */ // WTF RED
+    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChatTabComplete(PlayerChatTabCompleteEvent e) {

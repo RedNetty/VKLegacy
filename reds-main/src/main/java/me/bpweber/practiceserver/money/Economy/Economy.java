@@ -35,7 +35,8 @@ public class Economy implements Listener {
     public void saveAllBalance() {
         for (UUID id : currentBalance.keySet()) {
             int bal = currentBalance.get(id);
-            GameConfig.get().set(id + ".Economy.Money Balance", bal);
+            GameConfig.get().set(id.toString() + ".Economy.Money Balance", bal);
+            GameConfig.save();
 
         }
     }

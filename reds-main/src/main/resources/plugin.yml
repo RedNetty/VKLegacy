@@ -6,6 +6,7 @@ softdepend: [HolographicDisplays, BarAPI, BossBarAPI, VanishNoPacket, Vault, Wor
 loadbefore:
   [Essentials, VoxelSniper]
 commands:
+  Skip:
   giveOrb:
   giveNameTag:
   gcreate:
@@ -79,5 +80,3 @@ permissions:
       default: true
    PracticeServer.info:
        default: true
-   PracticeServer.novaguilds:
-      default: true

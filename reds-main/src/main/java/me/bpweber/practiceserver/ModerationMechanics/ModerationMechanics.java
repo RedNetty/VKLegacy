@@ -8,15 +8,18 @@ import me.bpweber.practiceserver.player.GamePlayer.GameConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
-public class ModerationMechanics {
+public class ModerationMechanics implements Listener {
     public Setrank setrank;
 
     public void onEnable() {
-        int time;
+        this.loadranks();
+        this.loadBans();
+        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
         PracticeServer.log.info("[ModerationMechanics] has been enabled.");
         new BukkitRunnable() {
 
@@ -24,7 +27,7 @@ public class ModerationMechanics {
                 for (UUID s2 : Mute.muted.keySet()) {
                     if (s2 == null)
                         continue;
-                    if (Mute.muted.get(s2) <= 0) {
+                    if (Mute.muted.get(s2) < 0) {
                         Player p;
                         Mute.muted.remove(s2);
                         if (Bukkit.getPlayer(s2) == null || !(p = Bukkit.getPlayer(s2)).isOnline())
@@ -55,10 +58,12 @@ public class ModerationMechanics {
     public void onDisable() {
         PracticeServer.log.info("[ModerationMechanics] has been disabled.");
         for (UUID s2 : Ban.banned.keySet()) {
-            GameConfig.get().set(s2 + ".Main.Banned", Ban.banned.get(s2));
+            GameConfig.get().set(s2.toString() + ".Main.Banned", Ban.banned.get(s2));
+            GameConfig.save();
         }
         for (UUID s2 : Mute.muted.keySet()) {
-            GameConfig.get().set(s2 + ".Main.Muted", Mute.muted.get(s2));
+            GameConfig.get().set(s2.toString() + ".Main.Muted", Mute.muted.get(s2));
+            GameConfig.save();
         }
         try {
 
@@ -83,16 +88,27 @@ public class ModerationMechanics {
     void loadranks() {
         for (String ke : GameConfig.get().getKeys(false)) {
             UUID key = UUID.fromString(ke);
-            String p = GameConfig.get().get(key + ".Main.Rank").toString();
+            String p = GameConfig.get().getString(ke + ".Main.Rank");
             Setrank.ranks.put(key, p);
+            System.out.print(key);
+        }
+    }
+
+    void loadBans() {
+        for (String ke : GameConfig.get().getKeys(false)) {
+            UUID key = UUID.fromString(ke);
+            int p = GameConfig.get().getInt(ke + ".Main.Banned");
+            Ban.banned.put(key, p);
         }
     }
 
 
 
+
     void saveranks() {
         for (UUID s : Setrank.ranks.keySet()) {
-            GameConfig.get().set(s + ".Main.Rank", Setrank.ranks.get(s));
+            GameConfig.get().set(s.toString() + ".Main.Rank", Setrank.ranks.get(s));
+            GameConfig.save();
         }
         try {
 

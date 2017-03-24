@@ -1,18 +1,21 @@
 package me.bpweber.practiceserver.profession;
 
-import me.bpweber.practiceserver.ModerationMechanics.*;
-import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
+import me.bpweber.practiceserver.PracticeServer;
 import org.bukkit.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.block.*;
-import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.*;
-import org.bukkit.potion.*;
-import org.bukkit.scheduler.*;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Mining
         implements Listener {
@@ -88,7 +91,6 @@ public class Mining
         ItemMeta im = is.getItemMeta();
         if (ModerationMechanics.isSub(p)) {
             is.setAmount(2);
-            p.sendMessage(ChatColor.AQUA + "Sub Rank: " + ChatColor.GRAY + "Since you are sub you got double the ore!");
         }
         im.setDisplayName(cc + name + " Ore");
         im.setLore(Arrays.asList(ChatColor.GRAY.toString() + ChatColor.ITALIC + lore));
