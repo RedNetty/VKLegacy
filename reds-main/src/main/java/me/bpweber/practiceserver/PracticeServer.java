@@ -1,11 +1,11 @@
 package me.bpweber.practiceserver;
 
-import me.bpweber.practiceserver.Crates.Commands.giveCrate;
-import me.bpweber.practiceserver.Crates.Commands.giveKey;
-import me.bpweber.practiceserver.Crates.Commands.giveNameTag;
-import me.bpweber.practiceserver.Crates.Commands.giveOrb;
-import me.bpweber.practiceserver.Crates.CratesMain;
-import me.bpweber.practiceserver.Crates.Nametag;
+import me.bpweber.practiceserver.DonationMechanics.Commands.giveCrate;
+import me.bpweber.practiceserver.DonationMechanics.Commands.giveKey;
+import me.bpweber.practiceserver.DonationMechanics.Commands.giveNameTag;
+import me.bpweber.practiceserver.DonationMechanics.Commands.giveOrb;
+import me.bpweber.practiceserver.DonationMechanics.Crates.CratesMain;
+import me.bpweber.practiceserver.DonationMechanics.Nametags.Nametag;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
 import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.chat.ChatMechanics;

@@ -1,7 +1,7 @@
 package me.bpweber.practiceserver.player;
 
-import com.vexsoftware.votifier.bungee.events.VotifierEvent;
 import com.vexsoftware.votifier.model.Vote;
+import com.vexsoftware.votifier.model.VotifierEvent;
 import de.Herbystar.TTA.TTA_Methods;
 import fr.neatmonster.nocheatplus.checks.CheckType;
 import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
@@ -13,6 +13,7 @@ import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.damage.Damage;
 import me.bpweber.practiceserver.enchants.Enchants;
+import me.bpweber.practiceserver.item.Items;
 import me.bpweber.practiceserver.item.Journal;
 import me.bpweber.practiceserver.mobs.Mobs;
 import me.bpweber.practiceserver.player.Stats.StatsMain;
@@ -122,7 +123,7 @@ public class Listeners
         {
             if (PlayerManager.getPlayer(p.getUniqueId()).hasGuild()) {
                 Guild g = PlayerManager.getPlayer(p.getUniqueId()).getGuild();
-                TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Atherial Runes\n"
+                TTA_Methods.sendTablist(p, ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Zeniths Legacy\n"
                                 + ChatColor.GRAY + "\n      ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
                                 + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + g.getName() + "\n\n" +
                                 ChatColor.DARK_AQUA + "Guild Leader: " + ChatColor.GRAY + "\n" + g.getLeader().getName() + "\n\n" +
@@ -137,7 +138,7 @@ public class Listeners
                                 ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n" +
                                 ChatColor.GRAY + "==============================\n");
             } else {
-                TTA_Methods.sendTablist(p, ChatColor.DARK_AQUA.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Atherial Runes\n"
+                TTA_Methods.sendTablist(p, ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Zeniths Legacy\n"
                                 + ChatColor.GRAY + "\n      ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
                                 + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n" +
                                 ChatColor.GRAY + "==============================\n",
@@ -174,8 +175,10 @@ public class Listeners
         if (p == null) {
             return;
         }
-        p.getInventory().addItem(new ItemStack(Material.GOLD_INGOT, 5));
-        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + p.getName() + " add my.perm");
+        if(ModerationMechanics.isSub(p)) {
+            p.getInventory().addItem(Items.orb(false));
+        }
+        p.getInventory().addItem(Items.orb(false));
     }
 
     @EventHandler
@@ -270,7 +273,7 @@ public class Listeners
     //ANTICHEAT END
     @EventHandler
     public void onMOTD(ServerListPingEvent e) {
-        String motd = ChatColor.AQUA.toString() + ChatColor.BOLD + "Atherial Runes";
+        String motd = ChatColor.AQUA.toString() + ChatColor.BOLD + "Zeniths Legacy";
         int i = 0;
         while (i < 30) {
             motd = String.valueOf(motd) + " ";
@@ -306,8 +309,8 @@ public class Listeners
             if (ModerationMechanics.isSub(p) || p.isOp()) {
                 e.allow();
             } else {
-                e.setKickMessage(String.valueOf(ChatColor.RED.toString()) + "Atherial Runes is currently FULL." + "\n" +
-                        ChatColor.GRAY.toString() + "You can subscribe at http://store.atherialrunes.net/ to get instant access.");
+                e.setKickMessage(String.valueOf(ChatColor.RED.toString()) + "Zeniths Legacy is currently FULL." + "\n" +
+                        ChatColor.GRAY.toString() + "You can subscribe at http://store.zenithslegacy.net/ to get instant access.");
                 e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
                 return;
             }
@@ -345,8 +348,8 @@ public class Listeners
             p.sendMessage(" ");
             ++i;
         }
-        StringUtil.sendCenteredMessage(p, ChatColor.WHITE.toString() + ChatColor.BOLD + "Atherial Runes Patch " + PracticeServer.plugin.getDescription().getVersion());
-        StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "http://store.atherialrunes.net/");
+        StringUtil.sendCenteredMessage(p, ChatColor.WHITE.toString() + ChatColor.BOLD + "Zeniths Legacy Patch " + PracticeServer.plugin.getDescription().getVersion());
+        StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "http://store.zenithslegacy.net/");
         p.sendMessage("");
         StringUtil.sendCenteredMessage(p, ChatColor.YELLOW + "You are on the " + ChatColor.BOLD + "US-1" + ChatColor.YELLOW + " shard.");
         StringUtil.sendCenteredMessage(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To manage your gameplay settings, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggles");

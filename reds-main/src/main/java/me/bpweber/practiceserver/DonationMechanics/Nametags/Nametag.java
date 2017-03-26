@@ -1,4 +1,4 @@
-package me.bpweber.practiceserver.Crates;
+package me.bpweber.practiceserver.DonationMechanics.Nametags;
 
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.chat.ChatMechanics;

@@ -1,6 +1,6 @@
 package me.bpweber.practiceserver.drops;
 
-import me.bpweber.practiceserver.Crates.CratesMain;
+import me.bpweber.practiceserver.DonationMechanics.Crates.CratesMain;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.money.Money;

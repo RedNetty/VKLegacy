@@ -15,24 +15,15 @@ public class wipeAll implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("wipeall") && sender.getName().equalsIgnoreCase("RedsEmporium")) {
             Player p = (Player) sender;
-            for (String s : GameConfig.get().getKeys(false)) {
-                GameConfig.get().set(s + ".Economy.Money Balance", 0);
-                GameConfig.get().set(s + ".Stats.Monster Kills", 0);
-                GameConfig.get().set(s + ".Stats.Player Kills", 0);
-            }
             for (UUID s : Economy.currentBalance.keySet()) {
-                Economy.currentBalance.remove(s);
+                Economy.currentBalance.put(s, 0);
             }
             for (UUID s : StatsMain.currentPlayerKills.keySet()) {
-                StatsMain.currentPlayerKills.remove(s);
+                StatsMain.currentPlayerKills.put(s, 0);
             }
             for (UUID s : StatsMain.currentMonsterKills.keySet()) {
-                StatsMain.currentMonsterKills.remove(s);
+                StatsMain.currentMonsterKills.put(s, 0);
             }
-            for (UUID s : StatsMain.currentMonsterKills.keySet()) {
-                StatsMain.currentMonsterKills.remove(s);
-            }
-
         }
 
 

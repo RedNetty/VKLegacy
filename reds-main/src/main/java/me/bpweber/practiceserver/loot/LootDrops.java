@@ -1,6 +1,6 @@
 package me.bpweber.practiceserver.loot;
 
-import me.bpweber.practiceserver.Crates.*;
+import me.bpweber.practiceserver.DonationMechanics.Crates.CratesMain;
 import me.bpweber.practiceserver.item.*;
 import me.bpweber.practiceserver.money.*;
 import me.bpweber.practiceserver.teleport.*;

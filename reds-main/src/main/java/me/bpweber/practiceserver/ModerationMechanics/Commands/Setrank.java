@@ -9,11 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Setrank implements CommandExecutor {
-    public static ConcurrentHashMap<UUID, String> ranks = new ConcurrentHashMap<UUID, String>();
+    public static HashMap<UUID, String> ranks = new HashMap<>();
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("setrank") && sender.isOp() || sender instanceof ConsoleCommandSender) {
@@ -31,7 +32,7 @@ public class Setrank implements CommandExecutor {
                     }
                     if (Bukkit.getServer().getPlayer(player2.getUniqueId()) != null) {
                         sender.sendMessage(ChatColor.GREEN + "You have set the user " + player2.getName() + " to the rank of " + r
-                                + " on all Atherial Runes servers.");
+                                + " on all Zeniths Legacy servers.");
                         Alignments.updatePlayerAlignment(player2);
                     }
                 } else {

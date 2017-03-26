@@ -28,6 +28,9 @@ public class GamePlayer implements Listener {
 
     @EventHandler
     public void onJoinCheck(PlayerJoinEvent e) {
+        if(!GameConfig.get().contains(e.getPlayer().getUniqueId() + ".Main.ZCash")) {
+            GameConfig.get().set(e.getPlayer().getUniqueId() + ".Main.ZCash", 0);
+        }
         if (playerExists(e.getPlayer())) {
             return;
         } else {
