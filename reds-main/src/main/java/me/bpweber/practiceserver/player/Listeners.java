@@ -928,6 +928,13 @@ public class Listeners
         }
     }
 
+    @EventHandler(priority=EventPriority.NORMAL)
+    public void onVotifierEvent(VotifierEvent event) {
+        Vote vote = event.getVote();
+
+
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onKickLog(PlayerKickEvent e) {
         Player p = e.getPlayer();
