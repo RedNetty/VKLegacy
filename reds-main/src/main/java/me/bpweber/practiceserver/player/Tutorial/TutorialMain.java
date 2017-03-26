@@ -4,7 +4,6 @@ import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.player.GamePlayer.GameConfig;
 import me.bpweber.practiceserver.player.GamePlayer.GamePlayer;
 import me.bpweber.practiceserver.profession.Mining;
 import me.bpweber.practiceserver.teleport.TeleportBooks;
@@ -36,17 +35,6 @@ public class TutorialMain implements Listener {
     }
 
 
-    public void startTutorialIsland(Player p) {
-        inTutorial.add(p);
-        Location l = new Location(Bukkit.getWorlds().get(0), -823.0, 47.0, -102.0);
-        p.teleport(l);
-        String prefix = ChatColor.GRAY + "[" + ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + "AR" + ChatColor.RESET.toString() + ChatColor.GRAY + "]";
-        p.sendMessage(ChatColor.GRAY + "Island Greeter: " + ChatColor.YELLOW + "If you would like to skip the tutorial please use /skip!");
-        p.sendMessage(ChatColor.GRAY + "Island Greeter: " + ChatColor.YELLOW + "Otherwise follow the path and learn the server!");
-        p.sendMessage(ChatColor.GRAY + "Island Greeter: " + ChatColor.YELLOW + "If you would like a interactive tutorial watch the following video, WIP");
-        nextNPCMsg(p, "Island Greeter", "Interface Guide", "the servers interfaces");
-    }
-
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
         com.sk89q.worldguard.protection.managers.RegionManager Reee = WGBukkit.getRegionManager(e.getPlayer().getLocation().getWorld());
@@ -56,8 +44,16 @@ public class TutorialMain implements Listener {
             if (region.getId().equalsIgnoreCase("Tutorial_Island") && !inTutorial.contains(e.getPlayer())) {
                 e.getPlayer().teleport(TeleportBooks.Cyrennica);
             }
-            if (!GameConfig.get().contains(e.getPlayer().getUniqueId().toString())) {
-                startTutorialIsland(e.getPlayer());
+            if (!e.getPlayer().hasPlayedBefore()) {
+                Player p = e.getPlayer();
+                inTutorial.add(p);
+                Location l = new Location(Bukkit.getWorlds().get(0), -823.0, 47.0, -102.0);
+                p.teleport(l);
+                String prefix = ChatColor.GRAY + "[" + ChatColor.GOLD.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + "AR" + ChatColor.RESET.toString() + ChatColor.GRAY + "]";
+                p.sendMessage(ChatColor.GRAY + "Island Greeter: " + ChatColor.YELLOW + "If you would like to skip the tutorial please use /skip!");
+                p.sendMessage(ChatColor.GRAY + "Island Greeter: " + ChatColor.YELLOW + "Otherwise follow the path and learn the server!");
+                p.sendMessage(ChatColor.GRAY + "Island Greeter: " + ChatColor.YELLOW + "If you would like a interactive tutorial watch the following video, WIP");
+                nextNPCMsg(p, "Island Greeter", "Interface Guide", "the servers interfaces");
             }
         }
     }

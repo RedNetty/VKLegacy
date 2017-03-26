@@ -2,18 +2,11 @@ package me.bpweber.practiceserver.Crates;
 
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.drops.CreateDrop;
-import me.bpweber.practiceserver.vendors.MerchantMechanics;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -68,154 +61,155 @@ public class CratesMain implements Listener {
         p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.25f);
     }
 
-    @EventHandler
-    public void onInvClickA(InventoryClickEvent e) {
-        Player p = (Player) e.getWhoClicked();
+    /*
+       @EventHandler
+       public void onInvClickA(InventoryClickEvent e) {
+           Player p = (Player) e.getWhoClicked();
 
-        ItemStack item = null;
+           ItemStack item = null;
 
-        if (e.getWhoClicked() instanceof Player) {
-            if (e.getWhoClicked() != null && e.getCurrentItem() != null && e.getClickedInventory() != null && e.getInventory() != null) {
-                if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
-                    if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
-                        if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST) {
-                            if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
-                                item = unlockCrate(1);
-                            } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium")) {
-                                item = unlockCrate(2);
-                            } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
-                                item = unlockCrate(3);
-                            } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
-                                item = unlockCrate(4);
-                            }
-                            if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
-                                    e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
-                                    e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
-                                if (e.getCurrentItem().getAmount() == 1) {
-                                    e.setCurrentItem(null);
-                                }
-                                if (e.getCurrentItem().getAmount() > 1) {
-                                    e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
-                                }
-                                if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
-                                    p.getInventory().addItem(item);
-                                    doFirework(p);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+           if (e.getWhoClicked() instanceof Player) {
+               if (e.getWhoClicked() != null && e.getCurrentItem() != null && e.getClickedInventory() != null && e.getInventory() != null) {
+                   if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+                       if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
+                           if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST) {
+                               if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
+                                   item = unlockCrate(1);
+                               } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium")) {
+                                   item = unlockCrate(2);
+                               } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
+                                   item = unlockCrate(3);
+                               } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
+                                   item = unlockCrate(4);
+                               }
+                               if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
+                                       e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
+                                       e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
+                                   if (e.getCurrentItem().getAmount() == 1) {
+                                       e.setCurrentItem(null);
+                                   }
+                                   if (e.getCurrentItem().getAmount() > 1) {
+                                       e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
+                                   }
+                                   if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
+                                       p.getInventory().addItem(item);
+                                       doFirework(p);
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+       }
 
-    @EventHandler
-    public void crateScrap(AsyncPlayerChatEvent e) {
-        Player p = e.getPlayer();
-        if (meme.contains(e.getPlayer())) {
-            e.setCancelled(true);
-            if (e.getMessage().equalsIgnoreCase("Y") || e.getMessage().equalsIgnoreCase("Yes")) {
-                int tiers = tier.get(p);
-                meme.remove(p);
-                tier.remove(p);
-                if (tiers == 1) {
-                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T1_scrap);
-                    scrap.setAmount(120);
-                    p.getInventory().addItem(scrap);
-                }
-                if (tiers == 2) {
-                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T2_scrap);
-                    scrap.setAmount(60);
-                    p.getInventory().addItem(scrap);
-                }
-                if (tiers == 3) {
-                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T3_scrap);
-                    scrap.setAmount(30);
-                    p.getInventory().addItem(scrap);
-                }
-                if (tiers == 4) {
-                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T4_scrap);
-                    scrap.setAmount(15);
-                    p.getInventory().addItem(scrap);
-                }
-                if (tiers == 5) {
-                    final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T5_scrap);
-                    scrap.setAmount(5);
-                    p.getInventory().addItem(scrap);
-                }
-            } else {
-                e.getPlayer().getInventory().addItem(createCrate(tier.get(p)));
-                tier.remove(p);
-                meme.remove(p);
-            }
-        }
-    }
+       @EventHandler
+       public void crateScrap(AsyncPlayerChatEvent e) {
+           Player p = e.getPlayer();
+           if (meme.contains(e.getPlayer())) {
+               e.setCancelled(true);
+               if (e.getMessage().equalsIgnoreCase("Y") || e.getMessage().equalsIgnoreCase("Yes")) {
+                   int tiers = tier.get(p);
+                   meme.remove(p);
+                   tier.remove(p);
+                   if (tiers == 1) {
+                       final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T1_scrap);
+                       scrap.setAmount(120);
+                       p.getInventory().addItem(scrap);
+                   }
+                   if (tiers == 2) {
+                       final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T2_scrap);
+                       scrap.setAmount(60);
+                       p.getInventory().addItem(scrap);
+                   }
+                   if (tiers == 3) {
+                       final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T3_scrap);
+                       scrap.setAmount(30);
+                       p.getInventory().addItem(scrap);
+                   }
+                   if (tiers == 4) {
+                       final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T4_scrap);
+                       scrap.setAmount(15);
+                       p.getInventory().addItem(scrap);
+                   }
+                   if (tiers == 5) {
+                       final ItemStack scrap = CraftItemStack.asCraftCopy(MerchantMechanics.T5_scrap);
+                       scrap.setAmount(5);
+                       p.getInventory().addItem(scrap);
+                   }
+               } else {
+                   e.getPlayer().getInventory().addItem(createCrate(tier.get(p)));
+                   tier.remove(p);
+                   meme.remove(p);
+               }
+           }
+       }
 
-    @EventHandler
-    public void onRightClick(PlayerInteractEvent e) {
-        if (e.getAction() == Action.RIGHT_CLICK_AIR || (e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-            if (e.getPlayer().getInventory().getItemInMainHand() != null) {
-                if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.TRAPPED_CHEST && !meme.contains(e.getPlayer())) {
+       @EventHandler
+       public void onRightClick(PlayerInteractEvent e) {
+           if (e.getAction() == Action.RIGHT_CLICK_AIR || (e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+               if (e.getPlayer().getInventory().getItemInMainHand() != null) {
+                   if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.TRAPPED_CHEST && !meme.contains(e.getPlayer())) {
 
-                    meme.add(e.getPlayer());
-                    e.getPlayer().sendMessage(ChatColor.GREEN + "Are you sure you want to scrap this item? " +
-                            ChatColor.BOLD + "'Y'" + ChatColor.GREEN + " or " + ChatColor.RED.toString() + ChatColor.BOLD + "'N'");
-                    if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("Legendary")) {
-                        tier.put(e.getPlayer(), 5);
-                    } else if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("Ancient")) {
-                        tier.put(e.getPlayer(), 4);
-                    } else if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("War")) {
-                        tier.put(e.getPlayer(), 3);
-                    } else if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("Medium")) {
+                       meme.add(e.getPlayer());
+                       e.getPlayer().sendMessage(ChatColor.GREEN + "Are you sure you want to scrap this item? " +
+                               ChatColor.BOLD + "'Y'" + ChatColor.GREEN + " or " + ChatColor.RED.toString() + ChatColor.BOLD + "'N'");
+                       if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("Legendary")) {
+                           tier.put(e.getPlayer(), 5);
+                       } else if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("Ancient")) {
+                           tier.put(e.getPlayer(), 4);
+                       } else if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("War")) {
+                           tier.put(e.getPlayer(), 3);
+                       } else if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("Medium")) {
 
-                    } else if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("Basic")) {
-                        tier.put(e.getPlayer(), 1);
-                    }
-                    if (e.getPlayer().getInventory().getItemInMainHand().getAmount() == 1) {
-                        e.getPlayer().getInventory().setItemInMainHand(null);
-                    }
-                    if (e.getPlayer().getInventory().getItemInMainHand().getAmount() > 1) {
-                        e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
-                    }
-                }
-            }
-        }
-    }
+                       } else if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("Basic")) {
+                           tier.put(e.getPlayer(), 1);
+                       }
+                       if (e.getPlayer().getInventory().getItemInMainHand().getAmount() == 1) {
+                           e.getPlayer().getInventory().setItemInMainHand(null);
+                       }
+                       if (e.getPlayer().getInventory().getItemInMainHand().getAmount() > 1) {
+                           e.getPlayer().getInventory().getItemInMainHand().setAmount(e.getPlayer().getInventory().getItemInMainHand().getAmount() - 1);
+                       }
+                   }
+               }
+           }
+       }
 
-    @SuppressWarnings("deprecation")
-    @EventHandler
-    public void onInvClick(InventoryClickEvent e) {
-        if (e.getWhoClicked() instanceof Player) {
-            Player p = (Player) e.getWhoClicked();
-            if (e.getWhoClicked() != null && e.getCurrentItem() != null && e.getClickedInventory() != null && e.getInventory() != null) {
-                if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
-                    if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST && e.getCursor().getType() == Material.TRIPWIRE_HOOK) {
-                        ItemStack item1 = new ItemStack(Material.AIR);
-                        if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
-                            item1 = unlockCrate(5);
-                        }
-                        doFirework(p);
-                        if (e.getCursor().getAmount() == 1) {
-                            e.setCursor(null);
-                        }
-                        if (e.getCurrentItem().getAmount() == 1) {
-                            e.setCurrentItem(null);
-                        }
-                        if (e.getCursor().getAmount() > 1) {
-                            e.getCursor().setAmount(e.getCursor().getAmount() - 1);
-                        }
-                        if (e.getCurrentItem().getAmount() > 1) {
-                            e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
-                        }
-                        if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
-                            p.getInventory().addItem(item1);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
+       @SuppressWarnings("deprecation")
+       @EventHandler
+       public void onInvClick(InventoryClickEvent e) {
+           if (e.getWhoClicked() instanceof Player) {
+               Player p = (Player) e.getWhoClicked();
+               if (e.getWhoClicked() != null && e.getCurrentItem() != null && e.getClickedInventory() != null && e.getInventory() != null) {
+                   if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+                       if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST && e.getCursor().getType() == Material.TRIPWIRE_HOOK) {
+                           ItemStack item1 = new ItemStack(Material.AIR);
+                           if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
+                               item1 = unlockCrate(5);
+                           }
+                           doFirework(p);
+                           if (e.getCursor().getAmount() == 1) {
+                               e.setCursor(null);
+                           }
+                           if (e.getCurrentItem().getAmount() == 1) {
+                               e.setCurrentItem(null);
+                           }
+                           if (e.getCursor().getAmount() > 1) {
+                               e.getCursor().setAmount(e.getCursor().getAmount() - 1);
+                           }
+                           if (e.getCurrentItem().getAmount() > 1) {
+                               e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
+                           }
+                           if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
+                               p.getInventory().addItem(item1);
+                           }
+                       }
+                   }
+               }
+           }
+       }
+       */
     public static ItemStack createKey() {
         ItemStack crate = new ItemStack(Material.TRIPWIRE_HOOK);
         ItemMeta cm = crate.getItemMeta();

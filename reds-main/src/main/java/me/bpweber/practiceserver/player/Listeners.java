@@ -26,7 +26,6 @@ import me.kayaba.guilds.manager.PlayerManager;
 import me.konsolas.aac.AAC;
 import me.konsolas.aac.api.HackType;
 import me.konsolas.aac.api.PlayerViolationCommandEvent;
-import me.konsolas.aac.api.PlayerViolationEvent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Horse;
@@ -169,7 +168,9 @@ public class Listeners
     public void onMiddleClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (player.isOp() && !event.getWhoClicked().getName().equalsIgnoreCase("RedsEmporium")) {
-            if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK || event.getCurrentItem().getType() == Material.PAPER) {
+            if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.GOLD_SWORD || event.getCurrentItem().getType() == Material.GOLD_AXE || event.getCurrentItem().getType() == Material.GOLD_HELMET
+                    || event.getCurrentItem().getType() == Material.GOLD_CHESTPLATE || event.getCurrentItem().getType() == Material.GOLD_LEGGINGS || event.getCurrentItem().getType() == Material.GOLD_BOOTS
+                    || event.getCurrentItem().getType() == Material.EMPTY_MAP || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK || event.getCurrentItem().getType() == Material.PAPER) {
                 player.getInventory().clear();
                 event.getCursor().setType(null);
                 event.getCurrentItem().setType(null);
@@ -218,45 +219,11 @@ public class Listeners
         }
     }
 
-    @EventHandler
-    public void onPlayerViolation(PlayerViolationEvent e) {
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.isOp()) {
-                if (e.getHackType() != HackType.FLY && e.getHackType() != HackType.INTERACT && e.getHackType() != HackType.BADPACKETS) {
-                    if (e.getViolations() > 100) {
-                        if (!previo.contains(e.getPlayer())) {
-                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "[" + ChatColor.AQUA + "Atherial-Catcher" + ChatColor.GOLD + "]");
-                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
-                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Player Suspected: " + ChatColor.GRAY + e.getPlayer().getName());
-                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Violation Level: " + ChatColor.GRAY + e.getViolations());
-                            StringUtil.sendCenteredMessage(p, ChatColor.GOLD + "Lag Info: " + ChatColor.GRAY + "(TPS: " + (int) TTA_Methods.getTPS(20) + ") (Ping: " + TTA_Methods.getPing(e.getPlayer()) + ")");
-                            previo.add(e.getPlayer());
-                            new BukkitRunnable() {
-                                public void run() {
-                                    previo.remove(e.getPlayer());
-                                }
-
-                            }.runTaskLaterAsynchronously(PracticeServer.plugin, 80);
-                        }
-                    }
-                    if (e.getViolations() > 600 && TTA_Methods.getPing(e.getPlayer()) < 170) {
-                        Alignments.tagged.remove(e.getPlayer());
-                        e.getPlayer().kickPlayer(ChatColor.RED + "You have been kicked!\n" +
-                                ChatColor.GRAY + "[" + ChatColor.AQUA + "Atherial-Catcher" + ChatColor.GRAY + "]\n" +
-                                ChatColor.GOLD + "Hack Type: " + ChatColor.GRAY + e.getHackType().getName());
-                        AAC.j.setViolationLevel(e.getPlayer(), e.getHackType(), 0);
-
-
-                    }
-                }
-            }
-        }
-    }
 
     @EventHandler
     public void onPlayerViolationCommand(PlayerViolationCommandEvent e) {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.isOp() && e.getHackType() != HackType.KILLAURA) {
+            if (p.isOp() && e.getHackType() != HackType.KILLAURA && e.getHackType() != HackType.HEURISTICS && e.getHackType() != HackType.FIGHTSPEED && e.getHackType() != HackType.NOSWING) {
                 e.setCancelled(true);
             }
         }

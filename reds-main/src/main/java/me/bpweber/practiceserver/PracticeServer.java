@@ -26,6 +26,7 @@ import me.bpweber.practiceserver.money.Economy.Economy;
 import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.party.Parties;
 import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.player.GamePlayer.Commands.wipeAll;
 import me.bpweber.practiceserver.player.GamePlayer.GamePlayer;
 import me.bpweber.practiceserver.player.Stats.StatsMain;
 import me.bpweber.practiceserver.player.Tutorial.Commands.Skip;
@@ -424,6 +425,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         this.getCommand("dump").setExecutor(new FixItem());
         this.getCommand("giveOrb").setExecutor(new giveOrb());
         this.getCommand("Skip").setExecutor(new Skip());
+        this.getCommand("wipeall").setExecutor(new wipeAll());
         gap = new GamePlayer();
         cm = new CratesMain();
         tut = new TutorialMain();
