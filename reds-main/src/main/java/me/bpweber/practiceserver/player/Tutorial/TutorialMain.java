@@ -1,8 +1,5 @@
 package me.bpweber.practiceserver.player.Tutorial;
 
-import com.sk89q.worldguard.bukkit.WGBukkit;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.player.GamePlayer.GamePlayer;
 import me.bpweber.practiceserver.profession.Mining;
@@ -37,13 +34,6 @@ public class TutorialMain implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent e) {
-        com.sk89q.worldguard.protection.managers.RegionManager Reee = WGBukkit.getRegionManager(e.getPlayer().getLocation().getWorld());
-        ApplicableRegionSet regionsAtLocation = Reee.getApplicableRegions(e.getPlayer().getLocation());
-
-        for (ProtectedRegion region : regionsAtLocation) {
-            if (region.getId().equalsIgnoreCase("Tutorial_Island") && !inTutorial.contains(e.getPlayer())) {
-                e.getPlayer().teleport(TeleportBooks.Cyrennica);
-            }
             if (!e.getPlayer().hasPlayedBefore()) {
                 Player p = e.getPlayer();
                 inTutorial.add(p);
@@ -56,7 +46,6 @@ public class TutorialMain implements Listener {
                 nextNPCMsg(p, "Island Greeter", "Interface Guide", "the servers interfaces");
             }
         }
-    }
 
 
     public void nextNPCMsg(Player p, String npc, String nextnpc, String text) {

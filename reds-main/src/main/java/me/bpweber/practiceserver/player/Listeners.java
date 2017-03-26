@@ -1,5 +1,7 @@
 package me.bpweber.practiceserver.player;
 
+import com.vexsoftware.votifier.bungee.events.VotifierEvent;
+import com.vexsoftware.votifier.model.Vote;
 import de.Herbystar.TTA.TTA_Methods;
 import fr.neatmonster.nocheatplus.checks.CheckType;
 import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
@@ -163,6 +165,18 @@ public class Listeners
         }
     }
 
+    @EventHandler
+    public void onPlayerVote(VotifierEvent e) {
+        Vote v = e.getVote();
+        Bukkit.getServer().broadcastMessage(ChatColor.GREEN + v.getUsername() + " voted on " + v.getServiceName() + "!");
+
+        Player p = Bukkit.getServer().getPlayer(v.getUsername());
+        if (p == null) {
+            return;
+        }
+        p.getInventory().addItem(new ItemStack(Material.GOLD_INGOT, 5));
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), "pex user " + p.getName() + " add my.perm");
+    }
 
     @EventHandler
     public void onMiddleClick(InventoryClickEvent event) {
