@@ -1,45 +1,32 @@
 package me.bpweber.practiceserver.pvp;
 
-import com.google.common.collect.Maps;
-import com.sk89q.worldguard.bukkit.WGBukkit;
-import com.sk89q.worldguard.protection.ApplicableRegionSet;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import com.sk89q.worldguard.protection.flags.StateFlag;
-import de.Herbystar.TTA.TTA_Methods;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.damage.Staffs;
-import me.bpweber.practiceserver.party.Scoreboards;
-import me.bpweber.practiceserver.player.Listeners;
-import me.bpweber.practiceserver.player.Stats.StatsMain;
-import me.bpweber.practiceserver.teleport.TeleportBooks;
-import me.bpweber.practiceserver.utils.StringUtil;
+import com.google.common.collect.*;
+import com.sk89q.worldguard.bukkit.*;
+import com.sk89q.worldguard.protection.*;
+import com.sk89q.worldguard.protection.flags.*;
+import de.Herbystar.TTA.*;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.damage.*;
+import me.bpweber.practiceserver.party.*;
+import me.bpweber.practiceserver.player.*;
+import me.bpweber.practiceserver.player.Stats.*;
+import me.bpweber.practiceserver.teleport.*;
+import me.bpweber.practiceserver.utils.*;
+import me.kayaba.guilds.api.basic.*;
+import me.kayaba.guilds.manager.*;
 import org.bukkit.*;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.boss.*;
+import org.bukkit.configuration.file.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.*;
+import org.bukkit.scheduler.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
+import java.io.*;
+import java.util.*;
 
 public class Alignments
         implements Listener {
@@ -328,6 +315,21 @@ public class Alignments
     public void onNeutral(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
             Player d = (Player) e.getDamager();
+            GPlayer nPlayer = PlayerManager.getPlayer(((Player) e.getEntity()).getPlayer());
+            GPlayer nPlayerAttacker = PlayerManager.getPlayer(((Player) e.getDamager()).getPlayer());
+            if(nPlayer.hasGuild() && nPlayerAttacker.hasGuild())
+            {
+                if(nPlayer.getGuild().isMember(nPlayerAttacker) && nPlayer.getGuild().getFriendlyPvp())
+                {
+                    return;
+                }
+                if(nPlayer.getGuild().isAlly(nPlayerAttacker.getGuild()))
+                {
+                    return;
+                }
+            }
+
+
             if (e.getDamage() <= 0.0) {
                 return;
             }

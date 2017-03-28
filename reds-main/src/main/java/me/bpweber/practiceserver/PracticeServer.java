@@ -1,7 +1,6 @@
 package me.bpweber.practiceserver;
 
 import me.bpweber.practiceserver.DonationMechanics.Commands.*;
-import me.bpweber.practiceserver.DonationMechanics.Crates.*;
 import me.bpweber.practiceserver.DonationMechanics.Nametags.*;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
 import me.bpweber.practiceserver.ModerationMechanics.*;
@@ -118,7 +117,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
     private static Toggles toggles;
     private static Untradeable untradeable;
     private static Trading trading;
-    private static CratesMain cm;
+    //private static CratesMain cm;
     private static Economy em;
     private static ForceField ff;
     private static Nametag nt;
@@ -404,7 +403,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         this.getCommand("Skip").setExecutor(new Skip());
         this.getCommand("wipeall").setExecutor(new wipeAll());
         gap = new GamePlayer();
-        cm = new CratesMain();
+        //cm = new CratesMain();
         tut = new TutorialMain();
         stat = new StatsMain();
         trading = new Trading();
@@ -461,7 +460,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         horses.onEnable();
         itemVendors.onEnable();
         ff.onEnable();
-        cm.onEnable();
+        //cm.onEnable();
         listeners.onEnable();
         logout.onEnable();
         lootChests.onEnable();
@@ -532,7 +531,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         parties.onDisable();
         professionMechanics.onDisable();
         repairing.onDisable();
-        cm.onDisable();
+        //cm.onDisable();
         respawn.onDisable();
         spawners.onDisable();
         speedfish.onDisable();

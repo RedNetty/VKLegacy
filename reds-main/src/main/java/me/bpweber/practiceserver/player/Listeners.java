@@ -326,8 +326,9 @@ public class Listeners
         HashMap<String, PermissionAttachment> attachments = new HashMap<String, PermissionAttachment>();
 
         PermissionAttachment attachment = p.addAttachment(PracticeServer.plugin);
-        for (Permission permission : me.kayaba.guilds.enums.Permission.values()) {
+        for (Permission permission : Permission.values()) {
             if (permission.name().contains("GUILDS_GUILD_")) {
+                p.sendMessage("DEBUG ADDED: "  + permission.name());
                 attachment.setPermission(permission.getPath(), true);
             }
         }

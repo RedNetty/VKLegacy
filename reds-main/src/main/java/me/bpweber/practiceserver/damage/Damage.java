@@ -34,13 +34,15 @@
  */
 package me.bpweber.practiceserver.damage;
 
-import com.sainttx.holograms.api.*;
+import com.sainttx.holograms.api.Hologram;
 import com.sainttx.holograms.api.line.*;
 import me.bpweber.practiceserver.*;
 import me.bpweber.practiceserver.player.*;
 import me.bpweber.practiceserver.pvp.*;
 import me.bpweber.practiceserver.utils.*;
 import me.bpweber.practiceserver.vendors.*;
+import me.kayaba.guilds.api.basic.*;
+import me.kayaba.guilds.manager.*;
 import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.entity.*;
@@ -276,8 +278,25 @@ public class Damage
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onNoOpDamage(EntityDamageByEntityEvent e) {
+    public void onNoOpAndGuildDamage(EntityDamageByEntityEvent e) {
         Player p;
+        GPlayer nPlayer = PlayerManager.getPlayer(((Player) e.getEntity()).getPlayer());
+        GPlayer nPlayerAttacker = PlayerManager.getPlayer(((Player) e.getDamager()).getPlayer());
+        if(nPlayer.hasGuild() && nPlayerAttacker.hasGuild())
+        {
+            if(nPlayer.getGuild().isMember(nPlayerAttacker) && nPlayer.getGuild().getFriendlyPvp())
+            {
+                e.setCancelled(true);
+                e.setDamage(0.0);
+                ((LivingEntity) e.getEntity()).setNoDamageTicks(0);
+            }
+            if(nPlayer.getGuild().isAlly(nPlayerAttacker.getGuild()))
+            {
+                e.setCancelled(true);
+                e.setDamage(0.0);
+                ((LivingEntity) e.getEntity()).setNoDamageTicks(0);
+            }
+        }
         if (e.getDamager() instanceof Player && e.getEntity() instanceof LivingEntity && ((p = (Player) e.getDamager()).isOp() || p.getGameMode() == GameMode.CREATIVE || p.isFlying())) {
             e.setCancelled(true);
             e.setDamage(0.0);

@@ -1,5 +1,6 @@
 package me.kayaba.guilds.listener;
 
+import me.bpweber.practiceserver.damage.*;
 import me.kayaba.guilds.api.basic.*;
 import me.kayaba.guilds.enums.*;
 import me.kayaba.guilds.impl.util.*;
@@ -10,20 +11,12 @@ import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.*;
 
-import java.text.*;
-import java.util.*;
-
 public class DeathListener extends AbstractListener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player victim = event.getEntity();
-        Player attacker = event.getEntity().getKiller();
+        Player attacker = Damage.lastphit.get(victim);
         GPlayer nPlayer = PlayerManager.getPlayer(victim);
-
-
-        if (nPlayer.isAtRegion()) {
-            plugin.getRegionManager().playerExitedRegion(nPlayer.getPlayer());
-        }
 
         if (attacker == null || attacker.equals(victim)) {
             return;
@@ -36,17 +29,15 @@ public class DeathListener extends AbstractListener {
 
         if(nPlayer.hasGuild() && nPlayerAttacker.hasGuild())
         {
-            String dayNames[] = new DateFormatSymbols().getWeekdays();
-            Calendar date1 = Calendar.getInstance();
-            if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Saturday" || dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Sunday")
-            {
-                return;
-            }
             Guild guildAttacker = nPlayerAttacker.getGuild();
             Guild guildVictim = nPlayer.getGuild();
             if(!guildAttacker.isWarWith(guildVictim))
             {
                 return; // DO NOT RUN THE CODE IF THEY AREN'T AN ENEMY GUILD!
+            }
+            if(guildVictim.getLives() > 0)
+            {
+                guildVictim.setLives(guildVictim.getLives() - 1);
             }
             long createdTime = NumberUtils.systemSeconds() - guildVictim.getTimeCreated();
             long timeProtection = Config.GUILD_CREATEPROTECTION.getSeconds() - createdTime;
