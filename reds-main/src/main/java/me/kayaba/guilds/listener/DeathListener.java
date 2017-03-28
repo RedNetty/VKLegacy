@@ -1,16 +1,16 @@
 package me.kayaba.guilds.listener;
 
 import me.kayaba.guilds.api.basic.*;
-import me.kayaba.guilds.api.util.*;
 import me.kayaba.guilds.enums.*;
 import me.kayaba.guilds.impl.util.*;
-import me.kayaba.guilds.impl.util.preparedtag.*;
 import me.kayaba.guilds.manager.*;
 import me.kayaba.guilds.util.*;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.*;
 
+import java.text.*;
 import java.util.*;
 
 public class DeathListener extends AbstractListener {
@@ -31,78 +31,52 @@ public class DeathListener extends AbstractListener {
 
         GPlayer nPlayerAttacker = PlayerManager.getPlayer(attacker);
 
-        if (nPlayer.isPartRaid() && nPlayerAttacker.isPartRaid() && nPlayer.getPartRaid().equals(nPlayerAttacker.getPartRaid()) && !nPlayer.getGuild().isMember(nPlayerAttacker)) {
-            Raid raid = nPlayer.getPartRaid();
+        nPlayerAttacker.addKill();
+        nPlayer.addDeath();
 
-            if (raid.getPlayersOccupying().contains(nPlayerAttacker)) {
-                raid.addKillAttacker();
-            } else {
-                raid.addKillDefender();
+        if(nPlayer.hasGuild() && nPlayerAttacker.hasGuild())
+        {
+            String dayNames[] = new DateFormatSymbols().getWeekdays();
+            Calendar date1 = Calendar.getInstance();
+            if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Saturday" || dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Sunday")
+            {
+                return;
             }
-        }
-
-        if (nPlayerAttacker.canGetKillPoints(victim)) {
-            PreparedTag preparedTag1 = new PreparedTagChatImpl(nPlayer, false);
-            PreparedTag preparedTag2 = new PreparedTagChatImpl(nPlayerAttacker, false);
-
-            Map<VarKey, String> vars = new HashMap<>();
-            vars.put(VarKey.PLAYER1, victim.getName());
-            vars.put(VarKey.PLAYER2, attacker.getName());
-
-            nPlayerAttacker.addKill();
-            nPlayer.addDeath();
-
-
-            if (nPlayer.hasGuild()) {
-                Guild guildVictim = nPlayer.getGuild();
-                guildVictim.takePoints(Config.GUILD_DEATHPOINTS.getInt());
+            Guild guildAttacker = nPlayerAttacker.getGuild();
+            Guild guildVictim = nPlayer.getGuild();
+            if(!guildAttacker.isWarWith(guildVictim))
+            {
+                return; // DO NOT RUN THE CODE IF THEY AREN'T AN ENEMY GUILD!
             }
-
-            if (nPlayerAttacker.hasGuild()) {
-                Guild guildAttacker = nPlayerAttacker.getGuild();
-                guildAttacker.addPoints(Config.GUILD_KILLPOINTS.getInt());
-            }
-
-
-            double bonusPercentMoney = 0;
-            double bonusPercentPoints = 0;
-            if (nPlayer.isPartRaid()) {
-                bonusPercentMoney = Config.RAID_PVP_BONUSPERCENT_MONEY.getPercent();
-                bonusPercentPoints = Config.RAID_PVP_BONUSPERCENT_POINTS.getPercent();
-            }
-
-
-            int points = (int) Math.round(nPlayer.getPoints() * (Config.KILLING_RANKPERCENT.getPercent() + bonusPercentPoints));
-            nPlayer.takePoints(points);
-            nPlayerAttacker.addPoints(points);
-            nPlayerAttacker.addKillHistory(victim);
-
-
-            vars.clear();
-            vars.put(VarKey.PLAYER_NAME, victim.getName());
-            double money;
-            if (nPlayer.canGetKillPoints(attacker)) {
-                money = NumberUtils.roundOffTo2DecPlaces((Config.KILLING_MONEYFORKILL.getPercent() + bonusPercentMoney) * nPlayer.getMoney());
-
-                if (money > 0) {
-                    vars.put(VarKey.MONEY, String.valueOf(money));
-                    Message.CHAT_PLAYER_PVPMONEY_KILL.clone().vars(vars).send(attacker);
-                }
-            } else {
-                money = NumberUtils.roundOffTo2DecPlaces((Config.KILLING_MONEYFORREVENGE.getPercent() + bonusPercentMoney) * nPlayer.getMoney());
-
-                if (money > 0) {
-                    vars.put(VarKey.MONEY, String.valueOf(money));
-                    Message.CHAT_PLAYER_PVPMONEY_REVENGE.clone().vars(vars).send(attacker);
+            long createdTime = NumberUtils.systemSeconds() - guildVictim.getTimeCreated();
+            long timeProtection = Config.GUILD_CREATEPROTECTION.getSeconds() - createdTime;
+            if(timeProtection <= 0)
+            {
+                if (nPlayer.hasGuild()) {
+                    if(guildVictim.getLives() < 0)
+                    {
+                        guildVictim.setLives(0); // Small fix in case
+                    }
+                    if(guildVictim.getLives() == 0)
+                    {
+                        guildVictim.takePoints(Config.GUILD_DEATHPOINTS.getInt());
+                        guildAttacker.addPoints(Config.GUILD_KILLPOINTS.getInt());
+                        for(Player p : guildAttacker.getOnlinePlayers())
+                        {
+                            p.sendMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + ">>> " + ChatColor.AQUA + "Received " + Config.GUILD_KILLPOINTS.getInt() + " for killing an enemy guild's member." + " <<<");
+                            p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
+                            p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+                        }
+                        for(Player p : guildVictim.getOnlinePlayers())
+                        {
+                            p.sendMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + ">>> " + ChatColor.AQUA + "Lost " + Config.GUILD_DEATHPOINTS.getInt() + " for being killed by an enemy guild's member." + " <<<");
+                            p.playSound(p.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
+                            p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+                        }
+                    }
                 }
             }
-
-            if (money > 0) {
-                nPlayer.takeMoney(money);
-                nPlayerAttacker.addMoney(money);
-            }
         }
-
 
         TabUtils.refresh(attacker);
         TabUtils.refresh(victim);

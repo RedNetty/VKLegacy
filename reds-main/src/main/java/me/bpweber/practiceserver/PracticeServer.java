@@ -1,88 +1,65 @@
 package me.bpweber.practiceserver;
 
-import me.bpweber.practiceserver.DonationMechanics.Commands.giveCrate;
-import me.bpweber.practiceserver.DonationMechanics.Commands.giveKey;
-import me.bpweber.practiceserver.DonationMechanics.Commands.giveNameTag;
-import me.bpweber.practiceserver.DonationMechanics.Commands.giveOrb;
-import me.bpweber.practiceserver.DonationMechanics.Crates.CratesMain;
-import me.bpweber.practiceserver.DonationMechanics.Nametags.Nametag;
+import me.bpweber.practiceserver.DonationMechanics.Commands.*;
+import me.bpweber.practiceserver.DonationMechanics.Crates.*;
+import me.bpweber.practiceserver.DonationMechanics.Nametags.*;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
-import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
-import me.bpweber.practiceserver.chat.ChatMechanics;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.damage.Staffs;
-import me.bpweber.practiceserver.drops.Mobdrops;
-import me.bpweber.practiceserver.enchants.Enchants;
-import me.bpweber.practiceserver.enchants.Orbs;
-import me.bpweber.practiceserver.item.Durability;
-import me.bpweber.practiceserver.item.Repairing;
-import me.bpweber.practiceserver.item.Untradeable;
-import me.bpweber.practiceserver.loot.LootChests;
-import me.bpweber.practiceserver.mobs.Mobs;
-import me.bpweber.practiceserver.mobs.Spawners;
-import me.bpweber.practiceserver.money.Banks;
-import me.bpweber.practiceserver.money.Commands.Givepouch;
-import me.bpweber.practiceserver.money.Economy.Economy;
-import me.bpweber.practiceserver.money.GemPouches;
-import me.bpweber.practiceserver.party.Parties;
+import me.bpweber.practiceserver.ModerationMechanics.*;
+import me.bpweber.practiceserver.chat.*;
+import me.bpweber.practiceserver.damage.*;
+import me.bpweber.practiceserver.drops.*;
+import me.bpweber.practiceserver.enchants.*;
+import me.bpweber.practiceserver.item.*;
+import me.bpweber.practiceserver.loot.*;
+import me.bpweber.practiceserver.mobs.*;
+import me.bpweber.practiceserver.money.*;
+import me.bpweber.practiceserver.money.Commands.*;
+import me.bpweber.practiceserver.money.Economy.*;
+import me.bpweber.practiceserver.party.*;
 import me.bpweber.practiceserver.player.*;
-import me.bpweber.practiceserver.player.GamePlayer.Commands.wipeAll;
-import me.bpweber.practiceserver.player.GamePlayer.GamePlayer;
-import me.bpweber.practiceserver.player.Stats.StatsMain;
-import me.bpweber.practiceserver.player.Tutorial.Commands.Skip;
-import me.bpweber.practiceserver.player.Tutorial.TutorialMain;
-import me.bpweber.practiceserver.profession.Mining;
-import me.bpweber.practiceserver.profession.ProfessionMechanics;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.pvp.ForceField;
-import me.bpweber.practiceserver.pvp.Respawn;
-import me.bpweber.practiceserver.teleport.Hearthstone;
-import me.bpweber.practiceserver.teleport.TeleportBooks;
-import me.bpweber.practiceserver.vendors.ItemVendors;
-import me.bpweber.practiceserver.vendors.MerchantMechanics;
-import me.bpweber.practiceserver.world.Antibuild;
-import me.bpweber.practiceserver.world.Logout;
-import me.kayaba.guilds.api.GuildsAPI;
-import me.kayaba.guilds.api.basic.GPlayer;
-import me.kayaba.guilds.api.basic.TabList;
+import me.bpweber.practiceserver.player.GamePlayer.Commands.*;
+import me.bpweber.practiceserver.player.GamePlayer.*;
+import me.bpweber.practiceserver.player.Stats.*;
+import me.bpweber.practiceserver.player.Tutorial.Commands.*;
+import me.bpweber.practiceserver.player.Tutorial.*;
+import me.bpweber.practiceserver.profession.*;
+import me.bpweber.practiceserver.pvp.*;
+import me.bpweber.practiceserver.teleport.*;
+import me.bpweber.practiceserver.vendors.*;
+import me.bpweber.practiceserver.world.*;
+import me.kayaba.guilds.api.*;
+import me.kayaba.guilds.api.basic.*;
 import me.kayaba.guilds.api.event.PlayerInteractEntityEvent;
 import me.kayaba.guilds.api.manager.ErrorManager;
-import me.kayaba.guilds.api.storage.Storage;
-import me.kayaba.guilds.api.util.SignGUI;
-import me.kayaba.guilds.api.util.packet.PacketExtension;
-import me.kayaba.guilds.api.util.reflect.FieldAccessor;
-import me.kayaba.guilds.enums.Config;
-import me.kayaba.guilds.enums.Dependency;
-import me.kayaba.guilds.enums.EntityUseAction;
-import me.kayaba.guilds.exception.FatalKayabaGuildsException;
-import me.kayaba.guilds.exception.StorageConnectionFailedException;
-import me.kayaba.guilds.impl.storage.StorageConnector;
-import me.kayaba.guilds.impl.util.AbstractListener;
-import me.kayaba.guilds.impl.util.bossbar.BossBarUtils;
-import me.kayaba.guilds.impl.util.logging.WrappedLogger;
-import me.kayaba.guilds.impl.versionimpl.v1_8_R1.SignGUIImpl;
-import me.kayaba.guilds.listener.VanishListener;
+import me.kayaba.guilds.api.storage.*;
+import me.kayaba.guilds.api.util.*;
+import me.kayaba.guilds.api.util.packet.*;
+import me.kayaba.guilds.api.util.reflect.*;
+import me.kayaba.guilds.enums.*;
+import me.kayaba.guilds.exception.*;
+import me.kayaba.guilds.impl.storage.*;
+import me.kayaba.guilds.impl.util.*;
+import me.kayaba.guilds.impl.util.bossbar.*;
+import me.kayaba.guilds.impl.util.logging.*;
+import me.kayaba.guilds.impl.versionimpl.v1_8_R1.*;
+import me.kayaba.guilds.listener.*;
 import me.kayaba.guilds.manager.*;
 import me.kayaba.guilds.util.*;
-import me.kayaba.guilds.util.reflect.Reflections;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginLogger;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
+import me.kayaba.guilds.util.reflect.*;
+import org.bukkit.*;
+import org.bukkit.enchantments.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
+import org.bukkit.plugin.*;
+import org.bukkit.plugin.java.*;
+import org.bukkit.scheduler.*;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+import java.lang.reflect.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.logging.*;
 
 /**
  * Jaxson's native Dungeon Realms practice server code.
@@ -506,6 +483,24 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         toggles.onEnable();
         trading.onEnable();
         untradeable.onEnable();
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            String dayNames[] = new DateFormatSymbols().getWeekdays();
+            Calendar date1 = Calendar.getInstance();
+            if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Saturday" || dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Sunday")
+            {
+                Bukkit.broadcastMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + ">>> " + ChatColor.AQUA + "The Guild War is now over! You can redeem your current guild points at Cyrennica's Guild God!");
+                for (Player pl : Bukkit.getOnlinePlayers()) {
+                    pl.playSound(pl.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
+                    pl.playSound(pl.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+                }
+                for(Guild guild : this.getGuildManager().getGuilds())
+                {
+                    Collection<Guild> empty = new ArrayList<Guild>();
+                    guild.setWars(empty);
+                }
+            }
+        }, 0L, 20L);
     }
 
     public void onDisable() {

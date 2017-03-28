@@ -40,6 +40,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 
+import java.text.*;
 import java.util.*;
 
 public class ItemVendors
@@ -160,6 +161,18 @@ public class ItemVendors
                 inv.addItem(new ItemStack[]{TeleportBooks.crestwatch_book(true)});
                 inv.addItem(new ItemStack[]{TeleportBooks.crestguard_book(true)});
                 inv.addItem(new ItemStack[]{TeleportBooks.deadpeaks_book(true)});
+
+                e.getPlayer().openInventory(inv);
+                e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_WOOD_BUTTON_CLICK_ON, 1.0f, 1.0f);
+            } else if (p.getName().equals("Guild God")) {
+                String dayNames[] = new DateFormatSymbols().getWeekdays();
+                Calendar date1 = Calendar.getInstance();
+                if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] != "Saturday" && dayNames[date1.get(Calendar.DAY_OF_WEEK)] != "Sunday")
+                {
+                    e.getPlayer().sendMessage(ChatColor.GRAY + "Guild God: " + ChatColor.WHITE + "The guild wars aren't over yet! Talk to me on Saturday or Sunday.");
+                    return;
+                }
+                Inventory inv = Bukkit.getServer().createInventory(null, 9, "Guild God");
 
                 e.getPlayer().openInventory(inv);
                 e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_WOOD_BUTTON_CLICK_ON, 1.0f, 1.0f);

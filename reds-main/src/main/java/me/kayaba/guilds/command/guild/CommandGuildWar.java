@@ -6,14 +6,24 @@ import me.kayaba.guilds.command.abstractexecutor.*;
 import me.kayaba.guilds.enums.*;
 import me.kayaba.guilds.manager.*;
 import me.kayaba.guilds.util.*;
+import org.bukkit.*;
 import org.bukkit.command.*;
 
+import java.text.*;
 import java.util.*;
 
 public class CommandGuildWar extends AbstractCommandExecutor {
     @Override
     public void execute(CommandSender sender, String[] args) throws Exception {
         GPlayer nPlayer = PlayerManager.getPlayer(sender);
+
+        String dayNames[] = new DateFormatSymbols().getWeekdays();
+        Calendar date1 = Calendar.getInstance();
+        if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Saturday" || dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Sunday")
+        {
+           nPlayer.getPlayer().sendMessage(ChatColor.WHITE + "The Guild War hasn't started yet. The Guild War is in effect from Monday - Friday!");
+            return;
+        }
 
         if (!nPlayer.hasGuild()) {
             Message.CHAT_PLAYER_HASNOGUILD.send(sender);
