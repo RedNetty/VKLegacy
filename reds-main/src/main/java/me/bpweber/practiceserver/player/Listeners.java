@@ -60,6 +60,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.mcsg.double0negative.tabapi.TabAPI;
 
 import java.util.*;
 
@@ -123,33 +124,28 @@ public class Listeners
         {
             if (PlayerManager.getPlayer(p.getUniqueId()).hasGuild()) {
                 Guild g = PlayerManager.getPlayer(p.getUniqueId()).getGuild();
+                List<String> memes = new ArrayList<String>();
+                for(Player pl : g.getOnlinePlayers()) {
+                    memes.add(pl.getName());
+                }
                 TTA_Methods.sendTablist(p, ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Zeniths Legacy\n"
-                                + ChatColor.GRAY + "\n      ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
+                                + ChatColor.GRAY + "\n     ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
                                 + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + g.getName() + "\n\n" +
                                 ChatColor.DARK_AQUA + "Guild Leader: " + ChatColor.GRAY + "\n" + g.getLeader().getName() + "\n\n" +
-                                ChatColor.DARK_AQUA + "Online Players: " + ChatColor.GRAY + "\n" + g.getOnlinePlayers().size() + " / " + g.getPlayers().size() + "\n\n" +
-                                ChatColor.DARK_AQUA + "Guild Points: " + ChatColor.GRAY + "\n" + g.getPoints() + "\n\n" +
-                                ChatColor.DARK_AQUA + "Guild Lives: " + ChatColor.GRAY + "\n" + g.getLives() + "\n" +
-                                ChatColor.GRAY + "==============================\n",
+                                ChatColor.DARK_AQUA + "Online Players: " + ChatColor.GREEN + "\n" + memes + "\n\n" ,
                         ChatColor.GRAY + "   ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " INFO " + ChatColor.GRAY + "============\n\n"
                                 + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Alignment: \n" + StatsMain.getAlignment(p) + "\n" + StatsMain.getAlignTime(p) + "\n\n" +
-                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n" +
-                                ChatColor.GRAY + "==============================\n");
+                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n" +
+                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n\n");
             } else {
                 TTA_Methods.sendTablist(p, ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Zeniths Legacy\n"
-                                + ChatColor.GRAY + "\n      ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
-                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n" +
-                                ChatColor.GRAY + "==============================\n",
+                                + ChatColor.GRAY + "\n     ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
+                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n" ,
                         ChatColor.GRAY + "   ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " INFO " + ChatColor.GRAY + "============\n\n"
                                 + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Alignment: \n" + StatsMain.getAlignment(p) + "\n" + StatsMain.getAlignTime(p) + "\n\n" +
-                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n" +
-                                ChatColor.GRAY + "==============================\n");
+                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n" +
+                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n");
             }
-
         }
     }
     @EventHandler(priority = EventPriority.HIGH)

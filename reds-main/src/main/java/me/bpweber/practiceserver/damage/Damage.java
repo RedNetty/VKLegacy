@@ -795,9 +795,9 @@ public class Damage
                 if (d instanceof Player) {
                     Player dam = (Player) d;
                     if (dam.getInventory().getItemInMainHand() != null && dam.getInventory().getItemInMainHand().getType().name().contains("_SPADE")) {
-                        p.setVelocity(v.multiply(0.7F).setY(0.));
+                        p.setVelocity(v.multiply(0.9F).setY(0.40));
                     } else {
-                        p.setVelocity(v.multiply(0.5f).setY(0.35));
+                        p.setVelocity(v.multiply(0.54f).setY(0.25));
                     }
                 } else {
                     p.setVelocity(v.multiply(0.5f).setY(0.35));

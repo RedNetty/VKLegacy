@@ -432,7 +432,7 @@ public class Alignments
                     String wepname = "";
                     wepname = wep != null && wep.getType() != Material.AIR && wep.getItemMeta().hasDisplayName() ? wep.getItemMeta().getDisplayName() : String.valueOf(wep.getType().name().substring(0, 1).toUpperCase()) + wep.getType().name().substring(1, wep.getType().name().length()).toLowerCase();
                     reason = " was killed by " + ChatColor.RESET + d.getDisplayName() + ChatColor.WHITE + " with a(n) " + wepname;
-                    StatsMain.currentPlayerKills.put(d.getUniqueId(), StatsMain.currentPlayerKills.get(d.getUniqueId()) + 1);
+                    StatsMain.currentPlayerKills.put(d.getUniqueId(), StatsMain.getPlayerKills(d.getUniqueId()) + 1);
                 } else if (et.getDamager() instanceof LivingEntity) {
                     LivingEntity l = (LivingEntity) et.getDamager();
                     String name = "";

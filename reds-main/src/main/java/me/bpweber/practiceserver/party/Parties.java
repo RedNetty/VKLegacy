@@ -35,18 +35,19 @@ public class Parties implements CommandExecutor, Listener {
             if (sb.getObjective(DisplaySlot.SIDEBAR) != null) {
                 final Objective o = sb.getObjective(DisplaySlot.SIDEBAR);
                 for (final Player pl : mem) {
+                    int hp = (int)pl.getHealth();
                     if (Parties.parties.containsKey(pl)) {
                         String name = ChatColor.BOLD + pl.getName();
                         if (name.length() > 16) {
                             name = name.substring(0, 16);
                         }
 
-                        o.getScore(pl).setScore((int) pl.getHealth());
+                        o.getScore(pl).setScore(hp);
                     } else {
                         String name = pl.getName();
                         if (name.length() > 16) {
                             name = name.substring(0, 16);
-                            o.getScore(pl).setScore((int) pl.getHealth());
+                            o.getScore(pl).setScore(hp);
                         }
                     }
                 }
@@ -70,18 +71,19 @@ public class Parties implements CommandExecutor, Listener {
             o.setDisplayName(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Party").toString());
             o.setDisplaySlot(DisplaySlot.SIDEBAR);
             for (final Player pl : mem) {
+                int hp = (int)pl.getHealth();
                 if (Parties.parties.containsKey(pl)) {
                     String name = ChatColor.BOLD + pl.getName();
                     if (name.length() > 16) {
                         name = name.substring(0, 16);
                     }
-                    o.getScore(pl).setScore((int) pl.getHealth());
+                    o.getScore(pl).setScore(hp);
                 } else {
                     String name = pl.getName();
                     if (name.length() > 16) {
                         name = name.substring(0, 16);
                     }
-                    o.getScore(pl).setScore((int) pl.getHealth());
+                    o.getScore(pl).setScore(hp);
                 }
             }
             p.setScoreboard(sb);
@@ -221,15 +223,14 @@ public class Parties implements CommandExecutor, Listener {
     public void onEnable() {
         PracticeServer.log.info("[Parties] has been enabled.");
         Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
-        new BukkitRunnable() {
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(PracticeServer.plugin, new Runnable() {
+            @Override
             public void run() {
-                for (final Player p : Bukkit.getOnlinePlayers()) {
-                    if (p != null) {
-                        Parties.refreshScoreboard(p);
-                    }
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    refreshScoreboard(p);
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 1L, 1L);
+        },1, 1);
         new BukkitRunnable() {
             public void run() {
                 for (final Player p : Parties.invite.keySet()) {

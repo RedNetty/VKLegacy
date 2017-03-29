@@ -48,7 +48,7 @@ public class Mobdrops implements Listener {
             Player d = (Player) e.getDamager();
             final LivingEntity s = (LivingEntity) e.getEntity();
             if (e.getDamage() >= s.getHealth()) {
-                StatsMain.currentMonsterKills.put(d.getUniqueId(), StatsMain.currentMonsterKills.get(d.getUniqueId()) + 1);
+                StatsMain.currentMonsterKills.put(d.getUniqueId(), StatsMain.getMonsterKills(d.getUniqueId()) + 1);
 
             }
         }

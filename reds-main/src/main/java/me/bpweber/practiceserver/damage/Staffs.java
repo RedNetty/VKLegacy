@@ -112,7 +112,7 @@ public class Staffs
                         }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.STONE_HOE) {
-                        ep = p.launchProjectile(Egg.class);
+                        ep = p.launchProjectile(Snowball.class);
                         ep.setVelocity(ep.getVelocity().multiply(1));
                         ep.setBounce(false);
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
@@ -126,7 +126,7 @@ public class Staffs
                         }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.IRON_HOE) {
-                        ep = p.launchProjectile(EnderPearl.class);
+                        ep = p.launchProjectile(Snowball.class);
                         ep.setVelocity(ep.getVelocity().multiply(1));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 9;
@@ -139,7 +139,7 @@ public class Staffs
                         }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.DIAMOND_HOE) {
-                        ep = p.launchProjectile(WitherSkull.class);
+                        ep = p.launchProjectile(Snowball.class);
                         ep.setVelocity(ep.getVelocity().multiply(2));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 10;
@@ -152,7 +152,7 @@ public class Staffs
                         }.runTaskLaterAsynchronously(PracticeServer.plugin, 3);
                     }
                     if (p.getInventory().getItemInMainHand().getType() == Material.GOLD_HOE) {
-                        ep = p.launchProjectile(SmallFireball.class);
+                        ep = p.launchProjectile(Snowball.class);
                         ep.setVelocity(ep.getVelocity().multiply(1));
                         this.shots.put(ep, p.getInventory().getItemInMainHand());
                         amt = 11;

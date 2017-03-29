@@ -1,6 +1,8 @@
 package me.bpweber.practiceserver.player.GamePlayer;
 
 import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.money.Economy.Economy;
+import me.bpweber.practiceserver.player.Stats.StatsMain;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,16 +30,15 @@ public class GamePlayer implements Listener {
 
     @EventHandler
     public void onJoinCheck(PlayerJoinEvent e) {
-        if(!GameConfig.get().contains(e.getPlayer().getUniqueId() + ".Main.ZCash")) {
-            GameConfig.get().set(e.getPlayer().getUniqueId() + ".Main.ZCash", 0);
-        }
-        if (playerExists(e.getPlayer())) {
-            return;
-        } else {
+        if (!playerExists(e.getPlayer())) {
             PracticeServer.plugin.getServer().getScheduler().scheduleSyncDelayedTask(PracticeServer.plugin, new Runnable() {
                 @Override
                 public void run() {
                     Player p = e.getPlayer();
+                    StatsMain.currentMonsterKills.put(p.getUniqueId(), 0);
+                    StatsMain.currentPlayerKills.put(p.getUniqueId(), 0);
+                    Economy.currentBalance.put(p.getUniqueId(), 0);
+
                     GameConfig.get().set(p.getUniqueId() + ".Info.Username", p.getName());
                     GameConfig.get().set(p.getUniqueId() + ".Info.IP Address", p.getAddress().toString());
                     GameConfig.get().set(p.getUniqueId() + ".Main.Rank", "Default");

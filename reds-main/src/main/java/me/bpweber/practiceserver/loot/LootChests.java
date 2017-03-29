@@ -73,6 +73,20 @@ public class LootChests
     }
 
     public void onDisable() {
+        File file = new File(PracticeServer.plugin.getDataFolder(), "loot.yml");
+        if (file.exists()) {
+            file.delete();
+        }
+        YamlConfiguration config = new YamlConfiguration();
+        for (Location loc1 : loot.keySet()) {
+            String s = String.valueOf(loc1.getWorld().getName()) + "," + (int) loc1.getX() + "," + (int) loc1.getY() + "," + (int) loc1.getZ();
+            config.set(s, loot.get(loc1));
+            try {
+                config.save(file);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
         PracticeServer.log.info("[LootChests] has been disabled.");
     }
 

@@ -953,6 +953,22 @@ public class Spawners implements Listener, CommandExecutor {
                         + Spawners.spawners.get(e.getBlock().getLocation()) + ChatColor.GRAY + "' removed at "
                         + ChatColor.YELLOW + e.getBlock().getLocation().toVector());
                 Spawners.spawners.remove(e.getBlock().getLocation());
+                PracticeServer.log.info("[Spawners] has been disabled.");
+                final File file = new File(PracticeServer.plugin.getDataFolder(), "spawners.yml");
+                if (file.exists()) {
+                    file.delete();
+                }
+                final YamlConfiguration config = new YamlConfiguration();
+                for (final Location loc : Spawners.spawners.keySet()) {
+                    final String s = String.valueOf(loc.getWorld().getName()) + "," + (int) loc.getX() + "," + (int) loc.getY()
+                            + "," + (int) loc.getZ();
+                    config.set(s, Spawners.spawners.get(loc));
+                    try {
+                        config.save(file);
+                    } catch (IOException ee) {
+                        ee.printStackTrace();
+                    }
+                }
             }
             if (this.creatingspawner.containsValue(e.getBlock().getLocation())) {
                 for (final String s : this.creatingspawner.keySet()) {
@@ -963,6 +979,7 @@ public class Spawners implements Listener, CommandExecutor {
                     }
                 }
             }
+
         }
     }
 

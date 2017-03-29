@@ -38,6 +38,7 @@ import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
 import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.utils.JSONMessage;
+import me.kayaba.guilds.manager.PlayerManager;
 import net.minecraft.server.v1_9_R2.IChatBaseComponent;
 import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
 import org.bukkit.Bukkit;
@@ -114,6 +115,13 @@ public class ChatMechanics
         return personal_msg;
     }
 
+    public String getTag(Player p ) {
+        if(PlayerManager.getPlayer(p.getUniqueId()).hasGuild()) {
+            return "[" + PlayerManager.getPlayer(p.getUniqueId()).getGuild().getTag() + "] ";
+        }else{
+            return "";
+        }
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             int hours2;
@@ -155,10 +163,10 @@ public class ChatMechanics
                             }
                         } else {
                             for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-                                pl.sendMessage(ChatColor.GREEN + "<" + ChatColor.BOLD + "T" + ChatColor.GREEN + "> " + ChatColor.RESET + p.getDisplayName() + ": " + ChatColor.WHITE + message);
+                                pl.sendMessage(ChatColor.GREEN + "<" + ChatColor.BOLD + "T" + ChatColor.GREEN + "> " + ChatColor.RESET + getTag(p) + p.getDisplayName() + ": " + ChatColor.WHITE + message);
                             }
                         }
-                        PracticeServer.log.info(ChatColor.GREEN + "<" + ChatColor.BOLD + "T" + ChatColor.GREEN + "> " + ChatColor.RESET + p.getDisplayName() + ": " + ChatColor.WHITE + message);
+                        PracticeServer.log.info(ChatColor.GREEN + "<" + ChatColor.BOLD + "T" + ChatColor.GREEN + "> " + ChatColor.RESET + getTag(p) + p.getDisplayName() + ": " + ChatColor.WHITE + message);
                     } else {
                         if (message.contains("@i@") && p.getInventory().getItemInMainHand() != null && p.getInventory().getItemInMainHand().getType() != Material.AIR) {
                             for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
@@ -166,10 +174,10 @@ public class ChatMechanics
                             }
                         } else {
                             for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
-                                pl.sendMessage(ChatColor.AQUA + "<" + ChatColor.BOLD + "G" + ChatColor.AQUA + "> " + ChatColor.RESET + p.getDisplayName() + ": " + ChatColor.WHITE + message);
+                                pl.sendMessage(ChatColor.AQUA + "<" + ChatColor.BOLD + "G" + ChatColor.AQUA + "> " + ChatColor.RESET + getTag(p) +p.getDisplayName() + ": " + ChatColor.WHITE + message);
                             }
                         }
-                        PracticeServer.log.info(ChatColor.AQUA + "<" + ChatColor.BOLD + "G" + ChatColor.AQUA + "> " + ChatColor.RESET + p.getDisplayName() + ": " + ChatColor.WHITE + message);
+                        PracticeServer.log.info(ChatColor.AQUA + "<" + ChatColor.BOLD + "G" + ChatColor.AQUA + "> " + ChatColor.RESET + getTag(p) +p.getDisplayName() + ": " + ChatColor.WHITE + message);
                     }
                 }
             }
@@ -378,9 +386,9 @@ public class ChatMechanics
                         continue;
                     this.sendShowString(p, p.getInventory().getItemInMainHand(), "", message, op);
                 }
-                PracticeServer.log.info(String.valueOf(p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                PracticeServer.log.info(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
             } else {
-                p.sendMessage(String.valueOf(p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                p.sendMessage(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
                 ArrayList<Player> to_send = new ArrayList<Player>();
                 for (Player pl3 : Bukkit.getServer().getOnlinePlayers()) {
                     if (Vanish.vanished.contains(pl3.getName().toLowerCase()) || pl3 == null || pl3 == p || pl3.getLocation().distance(p.getLocation()) >= 50.0)
@@ -391,15 +399,15 @@ public class ChatMechanics
                     p.sendMessage(ChatColor.GRAY.toString() + ChatColor.ITALIC + "No one heard you.");
                 } else {
                     for (Player pl3 : to_send) {
-                        pl3.sendMessage(String.valueOf(p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                        pl3.sendMessage(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
                     }
                 }
                 for (Player op : Bukkit.getServer().getOnlinePlayers()) {
                     if (!op.isOp() || !Vanish.vanished.contains(op.getName().toLowerCase()) || op == p)
                         continue;
-                    op.sendMessage(String.valueOf(p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                    op.sendMessage(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
                 }
-                PracticeServer.log.info(String.valueOf(p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                PracticeServer.log.info(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
             }
         }
     }
@@ -424,7 +432,7 @@ public class ChatMechanics
             if (meta.hasLore())
                 hoveredChat.addAll(meta.getLore());
             JSONMessage normal = new JSONMessage(aprefix);
-            before = sender.getDisplayName() + ": " + ChatColor.WHITE + before;
+            before = getTag(p) + sender.getDisplayName() + ": " + ChatColor.WHITE + before;
             normal.addText(before + "");
             normal.addHoverText(hoveredChat, ChatColor.BOLD + ChatColor.UNDERLINE.toString() + "SHOW");
             normal.addText(after);
