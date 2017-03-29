@@ -16,6 +16,7 @@ public class DeathListener extends AbstractListener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player victim = event.getEntity();
         Player attacker = Damage.lastphit.get(victim);
+        if(attacker == null) return; // Fixes some errors.
         GPlayer nPlayer = PlayerManager.getPlayer(victim);
 
         if (attacker == null || attacker.equals(victim)) {

@@ -1,6 +1,5 @@
 package me.bpweber.practiceserver.loot;
 
-import me.bpweber.practiceserver.DonationMechanics.Crates.CratesMain;
 import me.bpweber.practiceserver.item.*;
 import me.bpweber.practiceserver.money.*;
 import me.bpweber.practiceserver.teleport.*;
@@ -15,12 +14,12 @@ public class LootDrops {
     public static ItemStack createLootDrop(int tier) {
         Random random = new Random();
         int dodrop = random.nextInt(250);
-        if (dodrop < 10) {
-            if (tier == 4 || tier == 5) {
-                return CratesMain.createKey();
-            }
-
-        }
+//        if (dodrop < 10) {
+//            if (tier == 4 || tier == 5) {
+//                return CratesMain.createKey();
+//            }
+//
+//        }
         if (dodrop < 50) {
             int whatenchant = random.nextInt(2);
             if (tier < 3 || tier >= 3 && whatenchant == 0) {
