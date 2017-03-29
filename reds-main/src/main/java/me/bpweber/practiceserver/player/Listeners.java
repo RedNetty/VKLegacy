@@ -1,67 +1,43 @@
 package me.bpweber.practiceserver.player;
 
-import com.vexsoftware.votifier.model.Vote;
-import com.vexsoftware.votifier.model.VotifierEvent;
-import de.Herbystar.TTA.TTA_Methods;
-import fr.neatmonster.nocheatplus.checks.CheckType;
-import fr.neatmonster.nocheatplus.hooks.NCPExemptionManager;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Ban;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.ToggleTrail;
-import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
-import me.bpweber.practiceserver.ModerationMechanics.ModerationMechanics;
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.damage.Damage;
-import me.bpweber.practiceserver.enchants.Enchants;
-import me.bpweber.practiceserver.item.Items;
-import me.bpweber.practiceserver.item.Journal;
-import me.bpweber.practiceserver.mobs.Mobs;
-import me.bpweber.practiceserver.player.Stats.StatsMain;
-import me.bpweber.practiceserver.pvp.Alignments;
-import me.bpweber.practiceserver.teleport.Hearthstone;
-import me.bpweber.practiceserver.teleport.TeleportBooks;
-import me.bpweber.practiceserver.utils.CheckIP;
-import me.bpweber.practiceserver.utils.Particles;
-import me.bpweber.practiceserver.utils.StringUtil;
-import me.kayaba.guilds.api.basic.Guild;
+import com.vexsoftware.votifier.model.*;
+import de.Herbystar.TTA.*;
+import fr.neatmonster.nocheatplus.checks.*;
+import fr.neatmonster.nocheatplus.hooks.*;
+import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
+import me.bpweber.practiceserver.ModerationMechanics.*;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.damage.*;
+import me.bpweber.practiceserver.enchants.*;
+import me.bpweber.practiceserver.item.*;
+import me.bpweber.practiceserver.mobs.*;
+import me.bpweber.practiceserver.player.Stats.*;
+import me.bpweber.practiceserver.pvp.*;
+import me.bpweber.practiceserver.teleport.*;
+import me.bpweber.practiceserver.utils.*;
+import me.kayaba.guilds.api.basic.*;
 import me.kayaba.guilds.enums.Permission;
-import me.kayaba.guilds.manager.PlayerManager;
-import me.konsolas.aac.AAC;
-import me.konsolas.aac.api.HackType;
-import me.konsolas.aac.api.PlayerViolationCommandEvent;
+import me.kayaba.guilds.manager.*;
+import me.konsolas.aac.*;
+import me.konsolas.aac.api.*;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.MagmaCube;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
+import org.bukkit.attribute.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.entity.EntityDamageEvent.*;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
-import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.event.weather.WeatherChangeEvent;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.mcsg.double0negative.tabapi.TabAPI;
+import org.bukkit.event.server.*;
+import org.bukkit.event.weather.*;
+import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.permissions.*;
+import org.bukkit.potion.*;
+import org.bukkit.scheduler.*;
 
+import java.io.*;
 import java.util.*;
 
 @SuppressWarnings("deprecation")
@@ -288,8 +264,18 @@ public class Listeners
     }
 
     @EventHandler
-    public void onJoinBanned(PlayerLoginEvent e) {
+    public void onJoinBannedAndSubCheck(PlayerLoginEvent e) {
         Player p = e.getPlayer();
+        if(new File("subserver").exists())
+        {
+            if(p.isOp()) return;
+            if (!ModerationMechanics.isSub(p)) {
+                e.setKickMessage(String.valueOf(ChatColor.RED.toString()) + "This Zeniths Legacy shard is for subscribers only." + "\n" +
+                        ChatColor.GRAY.toString() + "You can subscribe at http://store.zenithslegacy.net/ to get instant access.");
+                e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+                return;
+            }
+        }
         if (Ban.banned.containsKey(p.getUniqueId())) {
             if (Ban.banned.get(p.getUniqueId()) == -1) {
                 e.setKickMessage(ChatColor.RED + "Your account has been PERMANENTLY disabled." + "\n" + ChatColor.GRAY +
