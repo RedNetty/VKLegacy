@@ -145,6 +145,8 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
     private SignGUI signGUI;
     private final Map<ConfigManager.ServerVersion, Constructor<? extends TabList>> tabListConstructorMap = new HashMap<>();
 
+    private boolean messageGlobalized = false;
+
 
     public static PracticeServer getInstance() {
         return instance;
@@ -484,8 +486,9 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             String dayNames[] = new DateFormatSymbols().getWeekdays();
             Calendar date1 = Calendar.getInstance();
-            if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Saturday" || dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Sunday")
+            if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Saturday" && !messageGlobalized)
             {
+                messageGlobalized = true;
                 Bukkit.broadcastMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + ">>> " + ChatColor.AQUA + "The Guild War is now over! You can redeem your current guild points at Cyrennica's Guild God!");
                 for (Player pl : Bukkit.getOnlinePlayers()) {
                     pl.playSound(pl.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
@@ -496,6 +499,14 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
                     Collection<Guild> empty = new ArrayList<Guild>();
                     guild.setWars(empty);
                 }
+            }
+        }, 0L, 20L);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            String dayNames[] = new DateFormatSymbols().getWeekdays();
+            Calendar date1 = Calendar.getInstance();
+            if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] != "Saturday" && dayNames[date1.get(Calendar.DAY_OF_WEEK)] != "Sunday" && messageGlobalized)
+            {
+                messageGlobalized = false; // Reset the variable..
             }
         }, 0L, 20L);
     }

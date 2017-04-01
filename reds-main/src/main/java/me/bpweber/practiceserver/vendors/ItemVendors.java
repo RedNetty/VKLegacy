@@ -172,9 +172,7 @@ public class ItemVendors
                     e.getPlayer().sendMessage(ChatColor.GRAY + "Guild God: " + ChatColor.WHITE + "The guild wars aren't over yet! Talk to me on Saturday or Sunday.");
                     return;
                 }
-                Inventory inv = Bukkit.getServer().createInventory(null, 9, "Guild God");
-
-                e.getPlayer().openInventory(inv);
+                e.getPlayer().sendMessage(ChatColor.RED + "Temp. disabled!");
                 e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.BLOCK_WOOD_BUTTON_CLICK_ON, 1.0f, 1.0f);
             }
         }
