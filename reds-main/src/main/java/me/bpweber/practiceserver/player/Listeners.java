@@ -133,7 +133,7 @@ public class Listeners
 
     @EventHandler
     public void dropItem(PlayerDropItemEvent e) {
-        if (e.getPlayer().isOp() && !e.getPlayer().getName().equalsIgnoreCase("RedsEmporium")) {
+        if (e.getPlayer().isOp() && !e.getPlayer().getName().equalsIgnoreCase("RedsEmporium") && !e.getPlayer().getName().equalsIgnoreCase("Kayaba")) {
             e.setCancelled(true);
         }
     }
@@ -156,7 +156,7 @@ public class Listeners
     @EventHandler
     public void onMiddleClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (player.isOp() && !event.getWhoClicked().getName().equalsIgnoreCase("RedsEmporium")) {
+        if (player.isOp() && !event.getWhoClicked().getName().equalsIgnoreCase("RedsEmporium") && !event.getWhoClicked().getName().equalsIgnoreCase("Kayaba")) {
             if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.GOLD_SWORD || event.getCurrentItem().getType() == Material.GOLD_AXE || event.getCurrentItem().getType() == Material.GOLD_HELMET
                     || event.getCurrentItem().getType() == Material.GOLD_CHESTPLATE || event.getCurrentItem().getType() == Material.GOLD_LEGGINGS || event.getCurrentItem().getType() == Material.GOLD_BOOTS
                     || event.getCurrentItem().getType() == Material.EMPTY_MAP || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK || event.getCurrentItem().getType() == Material.PAPER) {

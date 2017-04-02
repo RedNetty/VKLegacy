@@ -36,6 +36,10 @@ public class DeathListener extends AbstractListener {
             {
                 return; // DO NOT RUN THE CODE IF THEY AREN'T AN ENEMY GUILD!
             }
+            if(guildVictim.getLives() < 0)
+            {
+                guildVictim.setLives(0); // Small fix in case
+            }
             if(guildVictim.getLives() > 0)
             {
                 guildVictim.setLives(guildVictim.getLives() - 1);
@@ -45,10 +49,6 @@ public class DeathListener extends AbstractListener {
             if(timeProtection <= 0)
             {
                 if (nPlayer.hasGuild()) {
-                    if(guildVictim.getLives() < 0)
-                    {
-                        guildVictim.setLives(0); // Small fix in case
-                    }
                     if(guildVictim.getLives() == 0)
                     {
                         guildVictim.takePoints(Config.GUILD_DEATHPOINTS.getInt());

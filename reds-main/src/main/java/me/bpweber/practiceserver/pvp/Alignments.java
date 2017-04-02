@@ -294,10 +294,10 @@ public class Alignments
         if (p.getName().equals("RedsEmporium")) {
             prefix = ChatColor.GOLD.toString() + ChatColor.BOLD + "DEV ";
         }
-        if (p.getName().equals("Kav_")) {
-            prefix = ChatColor.RED.toString() + ChatColor.BOLD + "ALLAH ";
+        if (p.getName().equals("Kayaba")) {
+            prefix = ChatColor.RED.toString() + ChatColor.BOLD + "DEV ";
         }
-        if (p.isOp() && !p.getName().equals("RedsEmporium") && !p.getName().equalsIgnoreCase("KAV_")) {
+        if (p.isOp() && !p.getName().equals("RedsEmporium") && !p.getName().equalsIgnoreCase("Kayaba")) {
             prefix = ChatColor.AQUA.toString() + ChatColor.BOLD + "GM ";
 
         }

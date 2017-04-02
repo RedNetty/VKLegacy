@@ -105,7 +105,7 @@ public class CratesMain implements Listener {
 
                                    if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
                                            e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
-                                           e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
+                                           e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
                                        if (e.getCurrentItem().getAmount() == 1) {
                                            e.setCurrentItem(null);
                                        }
@@ -113,6 +113,7 @@ public class CratesMain implements Listener {
                                            e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
 
                                        }
+                                       p.closeInventory();
                                    }
 
                            }
@@ -195,12 +196,17 @@ public class CratesMain implements Listener {
            }
        }
 
-    public static ItemStack createKey() {
+    public static ItemStack createKey(boolean inShop) {
         ItemStack crate = new ItemStack(Material.TRIPWIRE_HOOK);
         ItemMeta cm = crate.getItemMeta();
         new Random();
         cm.setDisplayName(ChatColor.AQUA + "Crate key");
-        cm.setLore(Arrays.asList(ChatColor.GRAY.toString() + ChatColor.ITALIC.toString() + "This key is used for locked crates."));
+        if(inShop)
+        {
+            cm.setLore(Arrays.asList(ChatColor.GRAY.toString() + ChatColor.ITALIC.toString() + "This key is used for locked crates.", ChatColor.GREEN + "Price: " + ChatColor.WHITE + "1050GP"));
+        } else {
+            cm.setLore(Arrays.asList(ChatColor.GRAY.toString() + ChatColor.ITALIC.toString() + "This key is used for locked crates."));
+        }
         crate.setItemMeta(cm);
         return crate;
 
