@@ -280,8 +280,8 @@ public class Damage
     @EventHandler(priority = EventPriority.LOWEST)
     public void onNoOpAndGuildDamage(EntityDamageByEntityEvent e) {
         Player p;
-        GPlayer nPlayer = PlayerManager.getPlayer(((Player) e.getEntity()).getPlayer());
-        GPlayer nPlayerAttacker = PlayerManager.getPlayer(((Player) e.getDamager()).getPlayer());
+        GPlayer nPlayer = PlayerManager.getPlayer(((Player) e.getEntity()).getPlayer().getUniqueId());
+        GPlayer nPlayerAttacker = PlayerManager.getPlayer(((Player) e.getDamager()).getPlayer().getUniqueId());
         if(nPlayer.hasGuild() && nPlayerAttacker.hasGuild())
         {
             if(nPlayer.getGuild().isMember(nPlayerAttacker) && nPlayer.getGuild().getFriendlyPvp())

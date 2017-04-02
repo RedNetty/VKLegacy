@@ -92,10 +92,6 @@ public class CratesMain implements Listener {
                                    } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
                                        item = unlockCrate(5);
                                    }
-                                   if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
-                                       p.getInventory().addItem(item);
-                                       doFirework(p);
-                                   }
                                }
                                if(succ >= 50) {
                                    p.sendMessage(ChatColor.RED + "The Crate Shatters as you have failed to open it.");
@@ -105,7 +101,13 @@ public class CratesMain implements Listener {
 
                                    if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
                                            e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
-                                           e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
+                                           e.getCurrentItem().getItemMeta().getDisplayName().contains("War") ||
+                                           e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient") ||
+                                           e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
+                                       if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
+                                           p.getInventory().addItem(item);
+                                           doFirework(p);
+                                       }
                                        if (e.getCurrentItem().getAmount() == 1) {
                                            e.setCurrentItem(null);
                                        }

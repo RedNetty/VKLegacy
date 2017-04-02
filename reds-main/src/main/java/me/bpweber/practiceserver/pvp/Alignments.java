@@ -277,7 +277,7 @@ public class Alignments
             rank = Setrank.ranks.get(p.getUniqueId());
         }
         if (rank.equalsIgnoreCase("default")) {
-            prefix = "";
+            prefix = ChatColor.GRAY + "";
         }
         if (rank.equalsIgnoreCase("sub")) {
             prefix = ChatColor.GREEN.toString() + ChatColor.BOLD + "S ";
