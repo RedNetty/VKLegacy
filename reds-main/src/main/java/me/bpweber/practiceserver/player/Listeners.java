@@ -2,8 +2,6 @@ package me.bpweber.practiceserver.player;
 
 import com.vexsoftware.votifier.model.*;
 import de.Herbystar.TTA.*;
-import fr.neatmonster.nocheatplus.checks.*;
-import fr.neatmonster.nocheatplus.hooks.*;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
 import me.bpweber.practiceserver.ModerationMechanics.*;
 import me.bpweber.practiceserver.*;
@@ -128,7 +126,6 @@ public class Listeners
     public void onFallDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Horse && event.getCause() == DamageCause.FALL)
             event.setCancelled(true);
-
     }
 
     @EventHandler
@@ -157,18 +154,7 @@ public class Listeners
     public void onMiddleClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         if (player.isOp() && !event.getWhoClicked().getName().equalsIgnoreCase("RedsEmporium") && !event.getWhoClicked().getName().equalsIgnoreCase("Kayaba")) {
-            if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.GOLD_SWORD || event.getCurrentItem().getType() == Material.GOLD_AXE || event.getCurrentItem().getType() == Material.GOLD_HELMET
-                    || event.getCurrentItem().getType() == Material.GOLD_CHESTPLATE || event.getCurrentItem().getType() == Material.GOLD_LEGGINGS || event.getCurrentItem().getType() == Material.GOLD_BOOTS
-                    || event.getCurrentItem().getType() == Material.EMPTY_MAP || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK || event.getCurrentItem().getType() == Material.PAPER) {
-                player.getInventory().clear();
-                event.getCursor().setType(null);
-                event.getCurrentItem().setType(null);
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (ModerationMechanics.isStaff(p)) {
-                        p.sendMessage(ChatColor.RED.toString() + "Staff Member " + player.getName() + " Was found with illegal items in their inventory.");
-                    }
-                }
-            }
+            event.setCancelled(true);
         }
     }
 
@@ -212,7 +198,12 @@ public class Listeners
     @EventHandler
     public void onPlayerViolationCommand(PlayerViolationCommandEvent e) {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.isOp() && e.getHackType() != HackType.KILLAURA && e.getHackType() != HackType.HEURISTICS && e.getHackType() != HackType.FIGHTSPEED && e.getHackType() != HackType.NOSWING) {
+            if(p.getInventory().getItemInMainHand().getType().name().contains("_HOE")) {
+                if(e.getHackType() == HackType.KILLAURA || e.getHackType() == HackType.NOSWING || e.getHackType() == HackType.CRITICALS || e.getHackType() == HackType.FIGHTSPEED || e.getHackType() == HackType.HEURISTICS) {
+                    e.setCancelled(true);
+                }
+            }
+            if (p.isOp() && e.getHackType() != HackType.FIGHTSPEED && e.getHackType() != HackType.HEURISTICS && e.getHackType() != HackType.FIGHTSPEED && e.getHackType() != HackType.NOSWING) {
                 e.setCancelled(true);
             }
         }
@@ -225,19 +216,6 @@ public class Listeners
             if (p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") || p.getInventory().getItemInMainHand().getType().name().contains("_HOE")) {
                 AAC.j.setViolationLevel(p, HackType.KILLAURA, 0);
                 AAC.j.setViolationLevel(p, HackType.HEURISTICS, 0);
-                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_NOSWING);
-                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_REACH);
-                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_SPEED);
-                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_DIRECTION);
-                NCPExemptionManager.exemptPermanently(p, CheckType.FIGHT_ANGLE);
-            } else if (!p.getInventory().getItemInMainHand().getType().name().contains("_HOE") || !p.getInventory().getItemInMainHand().getType().name().contains("_SPADE") && NCPExemptionManager.isExempted(p, CheckType.FIGHT_SPEED) ||
-                    NCPExemptionManager.isExempted(p, CheckType.FIGHT_REACH) || NCPExemptionManager.isExempted(p, CheckType.FIGHT_NOSWING)) {
-                NCPExemptionManager.unexempt(p, CheckType.FIGHT_SPEED);
-                NCPExemptionManager.unexempt(p, CheckType.FIGHT_REACH);
-                NCPExemptionManager.unexempt(p, CheckType.FIGHT_NOSWING);
-                NCPExemptionManager.unexempt(p, CheckType.FIGHT_DIRECTION);
-                NCPExemptionManager.unexempt(p, CheckType.FIGHT_ANGLE);
-
             }
         }
     }
