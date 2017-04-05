@@ -330,7 +330,7 @@ public class Damage
                         if (e.getDamage() > 0.0) {
                             p.getWorld().playEffect(p.getEyeLocation(), Effect.STEP_SOUND, Material.LEAVES);
                             int dmg = (int) e.getDamage();
-                            int afterDmg = dmg * thornsamt / 200;
+                            int afterDmg = dmg * thornsamt / 150;
                             le.damage(afterDmg);
                         }
                     }
@@ -403,7 +403,7 @@ public class Damage
     public void holoDMG(EntityDamageByEntityEvent e) {
         ArrayList<String> gettoggles = Toggles.getToggles(e.getDamager().getName());
         if (e.getEntity() instanceof LivingEntity && e.getDamager() instanceof Player) {
-            if (e.getDamage() > 0 && !e.isCancelled()) {
+            if (!e.isCancelled()) {
                 Player p = (Player) e.getDamager();
                 LivingEntity le = (LivingEntity) e.getEntity();
                 int dmg = (int) e.getDamage();

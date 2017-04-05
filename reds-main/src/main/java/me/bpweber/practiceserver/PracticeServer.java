@@ -120,6 +120,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
     private static Trading trading;
     private static CratesMain cm;
     private static Economy em;
+    private static ForceField ff;
     private static Nametag nt;
     private static StatsMain stat;
     private static GamePlayer gap;
@@ -412,6 +413,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         antibuild = new Antibuild();
         banks = new Banks();
         buddies = new Buddies();
+        ff = new ForceField();
         chatMechanics = new ChatMechanics();
         damage = new Damage();
         durability = new Durability();
@@ -458,6 +460,7 @@ public class PracticeServer extends JavaPlugin implements GuildsAPI {
         stat.onEnable();
         horses.onEnable();
         itemVendors.onEnable();
+        ff.onEnable();
         cm.onEnable();
         listeners.onEnable();
         logout.onEnable();

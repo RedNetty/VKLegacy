@@ -69,16 +69,16 @@ public class Orbs implements Listener {
         final List<String> oldlore = is.getItemMeta().getLore();
         final List<String> lore = new ArrayList<String>();
         final Random random = new Random();
-        final int elem = random.nextInt(7) + 1;
+        final int elem = random.nextInt(4) + 1;
         final int pure = random.nextInt(5) + 1;
-        final int life = random.nextInt(9) + 1;
+        final int life = random.nextInt(6) + 1;
         final int crit = random.nextInt(4) + 1;
         final int acc = random.nextInt(5) + 1;
         final int dodge = random.nextInt(4) + 1;
         final int block = random.nextInt(5) + 1;
-        final int vit = random.nextInt(7) + 1;
+        final int vit = random.nextInt(5) + 1;
         final int str = random.nextInt(5) + 1;
-        final int intel = random.nextInt(6) + 1;
+        final int intel = random.nextInt(3) + 1;
         final int thorns = random.nextInt(5) + 1;
 
         int dodgeamt = 0;

@@ -334,8 +334,8 @@ public class ChatMechanics
             if (Setrank.ranks.containsKey(p.getName())) {
                 rank = Setrank.ranks.get(p.getName());
             }
-            if (rank.equals("pmod")) {
-                if (!(s.equals("roll") || s.equals("sc") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("psban") || s.equals("psunban") || s.equals("psmute") || s.equals("psunmute"))) {
+            if (rank.equalsIgnoreCase("pmod")) {
+                if (!(s.equals("roll") || s.equals("sc") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("psban") || s.equals("psunban") || s.equals("psmute") || s.equals("psunmute") || s.equals("g") || s.equals("guild") || s.equals("guilds") || s.equals("abandon") || s.equals("create") || s.equals("join") || s.equals("gi"))) {
                     e.setCancelled(true);
                     p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
                 }
@@ -386,9 +386,9 @@ public class ChatMechanics
                         continue;
                     this.sendShowString(p, p.getInventory().getItemInMainHand(), "", message, op);
                 }
-                PracticeServer.log.info(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                PracticeServer.log.info(String.valueOf(getTag(e.getPlayer()) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
             } else {
-                p.sendMessage(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                p.sendMessage(String.valueOf(getTag(e.getPlayer()) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
                 ArrayList<Player> to_send = new ArrayList<Player>();
                 for (Player pl3 : Bukkit.getServer().getOnlinePlayers()) {
                     if (Vanish.vanished.contains(pl3.getName().toLowerCase()) || pl3 == null || pl3 == p || pl3.getLocation().distance(p.getLocation()) >= 50.0)
@@ -399,15 +399,15 @@ public class ChatMechanics
                     p.sendMessage(ChatColor.GRAY.toString() + ChatColor.ITALIC + "No one heard you.");
                 } else {
                     for (Player pl3 : to_send) {
-                        pl3.sendMessage(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                        pl3.sendMessage(String.valueOf(getTag(e.getPlayer()) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
                     }
                 }
                 for (Player op : Bukkit.getServer().getOnlinePlayers()) {
                     if (!op.isOp() || !Vanish.vanished.contains(op.getName().toLowerCase()) || op == p)
                         continue;
-                    op.sendMessage(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                    op.sendMessage(String.valueOf(getTag(e.getPlayer()) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
                 }
-                PracticeServer.log.info(String.valueOf(getTag(p) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
+                PracticeServer.log.info(String.valueOf(getTag(e.getPlayer()) + p.getDisplayName()) + ": " + ChatColor.WHITE + message);
             }
         }
     }

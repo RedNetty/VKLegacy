@@ -34,6 +34,7 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.permissions.*;
 import org.bukkit.potion.*;
 import org.bukkit.scheduler.*;
+import org.mcsg.double0negative.tabapi.TabAPI;
 
 import java.io.*;
 import java.util.*;
@@ -92,7 +93,6 @@ public class Listeners
     public void onDisable() {
         PracticeServer.log.info("[Listeners] has been disabled.");
     }
-
     public void refreshTabList(Player p) {
         int ping = TTA_Methods.getPing(p);
         {
@@ -255,15 +255,18 @@ public class Listeners
             }
         }
         if (Ban.banned.containsKey(p.getUniqueId())) {
-            if (Ban.banned.get(p.getUniqueId()) == -1) {
-                e.setKickMessage(ChatColor.RED + "Your account has been PERMANENTLY disabled." + "\n" + ChatColor.GRAY +
-                        "For further information about this suspension, please contact a " + ChatColor.UNDERLINE + "Staff Member");
-            } else {
-                e.setKickMessage(ChatColor.RED + "Your account has been TEMPORARILY locked due to suspisious activity." + "\n" + ChatColor.GRAY +
-                        "For further information about this suspension, please contact a " + ChatColor.UNDERLINE + "Staff Member");
+            if(Ban.banned.get(p.getUniqueId()) != 0) {
+                if (Ban.banned.get(p.getUniqueId()) == -1) {
+                    e.setKickMessage(ChatColor.RED + "Your account has been PERMANENTLY disabled." + "\n" + ChatColor.GRAY +
+                            "For further information about this suspension, please contact a " + ChatColor.UNDERLINE + "Staff Member");
+                } else {
+                    e.setKickMessage(ChatColor.RED + "Your account has been TEMPORARILY locked due to suspisious activity." + "\n" + ChatColor.GRAY +
+                            "For further information about this suspension, please contact a " + ChatColor.UNDERLINE + "Staff Member");
+                }
+                e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+
+                return;
             }
-            e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-            return;
         }
         if (Bukkit.getServer().getOnlinePlayers().size() >= 100) {
             if (ModerationMechanics.isSub(p) || p.isOp()) {

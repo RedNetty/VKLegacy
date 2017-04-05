@@ -194,7 +194,6 @@ public class Staffs
                 LivingEntity target = null;
                 ItemStack wep = this.shots.get(pj);
                 this.shots.remove(pj);
-
                 for (Entity ent : pj.getNearbyEntities(2.0, 2.0, 2.0)) {
                     if (!(ent instanceof LivingEntity) || ent == d) continue;
                     target = (LivingEntity) ent;
@@ -202,8 +201,6 @@ public class Staffs
                 if (target != null) {
                     if (pj instanceof Snowball) {
                         e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.BLOCK_SNOW_BREAK, 1.0f, 1.0f);
-
-
                     }
                     staff.put(d, wep);
                     target.damage(1.0, d);
