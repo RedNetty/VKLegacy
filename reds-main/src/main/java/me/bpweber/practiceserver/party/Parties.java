@@ -1,16 +1,24 @@
 package me.bpweber.practiceserver.party;
 
-import me.bpweber.practiceserver.*;
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.player.*;
-import org.bukkit.scheduler.*;
-import org.bukkit.scoreboard.*;
+import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.party.Scoreboards;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Parties implements CommandExecutor, Listener {
     public static ConcurrentHashMap<Player, ArrayList<Player>> parties;
@@ -35,20 +43,19 @@ public class Parties implements CommandExecutor, Listener {
             if (sb.getObjective(DisplaySlot.SIDEBAR) != null) {
                 final Objective o = sb.getObjective(DisplaySlot.SIDEBAR);
                 for (final Player pl : mem) {
-                    int hp = (int)pl.getHealth();
                     if (Parties.parties.containsKey(pl)) {
                         String name = ChatColor.BOLD + pl.getName();
                         if (name.length() > 16) {
                             name = name.substring(0, 16);
                         }
-
-                        o.getScore(pl).setScore(hp);
+                        o.getScore(name).setScore((int) pl.getHealth());
+                        o.getScore(name).setScore((int) pl.getHealth());
                     } else {
                         String name = pl.getName();
                         if (name.length() > 16) {
                             name = name.substring(0, 16);
-                            o.getScore(pl).setScore(hp);
                         }
+                        o.getScore(name).setScore((int) pl.getHealth());
                     }
                 }
                 p.setScoreboard(sb);
@@ -68,22 +75,21 @@ public class Parties implements CommandExecutor, Listener {
                 sb.getObjective(DisplaySlot.SIDEBAR).unregister();
             }
             final Objective o = sb.registerNewObjective("party_data", "dummy");
-            o.setDisplayName(new StringBuilder().append(ChatColor.RED).append(ChatColor.BOLD).append("Party").toString());
+            o.setDisplayName(new StringBuilder().append(ChatColor.AQUA).append(ChatColor.BOLD).append("Party").toString());
             o.setDisplaySlot(DisplaySlot.SIDEBAR);
             for (final Player pl : mem) {
-                int hp = (int)pl.getHealth();
                 if (Parties.parties.containsKey(pl)) {
                     String name = ChatColor.BOLD + pl.getName();
                     if (name.length() > 16) {
                         name = name.substring(0, 16);
                     }
-                    o.getScore(pl).setScore(hp);
+                    o.getScore(name).setScore((int) pl.getHealth());
                 } else {
                     String name = pl.getName();
                     if (name.length() > 16) {
                         name = name.substring(0, 16);
                     }
-                    o.getScore(pl).setScore(hp);
+                    o.getScore(name).setScore((int) pl.getHealth());
                 }
             }
             p.setScoreboard(sb);
@@ -222,15 +228,14 @@ public class Parties implements CommandExecutor, Listener {
 
     public void onEnable() {
         PracticeServer.log.info("[Parties] has been enabled.");
-        Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(PracticeServer.plugin, new Runnable() {
-            @Override
+        Bukkit.getServer().getPluginManager().registerEvents((Listener) this, PracticeServer.plugin);
+        new BukkitRunnable() {
             public void run() {
-                for (Player p : Bukkit.getOnlinePlayers()) {
-                    refreshScoreboard(p);
+                for (final Player p : Bukkit.getOnlinePlayers()) {
+                    Parties.refreshScoreboard(p);
                 }
             }
-        },1, 1);
+        }.runTaskTimer(PracticeServer.plugin, 1L, 1L);
         new BukkitRunnable() {
             public void run() {
                 for (final Player p : Parties.invite.keySet()) {
@@ -246,7 +251,7 @@ public class Parties implements CommandExecutor, Listener {
                     }
                 }
             }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 20L, 20L);
+        }.runTaskTimer(PracticeServer.plugin, 20L, 20L);
     }
 
     public void onDisable() {

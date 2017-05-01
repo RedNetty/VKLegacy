@@ -410,6 +410,10 @@ public class Trading implements Listener {
         if (tradie == null) {
             return;
         }
+        if(tradie.isOp() || trader.isOp()) {
+            e.setCancelled(true);
+            return;
+        }
         if (tradie.hasMetadata("no_trade") || trader.hasMetadata("no_trade")) {
             e.setCancelled(true);
             trader.updateInventory();

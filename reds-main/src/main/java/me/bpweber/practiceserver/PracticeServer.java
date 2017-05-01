@@ -235,7 +235,7 @@ public class PracticeServer extends JavaPlugin {
         horses.onEnable();
         itemVendors.onEnable();
         ff.onEnable();
-        //cm.onEnable();
+        cm.onEnable();
         listeners.onEnable();
         logout.onEnable();
         lootChests.onEnable();
@@ -311,7 +311,7 @@ public class PracticeServer extends JavaPlugin {
         parties.onDisable();
         professionMechanics.onDisable();
         repairing.onDisable();
-        //cm.onDisable();
+        cm.onDisable();
         respawn.onDisable();
         speedfish.onDisable();
         staffs.onDisable();

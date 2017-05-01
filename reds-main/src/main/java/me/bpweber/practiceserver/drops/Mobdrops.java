@@ -264,6 +264,8 @@ public class Mobdrops implements Listener {
                         s.getWorld().dropItemNaturally(s.getLocation().add(0, 1, 0), itemStack);
                         s.getWorld().dropItemNaturally(s.getLocation().add(0, 1, 0), itemStack);
                         s.getWorld().dropItemNaturally(s.getLocation().add(0, 1, 0), itemStack);
+                        s.getWorld().dropItemNaturally(s.getLocation().add(0, 1, 0), itemStack);
+                        s.getWorld().dropItemNaturally(s.getLocation().add(0, 1, 0), itemStack);
 
                     }
                 }

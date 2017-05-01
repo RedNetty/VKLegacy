@@ -3,6 +3,7 @@ package me.bpweber.practiceserver.DonationMechanics.Crates;
 import me.bpweber.practiceserver.PracticeServer;
 import me.bpweber.practiceserver.drops.CreateDrop;
 import me.bpweber.practiceserver.utils.Particles;
+import me.bpweber.practiceserver.utils.StringUtil;
 import me.bpweber.practiceserver.vendors.MerchantMechanics;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_9_R2.inventory.CraftItemStack;
@@ -80,41 +81,30 @@ public class CratesMain implements Listener {
                    if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
                        if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
                            if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST) {
-                               if (succ > 50) {
-                                   if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
-                                       item = unlockCrate(1);
-                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium")) {
-                                       item = unlockCrate(2);
-                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
-                                       item = unlockCrate(3);
+                               if (e.getCurrentItem().getAmount() == 1) {
+                                   e.setCurrentItem(null);
+                               }
+                               if (e.getCurrentItem().getAmount() > 1) {
+                                   e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
+                               }
+                               if(succ > 50) {
+                                   StringUtil.sendCenteredMessage(p, ChatColor.RED + "You have failed to open then crate and it has shattered into tiny pieces.");
+                                   return;
+                               }else if(succ <= 50) {
+                                   if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
+                                       item = unlockCrate(5);
                                    } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
                                        item = unlockCrate(4);
-                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
-                                       item = unlockCrate(5);
+                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
+                                       item = unlockCrate(3);
+                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium")) {
+                                       item = unlockCrate(2);
+                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
+                                       item = unlockCrate(1);
                                    }
-                                   if (!p.isOp() && p.getGameMode() == GameMode.SURVIVAL) {
-                                       p.getInventory().addItem(item);
-                                       doFirework(p);
-                                   }
+                                   p.getPlayer().getInventory().addItem(item);
+                                   doFirework(p);
                                }
-                               if(succ >= 50) {
-                                   p.sendMessage(ChatColor.RED + "The Crate Shatters as you have failed to open it.");
-                                   p.getWorld().playSound(p.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 2.0f, 1.25f);
-                                   Particles.LAVA.display(0.0f, 0.0f, 0.0f, 5.0f, 10, p.getEyeLocation(), 20.0);
-                               }
-
-                                   if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic") ||
-                                           e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium") ||
-                                           e.getCurrentItem().getItemMeta().getDisplayName().contains("War") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient") || e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
-                                       if (e.getCurrentItem().getAmount() == 1) {
-                                           e.setCurrentItem(null);
-                                       }
-                                       if (e.getCurrentItem().getAmount() > 1) {
-                                           e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
-
-                                       }
-                                       p.closeInventory();
-                                   }
 
                            }
                        }
@@ -122,6 +112,7 @@ public class CratesMain implements Listener {
                }
            }
        }
+
 
        @EventHandler
        public void crateScrap(AsyncPlayerChatEvent e) {
