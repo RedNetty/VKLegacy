@@ -33,8 +33,6 @@ import me.bpweber.practiceserver.item.*;
 import me.bpweber.practiceserver.money.*;
 import me.bpweber.practiceserver.player.*;
 import me.bpweber.practiceserver.teleport.*;
-import me.kayaba.guilds.api.basic.*;
-import me.kayaba.guilds.manager.*;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
@@ -291,43 +289,6 @@ public class ItemVendors
                     p.closeInventory();
                 }
             }
-        } else if (e.getCurrentItem() != null && e.getInventory().getTitle().equals("Guild God")) {
-            if(!PlayerManager.getPlayer(p.getUniqueId()).hasGuild())
-            {
-                p.sendMessage("You must be in a guild and be the guild leader in order to use guild points!");
-                p.closeInventory();
-                return; // How the fuck!?
-            }
-            Guild playerguild = PlayerManager.getPlayer(p.getUniqueId()).getGuild();
-            if(!playerguild.isLeader(PlayerManager.getPlayer(p.getUniqueId())))
-            {
-                p.sendMessage("You must be in a guild and be the guild leader in order to use guild points!");
-                p.closeInventory();
-                return;
-            }
-            List<String> lore;
-            e.setCancelled(true);
-            if (e.getCurrentItem() != null && e.getCurrentItem().getType() == Material.TRIPWIRE_HOOK && e.getCurrentItem().getItemMeta().hasLore() && ((String) (lore = e.getCurrentItem().getItemMeta().getLore()).get(lore.size() - 1)).contains("Price:")) {
-                int price = ItemVendors.getGuildPriceFromLore(e.getCurrentItem());
-                if(playerguild.getPoints() < price)
-                {
-                    p.sendMessage(ChatColor.RED + "You do NOT have enough Guild Points to purchase this " + e.getCurrentItem().getItemMeta().getDisplayName());
-                    p.closeInventory();
-                    return;
-                } else {
-                    ItemStack is = new ItemStack(e.getCurrentItem().getType());
-                    ItemMeta im = is.getItemMeta();
-                    im.setDisplayName(e.getCurrentItem().getItemMeta().getDisplayName());
-                    lore.remove(lore.size() - 1);
-                    im.setLore(lore);
-                    is.setItemMeta(im);
-                    buyingitem.put(p.getName(), is);
-                    buyingprice.put(p.getName(), price);
-                    p.sendMessage(ChatColor.GREEN + "Enter the " + ChatColor.BOLD + "QUANTITY" + ChatColor.GREEN + " you'd like to purchase.");
-                    p.sendMessage(ChatColor.GRAY + "MAX: 64X (" + price * 64 + "guild points), OR " + price + "guild points/each.");
-                    p.closeInventory();
-                }
-            }
         }
     }
 
@@ -338,94 +299,6 @@ public class ItemVendors
             e.setCancelled(true);
             int price = buyingprice.get(p.getName());
             ItemStack is = buyingitem.get(p.getName());
-            if(is.hasItemMeta())
-            {
-                if(is.getItemMeta().getDisplayName().contains(ChatColor.AQUA + "Crate key"))
-                {
-                    if(!PlayerManager.getPlayer(p.getUniqueId()).hasGuild())
-                    {
-                        buyingprice.remove(p.getName());
-                        buyingitem.remove(p.getName());
-                        p.sendMessage("Nice try..");
-                        p.closeInventory();
-                        return; // How the fuck!?
-                    }
-                    Guild playerguild = PlayerManager.getPlayer(p.getUniqueId()).getGuild();
-                    if(!playerguild.isLeader(PlayerManager.getPlayer(p.getUniqueId())))
-                    {
-                        buyingprice.remove(p.getName());
-                        buyingitem.remove(p.getName());
-                        p.sendMessage("Nice try..");
-                        p.closeInventory();
-                        return;
-                    }
-                    int amt = 0;
-                    if (e.getMessage().equalsIgnoreCase("cancel")) {
-                        p.sendMessage(ChatColor.RED + "Purchase of item - " + ChatColor.BOLD + "CANCELLED");
-                        buyingprice.remove(p.getName());
-                        buyingitem.remove(p.getName());
-                        return;
-                    }
-                    try {
-                        amt = Integer.parseInt(e.getMessage());
-                    } catch (Exception ex) {
-                        p.sendMessage(ChatColor.RED + "Please enter a valid integer, or type 'cancel' to void this item purchase.");
-                        return;
-                    }
-                    if (amt < 1) {
-                        p.sendMessage(ChatColor.RED + "You cannot purchase a NON-POSITIVE number.");
-                        return;
-                    }
-                    if (amt > 64) {
-                        p.sendMessage(ChatColor.RED + "You " + ChatColor.UNDERLINE + "cannot" + ChatColor.RED + " buy MORE than " + ChatColor.BOLD + "64x" + ChatColor.RED + " of a material per transaction.");
-                        return;
-                    }
-                    if(playerguild.getPoints() < amt * price)
-                    {
-                        p.sendMessage(ChatColor.RED + "You do not have enough Guild Point(s) to complete this purchase.");
-                        p.sendMessage(ChatColor.GRAY.toString() + amt + " X " + price + " guild point(s)/ea = " + amt * price + " guild point(s).");
-                        return;
-                    } else {
-                        int empty = 0;
-                        if (is.getMaxStackSize() == 1) {
-                            int i = 0;
-                            while (i < p.getInventory().getSize()) {
-                                if (p.getInventory().getItem(i) == null || p.getInventory().getItem(i).getType() == Material.AIR) {
-                                    ++empty;
-                                }
-                                ++i;
-                            }
-                            if (amt > empty) {
-                                p.sendMessage(ChatColor.RED + "No space available in inventory. Type 'cancel' or clear some room.");
-                            } else {
-                                i = 0;
-                                while (i < amt) {
-                                    p.getInventory().setItem(p.getInventory().firstEmpty(), is);
-                                    ++i;
-                                }
-                                p.sendMessage(ChatColor.RED + "-" + amt * price + ChatColor.BOLD + "Guild Points");
-                                p.sendMessage(ChatColor.GREEN + "Transaction successful.");
-                                playerguild.setPoints(playerguild.getPoints() - (amt * price));
-                                buyingprice.remove(p.getName());
-                                buyingitem.remove(p.getName());
-                            }
-                        } else {
-                            if (p.getInventory().firstEmpty() == -1) {
-                                p.sendMessage(ChatColor.RED + "No space available in inventory. Type 'cancel' or clear some room.");
-                                return;
-                            }
-                            p.sendMessage(ChatColor.RED + "-" + amt * price + ChatColor.BOLD + "Guild Points");
-                            p.sendMessage(ChatColor.GREEN + "Transaction successful.");
-                            playerguild.setPoints(playerguild.getPoints() - (amt * price));
-                            is.setAmount(amt);
-                            p.getInventory().setItem(p.getInventory().firstEmpty(), is);
-                            buyingprice.remove(p.getName());
-                            buyingitem.remove(p.getName());
-                        }
-                    }
-                    return;
-                }
-            }
             int amt = 0;
             if (e.getMessage().equalsIgnoreCase("cancel")) {
                 p.sendMessage(ChatColor.RED + "Purchase of item - " + ChatColor.BOLD + "CANCELLED");

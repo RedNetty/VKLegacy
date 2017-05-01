@@ -1,7 +1,6 @@
 package me.bpweber.practiceserver.player;
 
 import com.vexsoftware.votifier.model.*;
-import de.Herbystar.TTA.*;
 import fr.neatmonster.nocheatplus.checks.*;
 import fr.neatmonster.nocheatplus.hooks.*;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
@@ -11,13 +10,9 @@ import me.bpweber.practiceserver.damage.*;
 import me.bpweber.practiceserver.enchants.*;
 import me.bpweber.practiceserver.item.*;
 import me.bpweber.practiceserver.mobs.*;
-import me.bpweber.practiceserver.player.Stats.*;
 import me.bpweber.practiceserver.pvp.*;
 import me.bpweber.practiceserver.teleport.*;
 import me.bpweber.practiceserver.utils.*;
-import me.kayaba.guilds.api.basic.*;
-import me.kayaba.guilds.enums.Permission;
-import me.kayaba.guilds.manager.*;
 import me.konsolas.aac.*;
 import me.konsolas.aac.api.*;
 import org.bukkit.*;
@@ -33,7 +28,6 @@ import org.bukkit.event.server.*;
 import org.bukkit.event.weather.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
-import org.bukkit.permissions.*;
 import org.bukkit.potion.*;
 import org.bukkit.scheduler.*;
 
@@ -69,7 +63,6 @@ public class Listeners
 
             public void run() {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    refreshTabList(p);
                     Random r = new Random();
                     float y = r.nextFloat() - 0.2F;
                     float x = r.nextFloat() - 0.2F;
@@ -93,36 +86,6 @@ public class Listeners
 
     public void onDisable() {
         PracticeServer.log.info("[Listeners] has been disabled.");
-    }
-
-    public void refreshTabList(Player p) {
-        int ping = TTA_Methods.getPing(p);
-        {
-            if (PlayerManager.getPlayer(p.getUniqueId()).hasGuild()) {
-                Guild g = PlayerManager.getPlayer(p.getUniqueId()).getGuild();
-                List<String> memes = new ArrayList<String>();
-                for(Player pl : g.getOnlinePlayers()) {
-                    memes.add(pl.getName());
-                }
-                TTA_Methods.sendTablist(p, ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Zeniths Legacy\n"
-                                + ChatColor.GRAY + "\n     ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
-                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + g.getName() + "\n\n" +
-                                ChatColor.DARK_AQUA + "Guild Leader: " + ChatColor.GRAY + "\n" + g.getLeader().getName() + "\n\n" +
-                                ChatColor.DARK_AQUA + "Online Players: " + ChatColor.GREEN + "\n" + memes + "\n\n" ,
-                        ChatColor.GRAY + "   ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " INFO " + ChatColor.GRAY + "============\n\n"
-                                + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n" +
-                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n\n");
-            } else {
-                TTA_Methods.sendTablist(p, ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "Zeniths Legacy\n"
-                                + ChatColor.GRAY + "\n     ===========" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " GUILDS " + ChatColor.GRAY + "============"
-                                + ChatColor.DARK_AQUA + "\n\nGuild Name: " + ChatColor.GRAY + "\n" + "N/A" + "\n" ,
-                        ChatColor.GRAY + "   ============" + ChatColor.DARK_AQUA.toString() + ChatColor.BOLD + " INFO " + ChatColor.GRAY + "============\n\n"
-                                + ChatColor.DARK_AQUA + "Player Kills: \n" + ChatColor.GRAY + StatsMain.getPlayerKills(p.getUniqueId()) + "\n\n"
-                                + ChatColor.DARK_AQUA + "Monster Kills: \n" + ChatColor.GRAY + StatsMain.getMonsterKills(p.getUniqueId()) + "\n\n" +
-                                ChatColor.DARK_AQUA + "Players: \n" + ChatColor.GRAY + Bukkit.getOnlinePlayers().size() + " / 100\n");
-            }
-        }
     }
     @EventHandler(priority = EventPriority.HIGH)
     public void onFallDamage(EntityDamageEvent event) {
@@ -303,17 +266,6 @@ public class Listeners
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         p.setCollidable(false);
-
-
-        HashMap<String, PermissionAttachment> attachments = new HashMap<String, PermissionAttachment>();
-
-        PermissionAttachment attachment = p.addAttachment(PracticeServer.plugin);
-        for (Permission permission : Permission.values()) {
-            if (permission.name().contains("GUILDS_GUILD_")) {
-                p.sendMessage("DEBUG ADDED: "  + permission.name());
-                attachment.setPermission(permission.getPath(), true);
-            }
-        }
 
         // FIX SHIT
         p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(1024.0D);

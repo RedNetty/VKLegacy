@@ -13,8 +13,6 @@ import me.bpweber.practiceserver.player.*;
 import me.bpweber.practiceserver.player.Stats.*;
 import me.bpweber.practiceserver.teleport.*;
 import me.bpweber.practiceserver.utils.*;
-import me.kayaba.guilds.api.basic.*;
-import me.kayaba.guilds.manager.*;
 import org.bukkit.*;
 import org.bukkit.boss.*;
 import org.bukkit.configuration.file.*;
@@ -315,21 +313,6 @@ public class Alignments
     public void onNeutral(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
             Player d = (Player) e.getDamager();
-            GPlayer nPlayer = PlayerManager.getPlayer(((Player) e.getEntity()).getPlayer());
-            GPlayer nPlayerAttacker = PlayerManager.getPlayer(((Player) e.getDamager()).getPlayer());
-            if(nPlayer.hasGuild() && nPlayerAttacker.hasGuild())
-            {
-                if(nPlayer.getGuild().isMember(nPlayerAttacker) && nPlayer.getGuild().getFriendlyPvp())
-                {
-                    return;
-                }
-                if(nPlayer.getGuild().isAlly(nPlayerAttacker.getGuild()))
-                {
-                    return;
-                }
-            }
-
-
             if (e.getDamage() <= 0.0) {
                 return;
             }

@@ -1,22 +1,17 @@
 package me.bpweber.practiceserver.player.Tutorial;
 
-import me.bpweber.practiceserver.PracticeServer;
-import me.bpweber.practiceserver.player.GamePlayer.GamePlayer;
-import me.bpweber.practiceserver.profession.Mining;
-import me.bpweber.practiceserver.teleport.TeleportBooks;
-import me.bpweber.practiceserver.utils.StringUtil;
-import me.kayaba.guilds.api.event.PlayerInteractEntityEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.NPC;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.scheduler.BukkitRunnable;
+import me.bpweber.practiceserver.*;
+import me.bpweber.practiceserver.player.GamePlayer.*;
+import me.bpweber.practiceserver.profession.*;
+import me.bpweber.practiceserver.teleport.*;
+import me.bpweber.practiceserver.utils.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.player.*;
+import org.bukkit.scheduler.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Created by jaxon on 3/23/2017.
@@ -57,13 +52,13 @@ public class TutorialMain implements Listener {
 
     @EventHandler
     public void onClickTuts(PlayerInteractEntityEvent e) {
-        if (e.getEntity() instanceof NPC) {
-            NPC n = (NPC) e.getEntity();
+        if (e.getRightClicked() instanceof NPC) {
+            NPC n = (NPC) e.getRightClicked();
             Player p = e.getPlayer();
-            if (e.getEntity() == null) {
+            if (e.getRightClicked() == null) {
                 return;
             }
-            if (e.getEntity().getName().equalsIgnoreCase("")) {
+            if (e.getRightClicked().getName().equalsIgnoreCase("")) {
                 return;
             }
             if (n.getName().equalsIgnoreCase("Interface Guide")) {
