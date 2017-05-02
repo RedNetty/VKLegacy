@@ -27,6 +27,7 @@ import me.bpweber.practiceserver.pvp.*;
 import me.bpweber.practiceserver.teleport.*;
 import me.bpweber.practiceserver.vendors.*;
 import me.bpweber.practiceserver.world.*;
+import me.bpweber.practiceserver.world.Tips.TipsMain;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.plugin.*;
@@ -100,7 +101,7 @@ public class PracticeServer extends JavaPlugin {
     private static Nametag nt;
     private static StatsMain stat;
     private static GamePlayer gap;
-    private static TutorialMain tut;
+    private static TipsMain tip;
     private static PracticeServer instance;
 
     private boolean messageGlobalized = false;
@@ -177,9 +178,9 @@ public class PracticeServer extends JavaPlugin {
         this.getCommand("giveOrb").setExecutor(new giveOrb());
         this.getCommand("Skip").setExecutor(new Skip());
         this.getCommand("wipeall").setExecutor(new wipeAll());
+        tip = new TipsMain();
         gap = new GamePlayer();
         cm = new CratesMain();
-        tut = new TutorialMain();
         stat = new StatsMain();
         trading = new Trading();
         nt = new Nametag();
@@ -218,6 +219,7 @@ public class PracticeServer extends JavaPlugin {
         toggles = new Toggles();
         untradeable = new Untradeable();
         gap.onEnable();
+        tip.onEnable();
         alignments.onEnable();
         antibuild.onEnable();
         banks.onEnable();
@@ -242,7 +244,6 @@ public class PracticeServer extends JavaPlugin {
         merchantMechanics.onEnable();
         mining.onEnable();
         mobdrops.onEnable();
-        tut.onEnable();
         mobs.onEnable();
         orbs.onEnable();
         parties.onEnable();
@@ -257,32 +258,11 @@ public class PracticeServer extends JavaPlugin {
         toggles.onEnable();
         trading.onEnable();
         untradeable.onEnable();
-
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            String dayNames[] = new DateFormatSymbols().getWeekdays();
-            Calendar date1 = Calendar.getInstance();
-            if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] == "Saturday" && !messageGlobalized)
-            {
-                messageGlobalized = true;
-                Bukkit.broadcastMessage(ChatColor.AQUA.toString() + ChatColor.BOLD + ">>> " + ChatColor.AQUA + "The Guild War is now over! You can redeem your current guild points at Cyrennica's Guild God!");
-                for (Player pl : Bukkit.getOnlinePlayers()) {
-                    pl.playSound(pl.getLocation(), Sound.ENTITY_CHICKEN_EGG, 1, 1);
-                    pl.playSound(pl.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
-                }
-            }
-        }, 0L, 20L);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            String dayNames[] = new DateFormatSymbols().getWeekdays();
-            Calendar date1 = Calendar.getInstance();
-            if(dayNames[date1.get(Calendar.DAY_OF_WEEK)] != "Saturday" && dayNames[date1.get(Calendar.DAY_OF_WEEK)] != "Sunday" && messageGlobalized)
-            {
-                messageGlobalized = false; // Reset the variable..
-            }
-        }, 0L, 20L);
     }
 
     public void onDisable() {
         trading.onDisable();
+        tip.onDisable();
         em.onDisable();
         alignments.onDisable();
         antibuild.onDisable();
@@ -318,8 +298,6 @@ public class PracticeServer extends JavaPlugin {
         teleportBooks.onDisable();
         toggles.onDisable();
         untradeable.onDisable();
-
-        plugin = null;
         for (Player p : Bukkit.getServer().getOnlinePlayers()) {
             if (Alignments.tagged.containsKey(p.getName())) {
                 Alignments.tagged.remove(p.getName());
@@ -327,6 +305,8 @@ public class PracticeServer extends JavaPlugin {
             p.saveData();
             p.kickPlayer(String.valueOf(ChatColor.GREEN.toString()) + "You have been safely logged out by the server." + "\n\n" + ChatColor.GRAY.toString() + "Your player data has been synced.");
         }
+
+        plugin = null;
     }
 }
 

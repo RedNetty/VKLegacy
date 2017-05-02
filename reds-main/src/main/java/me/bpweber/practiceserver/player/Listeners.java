@@ -1,6 +1,7 @@
 package me.bpweber.practiceserver.player;
 
 import com.vexsoftware.votifier.model.*;
+import de.Herbystar.TTA.TTA_Methods;
 import fr.neatmonster.nocheatplus.checks.*;
 import fr.neatmonster.nocheatplus.hooks.*;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.*;
@@ -96,7 +97,7 @@ public class Listeners
 
     @EventHandler
     public void dropItem(PlayerDropItemEvent e) {
-        if (e.getPlayer().isOp() && !e.getPlayer().getName().equalsIgnoreCase("RedsEmporium") && !e.getPlayer().getName().equalsIgnoreCase("Kayaba")) {
+        if (e.getPlayer().isOp() && !e.getPlayer().getName().equalsIgnoreCase("RedNetty") && !e.getPlayer().getName().equalsIgnoreCase("Kayaba")) {
             e.setCancelled(true);
         }
     }
@@ -119,7 +120,7 @@ public class Listeners
     @EventHandler
     public void onMiddleClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
-        if (player.isOp() && !event.getWhoClicked().getName().equalsIgnoreCase("RedsEmporium") && !event.getWhoClicked().getName().equalsIgnoreCase("Kayaba")) {
+        if (player.isOp() && !event.getWhoClicked().getName().equalsIgnoreCase("RedNetty") && !event.getWhoClicked().getName().equalsIgnoreCase("Kayaba")) {
             if (event.getCurrentItem().getType() == Material.TRAPPED_CHEST || event.getCurrentItem().getType() == Material.GOLD_SWORD || event.getCurrentItem().getType() == Material.GOLD_AXE || event.getCurrentItem().getType() == Material.GOLD_HELMET
                     || event.getCurrentItem().getType() == Material.GOLD_CHESTPLATE || event.getCurrentItem().getType() == Material.GOLD_LEGGINGS || event.getCurrentItem().getType() == Material.GOLD_BOOTS
                     || event.getCurrentItem().getType() == Material.EMPTY_MAP || event.getCurrentItem().getType() == Material.TRIPWIRE_HOOK || event.getCurrentItem().getType() == Material.PAPER) {
@@ -208,13 +209,13 @@ public class Listeners
     //ANTICHEAT END
     @EventHandler
     public void onMOTD(ServerListPingEvent e) {
-        String motd = ChatColor.AQUA.toString() + ChatColor.BOLD + "Zeniths Legacy";
+        String motd = StringUtil.centerText(ChatColor.GOLD.toString() + ChatColor.BOLD + "✤ Dungeon Isles ✤", 45);
         int i = 0;
         while (i < 30) {
             motd = String.valueOf(motd) + " ";
             ++i;
         }
-        motd = String.valueOf(motd) + ChatColor.GRAY + "Patch " + PracticeServer.plugin.getDescription().getVersion();
+        motd = String.valueOf(motd) + StringUtil.centerText(ChatColor.WHITE + "< Reopening, Come and play! >", 45);
         e.setMotd(motd);
         e.setMaxPlayers(100);
     }
@@ -229,16 +230,6 @@ public class Listeners
     @EventHandler
     public void onJoinBannedAndSubCheck(PlayerLoginEvent e) {
         Player p = e.getPlayer();
-        if(new File("subserver").exists())
-        {
-            if(p.isOp()) return;
-            if (!ModerationMechanics.isSub(p)) {
-                e.setKickMessage(String.valueOf(ChatColor.RED.toString()) + "This Zeniths Legacy shard is for subscribers only." + "\n" +
-                        ChatColor.GRAY.toString() + "You can subscribe at http://store.zenithslegacy.net/ to get instant access.");
-                e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-                return;
-            }
-        }
         if (Ban.banned.containsKey(p.getUniqueId())) {
             if (Ban.banned.get(p.getUniqueId()) == -1) {
                 e.setKickMessage(ChatColor.RED + "Your account has been PERMANENTLY disabled." + "\n" + ChatColor.GRAY +
@@ -254,8 +245,8 @@ public class Listeners
             if (ModerationMechanics.isSub(p) || p.isOp()) {
                 e.allow();
             } else {
-                e.setKickMessage(String.valueOf(ChatColor.RED.toString()) + "Zeniths Legacy is currently FULL." + "\n" +
-                        ChatColor.GRAY.toString() + "You can subscribe at http://store.zenithslegacy.net/ to get instant access.");
+                e.setKickMessage(String.valueOf(ChatColor.RED.toString()) + "The server is currently full." + "\n" +
+                        ChatColor.GRAY.toString() + "You can subscribe at http://store.dungeonisles.net/ to get instant access.");
                 e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
                 return;
             }
@@ -283,13 +274,11 @@ public class Listeners
             p.sendMessage(" ");
             ++i;
         }
-        StringUtil.sendCenteredMessage(p, ChatColor.WHITE.toString() + ChatColor.BOLD + "Zeniths Legacy Patch " + PracticeServer.plugin.getDescription().getVersion());
-        StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "http://store.zenithslegacy.net/");
-        p.sendMessage("");
-        StringUtil.sendCenteredMessage(p, ChatColor.YELLOW + "You are on the " + ChatColor.BOLD + "US-1" + ChatColor.YELLOW + " shard.");
-        StringUtil.sendCenteredMessage(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To manage your gameplay settings, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggles");
+        StringUtil.sendCenteredMessage(p, ChatColor.GOLD.toString() + ChatColor.BOLD + "✤ Dungeon Isles ✤");
+        StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "http://store.dungeonisles.net/");
+        StringUtil.sendCenteredMessage(p, ChatColor.YELLOW + "Patch v1.0");
         if (ModerationMechanics.isSub(p)) {
-            StringUtil.sendCenteredMessage(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To toggle your subscriber trail, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggletrail");
+            TTA_Methods.sendActionBar(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To toggle your subscriber trail, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggletrail", 40);
         }
         p.sendMessage("");
         e.setJoinMessage(null);
@@ -306,10 +295,9 @@ public class Listeners
             if (!Vanish.vanished.contains(p.getName().toLowerCase())) {
                 Vanish.vanished.add(p.getName().toLowerCase());
             }
-            StringUtil.sendCenteredMessage(p, ChatColor.AQUA.toString() + ChatColor.BOLD + "GM INVISIBILITY (infinite)");
-            StringUtil.sendCenteredMessage(p, ChatColor.GREEN + "You are now " + ChatColor.BOLD + "invisible.");
-            p.setMaxHealth(9999.0);
-            p.setHealth(9999.0);
+            TTA_Methods.sendActionBar(p, ChatColor.AQUA.toString()  + "You are in " + ChatColor.BOLD + "GM " + ChatColor.AQUA + "vanish ", 40);
+            p.setMaxHealth(10000);
+            p.setHealth(10000);
         } else {
             for (Player pl : Bukkit.getOnlinePlayers()) {
                 if (pl == p || !pl.isOp()) continue;

@@ -32,27 +32,8 @@ public class CratesMain implements Listener {
     public HashMap<Player, Integer> tier = new HashMap<Player, Integer>();
 
     public void onEnable() {
-        PracticeServer.log.info("[PracticeServer] DonationMechanics Enabled");
+        PracticeServer.log.info("[PracticeServer] Donation Mechanics Enabled");
         Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
-        new BukkitRunnable() {
-
-            public void run() {
-                String prefix = ChatColor.GRAY + "[" + ChatColor.DARK_PURPLE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE + "ZL" + ChatColor.GRAY + "]";
-                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    Random random = new Random();
-                    int ran = random.nextInt(2) + 1;
-                    if (ran == 1) {
-                        p.sendMessage(prefix + ChatColor.GRAY + " Help pay for the server today at http://store.zenithslegacy.net! Buy Gem Pouches, Ranks, And Unbans!");
-                    } else {
-                        p.sendMessage(prefix + ChatColor.GREEN + " Vote for prizes like orbs!");
-                        p.sendMessage(ChatColor.GRAY + " https://minecraft-server.net/vote/AtherialRunes");
-                        p.sendMessage(ChatColor.GRAY + " http://minecraft-mp.com/server/154080/vote/");
-
-                    }
-                }
-            }
-        }.runTaskTimerAsynchronously(PracticeServer.plugin, 2200, 2200);
-
     }
 
     public void onDisable() {

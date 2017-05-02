@@ -1,5 +1,8 @@
 package me.bpweber.practiceserver.loot;
 
+import com.sainttx.holograms.api.Hologram;
+import com.sainttx.holograms.api.line.HologramLine;
+import com.sainttx.holograms.api.line.TextLine;
 import me.bpweber.practiceserver.*;
 import org.bukkit.*;
 import org.bukkit.command.*;
@@ -23,6 +26,8 @@ public class LootChests
     static HashMap<String, Location> creatingloot = new HashMap<String, Location>();
     HashMap<Location, Inventory> opened = new HashMap<Location, Inventory>();
     HashMap<Player, Location> viewers = new HashMap<Player, Location>();
+    HashMap<Location, Hologram> chestgrams = new HashMap<>();
+
 
     public void onEnable() {
         PracticeServer.log.info("[LootChests] has been enabled.");
@@ -41,6 +46,8 @@ public class LootChests
                     }
                     if (!loc.getWorld().getChunkAt(loc).isLoaded() || loc.getWorld().getBlockAt(loc).getType().equals(Material.GLOWSTONE))
                         continue;
+                    int tier = loot.get(loc);
+                    spawnChestHoloGram(loc, tier);
                     loc.getWorld().getBlockAt(loc).setType(Material.CHEST);
                 }
             }
@@ -89,7 +96,34 @@ public class LootChests
         }
         PracticeServer.log.info("[LootChests] has been disabled.");
     }
-
+    public void spawnChestHoloGram(Location l, int tier) {
+        if(!chestgrams.containsKey(l)) {
+            ChatColor c = ChatColor.WHITE;
+            String lc = c + "Loot Chest";
+            switch (tier) {
+                case 1:
+                    c = ChatColor.WHITE;
+                    break;
+                case 2:
+                    c = ChatColor.GREEN;
+                    break;
+                case 3:
+                    c = ChatColor.AQUA;
+                    break;
+                case 4:
+                    c = ChatColor.LIGHT_PURPLE;
+                    break;
+                case 5:
+                    c = ChatColor.YELLOW;
+                    break;
+            }
+            Hologram hg = new Hologram("loot", l.add(0,1,0));
+            chestgrams.put(l, hg);
+            HologramLine line = new TextLine(chestgrams.get(l), lc);
+            chestgrams.get(l).addLine(line);
+            chestgrams.get(l).spawn();
+        }
+    }
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         Player p;
         if (sender instanceof Player && (p = (Player) sender).isOp()) {
@@ -219,6 +253,7 @@ public class LootChests
                                 p.sendMessage(ChatColor.GRAY + "Eliminate the monsters in the area first.");
                             } else if (this.opened.containsKey(loc)) {
                                 loc.getWorld().getBlockAt(loc).setType(Material.AIR);
+                                chestgrams.get(loc).despawn();
                                 p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, 0.5f, 1.2f);
                                 ItemStack[] arritemStack = this.opened.get(loc).getContents();
                                 int n = arritemStack.length;
@@ -233,6 +268,7 @@ public class LootChests
                                 this.opened.remove(loc);
                                 int tier = loot.get(loc);
                                 respawn.put(loc, 60 * tier);
+                                chestgrams.get(loc).despawn();
                                 for (Player v : this.viewers.keySet()) {
                                     if (!this.viewers.get(v).equals(loc)) continue;
                                     this.viewers.remove(v);
@@ -246,6 +282,7 @@ public class LootChests
                                 p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, 0.5f, 1.2f);
                                 loc.getWorld().dropItemNaturally(loc, LootDrops.createLootDrop(loot.get(loc)));
                                 int tier = loot.get(loc);
+                                chestgrams.get(loc).despawn();
                                 respawn.put(loc, 60 * tier);
                                 for (Player v : this.viewers.keySet()) {
                                     if (!this.viewers.get(v).equals(loc)) continue;
@@ -266,6 +303,8 @@ public class LootChests
                         e.setCancelled(true);
                         loot.put(loc, LootChests.getPlayerTier(p));
                         p.sendMessage(ChatColor.GREEN.toString() + ChatColor.BOLD + "     *** LOOT CHEST CREATED ***");
+                        int tier = loot.get(loc);
+                        spawnChestHoloGram(loc, tier);
                         loc.getWorld().getBlockAt(loc).setType(Material.CHEST);
                         loc.getWorld().playEffect(loc, Effect.STEP_SOUND, Material.CHEST);
                         File file = new File(PracticeServer.plugin.getDataFolder(), "loot.yml");
@@ -348,6 +387,7 @@ public class LootChests
                     p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, 0.5f, 1.2f);
                     this.opened.remove(loc);
                     int tier = loot.get(loc);
+                    chestgrams.get(loc).despawn();
                     respawn.put(loc, 60 * tier);
                     for (Player v : this.viewers.keySet()) {
                         if (!this.viewers.get(v).equals(loc)) continue;

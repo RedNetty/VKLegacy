@@ -32,7 +32,7 @@ public class Setrank implements CommandExecutor {
                     }
                     if (Bukkit.getServer().getPlayer(player2.getUniqueId()) != null) {
                         sender.sendMessage(ChatColor.GREEN + "You have set the user " + player2.getName() + " to the rank of " + r
-                                + " on all Zeniths Legacy servers.");
+                                + " on all Dungeon Isles servers.");
                         Alignments.updatePlayerAlignment(player2);
                     }
                 } else {

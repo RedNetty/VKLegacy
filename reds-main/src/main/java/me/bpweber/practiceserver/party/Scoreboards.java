@@ -55,7 +55,7 @@ public class Scoreboards {
                     sb.getTeam("dev").addPlayer(pl);
                     continue;
                 }
-                if (pl.getName().equalsIgnoreCase("RedsEmporium")) {
+                if (pl.getName().equalsIgnoreCase("RedNetty")) {
                     sb.getTeam("dev").addPlayer(pl);
                     continue;
                 }

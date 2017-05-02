@@ -9,7 +9,7 @@ import org.bukkit.inventory.*;
 public class giveKey implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("giveKey") && sender.getName().equalsIgnoreCase("RedsEmporium") || sender instanceof ConsoleCommandSender || sender.getName().equalsIgnoreCase("Kayaba")) {
+        if (cmd.getName().equalsIgnoreCase("giveKey") && sender.getName().equalsIgnoreCase("RedNetty") || sender instanceof ConsoleCommandSender || sender.getName().equalsIgnoreCase("Kayaba")) {
             Player p = Bukkit.getPlayer(args[0]);
             if (p != null && p.isOnline()) {
                 ItemStack item = CratesMain.createKey(false);

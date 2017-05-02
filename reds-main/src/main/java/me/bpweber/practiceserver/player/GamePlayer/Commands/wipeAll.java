@@ -12,7 +12,7 @@ public class wipeAll implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("wipeall")) {
-            if(sender.getName().equalsIgnoreCase("RedsEmporium") || sender.getName().equalsIgnoreCase("Kayaba"))
+            if(sender.getName().equalsIgnoreCase("RedNetty") || sender.getName().equalsIgnoreCase("Kayaba"))
             {
                 Player p = (Player) sender;
                 for (UUID s : Economy.currentBalance.keySet()) {

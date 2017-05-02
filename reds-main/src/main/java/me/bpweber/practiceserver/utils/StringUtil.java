@@ -45,4 +45,14 @@ public class StringUtil {
         }
         player.sendMessage(sb.toString() + message);
     }
+    public static String centerText(String text, int lineLength) {
+        StringBuilder builder = new StringBuilder(text);
+        char space = ' ';
+        int distance = (lineLength - text.length()) / 2;
+        for (int i = 0; i < distance; ++i) {
+            builder.insert(0, space);
+            builder.append(space);
+        }
+        return builder.toString();
+    }
 }

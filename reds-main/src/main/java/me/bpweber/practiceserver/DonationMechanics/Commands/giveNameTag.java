@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
 public class giveNameTag implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("giveNameTag") && sender.getName().equalsIgnoreCase("RedsEmporium") || sender instanceof ConsoleCommandSender) {
+        if (cmd.getName().equalsIgnoreCase("giveNameTag") && sender.getName().equalsIgnoreCase("RedNetty") || sender instanceof ConsoleCommandSender) {
             Player p = Bukkit.getPlayer(args[0]);
             if (p != null && p.isOnline()) {
                 ItemStack item = Nametag.item_ownership_tag;

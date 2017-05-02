@@ -8,7 +8,7 @@ import org.bukkit.entity.*;
 public class Givepouch implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("givePouch") && sender.getName().equalsIgnoreCase("RedsEmporium") || sender instanceof ConsoleCommandSender) {
+        if (cmd.getName().equalsIgnoreCase("givePouch") && sender.getName().equalsIgnoreCase("RedNetty") || sender instanceof ConsoleCommandSender) {
             Player p = Bukkit.getPlayer(args[0]);
             if (p != null && p.isOnline()) {
                 p.getInventory().addItem(GemPouches.gemPouch(Integer.parseInt(args[1])));

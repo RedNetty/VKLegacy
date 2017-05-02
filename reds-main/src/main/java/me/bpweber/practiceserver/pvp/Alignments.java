@@ -14,14 +14,26 @@ import me.bpweber.practiceserver.player.Stats.*;
 import me.bpweber.practiceserver.teleport.*;
 import me.bpweber.practiceserver.utils.*;
 import org.bukkit.*;
-import org.bukkit.boss.*;
-import org.bukkit.configuration.file.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.*;
-import org.bukkit.event.entity.*;
-import org.bukkit.event.player.*;
-import org.bukkit.inventory.*;
-import org.bukkit.scheduler.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.*;
 import java.util.*;
@@ -84,7 +96,7 @@ public class Alignments
                     int n2 = 0;
                     while (n2 < n) {
                         ItemStack is = arritemStack[n2];
-                        if (is != null && is.getType() != Material.AIR && is.hasItemMeta() && is.getItemMeta().hasLore()) {
+                        if (is != null && is.getType() != Material.AIR.AIR && is.hasItemMeta() && is.getItemMeta().hasLore()) {
                             double added = Damage.getHps(is);
                             amt += added;
                             int addedvit = Damage.getElem(is, "VIT");
@@ -262,7 +274,7 @@ public class Alignments
 
     public static void updatePlayerAlignment(Player p) {
         ChatColor cc = ChatColor.GRAY;
-        cc = p.getName().equalsIgnoreCase("RedsEmporium") ? ChatColor.GOLD : (p.isOp() ? ChatColor.AQUA : (neutral.containsKey(p.getName()) ? ChatColor.YELLOW : (chaotic.containsKey(p.getName()) ? ChatColor.RED : ChatColor.GRAY)));
+        cc = p.getName().equalsIgnoreCase("RedNetty") ? ChatColor.GOLD : (p.isOp() ? ChatColor.AQUA : (neutral.containsKey(p.getName()) ? ChatColor.YELLOW : (chaotic.containsKey(p.getName()) ? ChatColor.RED : ChatColor.GRAY)));
         p.setDisplayName(String.valueOf(Alignments.getPlayerPrefix(p)) + cc + p.getName());
         p.playSound(p.getLocation(), Sound.ENTITY_ZOMBIE_INFECT, 10.0f, 1.0f);
         Scoreboards.updateAllColors();
@@ -289,13 +301,10 @@ public class Alignments
         if (rank.equalsIgnoreCase("pmod")) {
             prefix = ChatColor.WHITE.toString() + ChatColor.BOLD + "PMOD ";
         }
-        if (p.getName().equals("RedsEmporium")) {
+        if (p.getName().equals("RedNetty") || p.getName().equals("Kayaba")) {
             prefix = ChatColor.GOLD.toString() + ChatColor.BOLD + "DEV ";
         }
-        if (p.getName().equals("Kayaba")) {
-            prefix = ChatColor.RED.toString() + ChatColor.BOLD + "DEV ";
-        }
-        if (p.isOp() && !p.getName().equals("RedsEmporium") && !p.getName().equalsIgnoreCase("Kayaba")) {
+        if (p.isOp() && !p.getName().equals("RedNetty") && !p.getName().equalsIgnoreCase("Kayaba")) {
             prefix = ChatColor.AQUA.toString() + ChatColor.BOLD + "GM ";
 
         }
