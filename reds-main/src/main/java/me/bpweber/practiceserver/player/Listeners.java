@@ -16,6 +16,7 @@ import me.bpweber.practiceserver.teleport.*;
 import me.bpweber.practiceserver.utils.*;
 import me.konsolas.aac.*;
 import me.konsolas.aac.api.*;
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.*;
 import org.bukkit.attribute.*;
 import org.bukkit.entity.*;
@@ -209,13 +210,10 @@ public class Listeners
     //ANTICHEAT END
     @EventHandler
     public void onMOTD(ServerListPingEvent e) {
-        String motd = StringUtil.centerText(ChatColor.GOLD.toString() + ChatColor.BOLD + "✤ Dungeon Isles ✤", 45);
-        int i = 0;
-        while (i < 30) {
-            motd = String.valueOf(motd) + " ";
-            ++i;
-        }
-        motd = String.valueOf(motd) + StringUtil.centerText(ChatColor.WHITE + "< Reopening, Come and play! >", 45);
+        String motd;
+        String line1 = StringUtil.centerText(ChatColor.GOLD.toString() + ChatColor.BOLD + "✤ Dungeon Isles ✤", 54);
+        String line2 = StringUtil.centerText(ChatColor.YELLOW + "< " + ChatColor.GREEN + ChatColor.BOLD + "Reopened, Come and play!" + ChatColor.YELLOW + " >",53);
+        motd = line1 + "\n" + line2;
         e.setMotd(motd);
         e.setMaxPlayers(100);
     }
@@ -257,10 +255,7 @@ public class Listeners
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         p.setCollidable(false);
-
-        // FIX SHIT
         p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(1024.0D);
-
         p.setLevel(100);
         p.setExp(1.0f);
         p.setHealthScale(20.0);
@@ -270,15 +265,18 @@ public class Listeners
             p.playSound(p.getLocation(), Sound.ENTITY_ITEM_BREAK, 1.0f, 1.5f);
         }
         int i = 0;
-        while (i < 20) {
+        while (i < 30) {
             p.sendMessage(" ");
             ++i;
         }
         StringUtil.sendCenteredMessage(p, ChatColor.GOLD.toString() + ChatColor.BOLD + "✤ Dungeon Isles ✤");
+        p.sendMessage("");
+        StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "Report any bugs found to a Developer or Game Master.");
+        p.sendMessage("");
         StringUtil.sendCenteredMessage(p, ChatColor.GRAY + "http://store.dungeonisles.net/");
         StringUtil.sendCenteredMessage(p, ChatColor.YELLOW + "Patch v1.0");
-        if (ModerationMechanics.isSub(p)) {
-            TTA_Methods.sendActionBar(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To toggle your subscriber trail, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggletrail", 40);
+        if (ModerationMechanics.isSub(p) && !p.isOp()) {
+            TTA_Methods.sendActionBar(p, ChatColor.GRAY.toString() + ChatColor.ITALIC + "To toggle your subscriber trail, use " + ChatColor.YELLOW.toString() + ChatColor.UNDERLINE + "/toggletrail", 400);
         }
         p.sendMessage("");
         e.setJoinMessage(null);
@@ -295,7 +293,7 @@ public class Listeners
             if (!Vanish.vanished.contains(p.getName().toLowerCase())) {
                 Vanish.vanished.add(p.getName().toLowerCase());
             }
-            TTA_Methods.sendActionBar(p, ChatColor.AQUA.toString()  + "You are in " + ChatColor.BOLD + "GM " + ChatColor.AQUA + "vanish ", 40);
+            TTA_Methods.sendActionBar(p, ChatColor.AQUA.toString()  + "You are in " + ChatColor.BOLD + "GM " + ChatColor.AQUA + "vanish to leave use /psvanish", 400);
             p.setMaxHealth(10000);
             p.setHealth(10000);
         } else {
@@ -344,6 +342,7 @@ public class Listeners
             }
         }
     }
+
 
     @EventHandler
     public void onHealthBar(EntityDamageEvent e) {

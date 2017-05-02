@@ -32,6 +32,7 @@
  */
 package me.bpweber.practiceserver.chat;
 
+import de.Herbystar.TTA.TTA_Methods;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Mute;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Setrank;
 import me.bpweber.practiceserver.ModerationMechanics.Commands.Vanish;
@@ -65,6 +66,7 @@ public class ChatMechanics
         CommandExecutor {
     private static HashMap<Player, Player> reply = new HashMap<Player, Player>();
     public static List<String> bad_words;
+    public static boolean enabled;
 
     static {
         bad_words = new ArrayList<String>(Arrays.asList("shit", "fuck", "cunt", "bitch", "whore", "slut", "wank", "asshole", "cock", "dick", "clit", "homo", "fag", "queer", "nigger", "dike", "dyke", "retard", "motherfucker", "vagina", "boob", "pussy", "rape", "gay", "penis", "cunt", "titty", "anus", "faggot", "xFinity", "destiny"));
@@ -73,11 +75,14 @@ public class ChatMechanics
     public void onEnable() {
         PracticeServer.log.info("[ChatMechanics] has been enabled.");
         Bukkit.getServer().getPluginManager().registerEvents(this, PracticeServer.plugin);
+        enabled = true;
     }
 
     public void onDisable() {
+        enabled = false;
         PracticeServer.log.info("[ChatMechanics] has been disabled.");
     }
+
 
     public static String censorMessage(String msg) {
         String personal_msg = "";
@@ -302,6 +307,11 @@ public class ChatMechanics
     public void onPlayerChat(PlayerCommandPreprocessEvent e) {
         Player p = e.getPlayer();
         String s = e.getMessage().toLowerCase();
+        if(e.getMessage().contains("autismrealms.club")) {
+            e.getPlayer().kickPlayer("Illegal Argument");
+            e.getPlayer().setBanned(true);
+            e.setCancelled(true);
+        }
         if (s.startsWith("/")) {
             s = s.replace("/", "");
         }
@@ -327,16 +337,16 @@ public class ChatMechanics
                 rank = Setrank.ranks.get(p.getName());
             }
             if (rank.equals("pmod")) {
-                if (!(s.equals("roll") || s.equals("sc") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("psban") || s.equals("psunban") || s.equals("psmute") || s.equals("psunmute"))) {
+                if (!(s.equals("roll") || s.equals("sc") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("toggletips") || s.equals("toggleholodmg") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("psban") || s.equals("psunban") || s.equals("psmute") || s.equals("psunmute"))) {
                     e.setCancelled(true);
                     p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
                 }
             } else if (ModerationMechanics.isSub(p)) {
-                if (!(s.equals("roll") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("toggletrail") || s.equals("g") || s.equals("guild") || s.equals("guilds") || s.equals("abandon") || s.equals("create") || s.equals("join") || s.equals("gi"))) {
+                if (!(s.equals("roll") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("toggletips") || s.equals("toggleholodmg") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("toggletrail") || s.equals("g") || s.equals("guild") || s.equals("guilds") || s.equals("abandon") || s.equals("create") || s.equals("join") || s.equals("gi"))) {
                     e.setCancelled(true);
                     p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
                 }
-            } else if (!(s.equals("roll") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("g") || s.equals("guild") || s.equals("guilds") || s.equals("abandon") || s.equals("create") || s.equals("join") || s.equals("gi"))) {
+            } else if (!(s.equals("roll") || s.equals("gl") || s.equals("toggle") || s.equals("toggles") || s.equals("togglepvp") || s.equals("toggletips") || s.equals("toggleholodmg") || s.equals("togglechaos") || s.equals("toggledebug") || s.equals("debug") || s.equals("toggleff") || s.equals("add") || s.equals("del") || s.equals("delete") || s.equals("message") || s.equals("msg") || s.equals("m") || s.equals("whisper") || s.equals("w") || s.equals("tell") || s.equals("t") || s.equals("reply") || s.equals("r") || s.equals("logout") || s.equals("sync") || s.equals("reboot") || s.equals("pinvite") || s.equals("paccept") || s.equals("pquit") || s.equals("pkick") || s.equals("pdecline") || s.equals("p") || s.equals("g") || s.equals("guild") || s.equals("guilds") || s.equals("abandon") || s.equals("create") || s.equals("join") || s.equals("gi"))) {
                 e.setCancelled(true);
                 p.sendMessage(ChatColor.WHITE + "Unknown command. View your Character Journal's Index for a list of commands.");
             }
@@ -354,6 +364,11 @@ public class ChatMechanics
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerChat(AsyncPlayerChatEvent e) {
+        if(e.getMessage().contains("autismrealms.club")) {
+            e.getPlayer().kickPlayer("Illegal Argument");
+            e.getPlayer().setBanned(true);
+            e.setCancelled(true);
+        }
         if (!e.isCancelled()) {
             Player p = e.getPlayer();
             e.setCancelled(true);

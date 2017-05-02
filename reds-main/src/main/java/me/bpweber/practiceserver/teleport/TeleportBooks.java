@@ -57,6 +57,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.*;
 import org.bukkit.scheduler.*;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.util.*;
 

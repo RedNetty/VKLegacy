@@ -1,5 +1,5 @@
 chat:
- prefix: "&4&l[&7AutismGuilds&4&l] &6"
+ prefix: "&4&l[&7GuildMechanics&4&l] &6"
  nopermissions: "&cYou don't have enough permissions to do this."
  unknowncmd: "&cUnknown command."
  invalidparam: "&cInvalid command parameter"

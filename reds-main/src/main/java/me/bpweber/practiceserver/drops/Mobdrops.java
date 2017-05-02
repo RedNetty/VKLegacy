@@ -2,6 +2,7 @@ package me.bpweber.practiceserver.drops;
 
 import me.bpweber.practiceserver.DonationMechanics.Crates.CratesMain;
 import me.bpweber.practiceserver.PracticeServer;
+import me.bpweber.practiceserver.item.Items;
 import me.bpweber.practiceserver.money.GemPouches;
 import me.bpweber.practiceserver.money.Money;
 import me.bpweber.practiceserver.player.Stats.StatsMain;
@@ -10,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -147,14 +150,14 @@ public class Mobdrops implements Listener {
                 if (s.getEquipment().getItemInMainHand().getType().name().contains("IRON_")) {
                     gemamt = random.nextInt(10) + 10;
                     if (elite && !this.isCustomNamedElite(s)) {
-                        if (rd < 38) {
+                        if (rd < 40) {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 35) {
+                        if (rd < 39) {
                             dodrop = true;
                         }
-                    } else if (rd < 34) {
+                    } else if (rd < 38) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -189,10 +192,10 @@ public class Mobdrops implements Listener {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 20) {
+                        if (rd < 22) {
                             dodrop = true;
                         }
-                    } else if (rd < 16) {
+                    } else if (rd < 20) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 9) {
@@ -224,10 +227,10 @@ public class Mobdrops implements Listener {
                             dodrop = true;
                         }
                     } else if (elite && this.isCustomNamedElite(s)) {
-                        if (rd < 14) {
+                        if (rd < 18) {
                             dodrop = true;
                         }
-                    } else if (rd < 10) {
+                    } else if (rd < 15) {
                         dodrop = true;
                     }
                     if (scrolldrop <= 5) {
@@ -296,7 +299,13 @@ public class Mobdrops implements Listener {
                             dura = (short) (is2.getType().getMaxDurability() - 1);
                         }
                         is2.setDurability(dura);
-                        s.getWorld().dropItemNaturally(s.getLocation(), is2);
+                        Entity en = s.getWorld().dropItemNaturally(s.getLocation(), is2);
+                        int rarity = Items.getRarity(is2);
+                        for(Player p : Bukkit.getOnlinePlayers()) {
+                            GlowAPI.setGlowing(en, Items.getGlowcolor(rarity), p);
+                        }
+
+
                     } else if (s.hasMetadata("type")) {
                         final String type = s.getMetadata("type").get(0).asString();
                         if (type.equalsIgnoreCase("mitsuki") || type.equalsIgnoreCase("copjak")
@@ -304,14 +313,18 @@ public class Mobdrops implements Listener {
                                 || type.equalsIgnoreCase("impa") || type.equalsIgnoreCase("bloodbutcher")
                                 || type.equalsIgnoreCase("blayshan") || type.equalsIgnoreCase("jayden") || type.equalsIgnoreCase("kilatan")) {
                             final ItemStack is = EliteDrops.createCustomEliteDrop(type);
-                            s.getWorld().dropItemNaturally(s.getLocation(), is);
+                            Entity en = s.getWorld().dropItemNaturally(s.getLocation(), is);
+                            int rarity = Items.getRarity(is);
+
+                            for(Player p : Bukkit.getOnlinePlayers()) {
+                                GlowAPI.setGlowing(en, Items.getGlowcolor(rarity), p);
+                            }
                         }
                     }
                 }
             }
         }
     }
-
     boolean isCustomNamedElite(final LivingEntity l) {
         if (l.hasMetadata("type")) {
             final String type = l.getMetadata("type").get(0).asString();

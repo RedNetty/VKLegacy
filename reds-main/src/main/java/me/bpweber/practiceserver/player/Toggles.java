@@ -109,6 +109,18 @@ public class Toggles
                     p.sendMessage(ChatColor.GREEN + "Holographic Damage Messages - " + ChatColor.BOLD + "ENABLED");
                 }
             }
+            if (cmd.getName().equalsIgnoreCase("toggletips")) {
+                toggle = Toggles.getToggles(p.getName());
+                if (toggle.contains("tips")) {
+                    toggle.remove("tips");
+                    toggles.put(p.getName(), toggle);
+                    p.sendMessage(ChatColor.RED + "Tip Messages - " + ChatColor.BOLD + "DISABLED");
+                } else {
+                    toggle.add("tips");
+                    toggles.put(p.getName(), toggle);
+                    p.sendMessage(ChatColor.GREEN + "Tip Messages - " + ChatColor.BOLD + "ENABLED");
+                }
+            }
             if (cmd.getName().equalsIgnoreCase("toggledebug")) {
                 toggle = Toggles.getToggles(p.getName());
                 if (toggle.contains("debug")) {
@@ -246,6 +258,11 @@ public class Toggles
         } else {
             inv.setItem(4, Toggles.getToggleButton("toggledebug", false));
         }
+        if (toggles.contains("tips")) {
+            inv.setItem(3, Toggles.getToggleButton("toggltips", true));
+        } else {
+            inv.setItem(3, Toggles.getToggleButton("toggletips", false));
+        }
         return inv;
     }
 
@@ -279,6 +296,12 @@ public class Toggles
         }
         if (toggle.equalsIgnoreCase("togglepvp")) {
             desc = String.valueOf(desc) + "Toggles all outgoing PvP damage (anti-neutral).";
+        }
+        if (toggle.equalsIgnoreCase("toggleholodmg")) {
+            desc = String.valueOf(desc) + "Toggles Holo-Graphic damage messages.";
+        }
+        if (toggle.equalsIgnoreCase("toggletips")) {
+            desc = String.valueOf(desc) + "Toggles in-game message tips.";
         }
         return desc;
     }

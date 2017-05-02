@@ -37,7 +37,7 @@ public class CratesMain implements Listener {
     }
 
     public void onDisable() {
-        PracticeServer.log.info("[PracticeServer] DonationMechanics Disabled");
+        PracticeServer.log.info("[PracticeServer] Donation Mechanics Disabled");
 
     }
 
@@ -54,41 +54,30 @@ public class CratesMain implements Listener {
        @EventHandler
        public void onInvClickA(InventoryClickEvent e) {
            Player p = (Player) e.getWhoClicked();
-           ItemStack item = null;
-           Random r = new Random();
-           int succ = r.nextInt(100);
+           ItemStack item = unlockCrate(1);
            if (e.getWhoClicked() instanceof Player) {
-               if (e.getWhoClicked() != null && e.getCurrentItem() != null && e.getClickedInventory() != null && e.getInventory() != null) {
-                   if (e.getCurrentItem() != null || e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
-                       if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
-                           if (e.getInventory().getHolder() == p && e.getCurrentItem().getType() == Material.TRAPPED_CHEST) {
-                               if (e.getCurrentItem().getAmount() == 1) {
-                                   e.setCurrentItem(null);
-                               }
-                               if (e.getCurrentItem().getAmount() > 1) {
-                                   e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
-                               }
-                               if(succ > 50) {
-                                   StringUtil.sendCenteredMessage(p, ChatColor.RED + "You have failed to open then crate and it has shattered into tiny pieces.");
-                                   return;
-                               }else if(succ <= 50) {
-                                   if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
-                                       item = unlockCrate(5);
-                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
-                                       item = unlockCrate(4);
-                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
-                                       item = unlockCrate(3);
-                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium")) {
-                                       item = unlockCrate(2);
-                                   } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
-                                       item = unlockCrate(1);
-                                   }
-                                   p.getPlayer().getInventory().addItem(item);
-                                   doFirework(p);
-                               }
-
-                           }
+               if (e.getInventory().getHolder() != null && e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
+                   if (e.getCurrentItem().getType() == Material.TRAPPED_CHEST && e.getCurrentItem().getItemMeta().hasLore()) {
+                       if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Legendary")) {
+                           item = unlockCrate(5);
+                       } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Ancient")) {
+                           item = unlockCrate(4);
+                       } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("War")) {
+                           item = unlockCrate(3);
+                       } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Medium")) {
+                           item = unlockCrate(2);
+                       } else if (e.getCurrentItem().getItemMeta().getDisplayName().contains("Basic")) {
+                           item = unlockCrate(1);
                        }
+                       if (e.getCurrentItem().getAmount() == 1) {
+                           e.setCurrentItem(null);
+                       }
+                       if (e.getCurrentItem().getAmount() > 1) {
+                           e.getCurrentItem().setAmount(e.getCurrentItem().getAmount() - 1);
+                       }
+
+                       p.getPlayer().getInventory().addItem(item);
+                       doFirework(p);
                    }
                }
            }

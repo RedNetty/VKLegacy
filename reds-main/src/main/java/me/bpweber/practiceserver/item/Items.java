@@ -12,6 +12,7 @@ package me.bpweber.practiceserver.item;
 import org.bukkit.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
+import org.inventivetalent.glow.GlowAPI;
 
 import java.util.*;
 
@@ -29,7 +30,41 @@ public class Items {
         orb.setItemMeta(orbmeta);
         return orb;
     }
+    public static GlowAPI.Color getGlowcolor(int i) {
+        if(i == 1) {
+            return GlowAPI.Color.WHITE;
+        }
+        if(i == 2) {
+            return GlowAPI.Color.GREEN;
+        }
+        if(i == 3) {
+            return GlowAPI.Color.AQUA;
+        }
+        if(i == 4) {
+            return GlowAPI.Color.YELLOW;
+        }else{
+            return GlowAPI.Color.WHITE;
+        }
 
+    }
+    public static int getRarity(ItemStack i) {
+        List<String> lore = i.getItemMeta().getLore();
+        if (lore.contains(ChatColor.GRAY.toString() + ChatColor.ITALIC + "Common")) {
+            return 1;
+        }
+        if (lore.contains(ChatColor.GREEN.toString() + ChatColor.ITALIC + "Uncommon")) {
+            return 2;
+        }
+        if (lore.contains(ChatColor.AQUA.toString() + ChatColor.ITALIC + "Rare")) {
+            return 3;
+        }
+        if (lore.contains(ChatColor.YELLOW.toString() + ChatColor.ITALIC + "Unique")) {
+            return 4;
+        }else{
+            return 1;
+        }
+
+    }
     public static ItemStack signNewCustomItem(final Material m, final String name, final String desc) {
         final ItemStack is = new ItemStack(m);
         final ItemMeta im = is.getItemMeta();
